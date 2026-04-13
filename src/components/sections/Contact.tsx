@@ -1,0 +1,213 @@
+"use client";
+
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { SectionWrapper } from "@/components/layout/SectionWrapper";
+import { TextReveal } from "@/components/animations/TextReveal";
+import { FadeUp } from "@/components/animations/FadeUp";
+import { Button } from "@/components/ui/Button";
+import { personal } from "@/data/personal";
+import { sendContactEmail } from "@/app/actions/contact";
+
+type FormStatus = "idle" | "sending" | "success" | "error";
+
+export function Contact() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [status, setStatus] = useState<FormStatus>("idle");
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus("sending");
+    setErrorMsg("");
+
+    const result = await sendContactEmail(formData);
+
+    if (result.success) {
+      setStatus("success");
+      setFormData({ name: "", email: "", message: "" });
+      setTimeout(() => setStatus("idle"), 4000);
+    } else {
+      setStatus("error");
+      setErrorMsg(result.message);
+      setTimeout(() => setStatus("idle"), 4000);
+    }
+  };
+
+  return (
+    <SectionWrapper id="contact" background="#1A1714">
+      <div className="mx-auto max-w-[680px] text-center">
+        {/* Heading */}
+        <FadeUp>
+          <span className="typ-label mb-6 block text-copper">Get in Touch</span>
+        </FadeUp>
+
+        <TextReveal
+          as="h2"
+          className="typ-display text-cream mb-6"
+          splitType="words"
+          stagger={0.06}
+          delay={0.2}
+        >
+          Let&apos;s Build Together
+        </TextReveal>
+
+        <FadeUp delay={0.4}>
+          <p className="typ-body-lg mx-auto mb-12 max-w-[480px] text-cream/50">
+            Have a project in mind or just want to chat? Drop me a message and
+            I&apos;ll get back to you.
+          </p>
+        </FadeUp>
+
+        {/* Form */}
+        <FadeUp delay={0.5}>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-5 text-left">
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+              <InputField
+                label="Name"
+                value={formData.name}
+                onChange={(v) => setFormData((p) => ({ ...p, name: v }))}
+                placeholder="Your name"
+                required
+              />
+              <InputField
+                label="Email"
+                type="email"
+                value={formData.email}
+                onChange={(v) => setFormData((p) => ({ ...p, email: v }))}
+                placeholder="you@example.com"
+                required
+              />
+            </div>
+            <InputField
+              label="Message"
+              value={formData.message}
+              onChange={(v) => setFormData((p) => ({ ...p, message: v }))}
+              placeholder="Tell me about your project..."
+              multiline
+              required
+            />
+
+            <div className="mt-2 flex items-center justify-center gap-4">
+              <Button
+                type="submit"
+                variant="solid"
+                className={status === "sending" ? "opacity-70 pointer-events-none" : ""}
+              >
+                {status === "sending"
+                  ? "Sending..."
+                  : status === "success"
+                    ? "Sent!"
+                    : "Send Message"}
+              </Button>
+            </div>
+
+            {status === "success" && (
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mt-2 text-center font-[family-name:var(--font-mono)] text-sm text-sage"
+              >
+                Thanks! I&apos;ll be in touch soon.
+              </motion.p>
+            )}
+            {status === "error" && (
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mt-2 text-center font-[family-name:var(--font-mono)] text-sm text-red-400"
+              >
+                {errorMsg}
+              </motion.p>
+            )}
+          </form>
+        </FadeUp>
+
+        {/* Social links */}
+        <FadeUp delay={0.6}>
+          <div className="mt-14 flex flex-wrap items-center justify-center gap-4 sm:gap-8">
+            <a
+              href={personal.socials.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Visit GitHub profile"
+              className="font-[family-name:var(--font-mono)] text-sm tracking-wide text-cream/50 transition-colors hover:text-copper"
+            >
+              GitHub
+            </a>
+            <div className="h-3 w-px bg-cream/10" aria-hidden="true" />
+            <a
+              href={personal.socials.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Visit LinkedIn profile"
+              className="font-[family-name:var(--font-mono)] text-sm tracking-wide text-cream/50 transition-colors hover:text-copper"
+            >
+              LinkedIn
+            </a>
+            <div className="h-3 w-px bg-cream/10" aria-hidden="true" />
+            <a
+              href={`mailto:${personal.email}`}
+              aria-label="Send email"
+              className="font-[family-name:var(--font-mono)] text-sm tracking-wide text-cream/50 transition-colors hover:text-copper"
+            >
+              Email
+            </a>
+          </div>
+        </FadeUp>
+      </div>
+    </SectionWrapper>
+  );
+}
+
+function InputField({
+  label,
+  value,
+  onChange,
+  placeholder,
+  type = "text",
+  multiline = false,
+  required = false,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  placeholder?: string;
+  type?: string;
+  multiline?: boolean;
+  required?: boolean;
+}) {
+  const shared =
+    "w-full rounded-md border border-cream/[0.08] bg-cream/[0.03] px-4 py-3.5 font-[family-name:var(--font-body)] text-base text-cream placeholder:text-cream/25 outline-none transition-all duration-200 focus:border-copper/50 focus:bg-cream/[0.05] focus:ring-1 focus:ring-copper/20 sm:py-3 sm:text-sm";
+
+  return (
+    <label className="block">
+      <span className="mb-2 block font-[family-name:var(--font-mono)] text-xs tracking-wider text-cream/50 uppercase">
+        {label}
+      </span>
+      {multiline ? (
+        <textarea
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
+          required={required}
+          rows={5}
+          className={`${shared} resize-none`}
+        />
+      ) : (
+        <input
+          type={type}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
+          required={required}
+          className={shared}
+        />
+      )}
+    </label>
+  );
+}

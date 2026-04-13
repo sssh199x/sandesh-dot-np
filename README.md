@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sandesh Hamal Thakuri — Portfolio
+
+Personal developer portfolio built with Next.js 16, Tailwind CSS v4, GSAP, Framer Motion, and Lenis.
+
+## Creative Direction: "Himalayan Dusk"
+
+The scroll is a sunset. Background transitions from warm cream through amber to deep indigo as the user scrolls — like golden hour over Pokhara valley. Copper accents. Sora + Outfit + JetBrains Mono typography. Cinematic scroll-driven animations.
+
+## Tech Stack
+
+| Layer | Tech |
+|-------|------|
+| Framework | Next.js 16 (App Router) + React 19 |
+| Language | TypeScript |
+| Styling | Tailwind CSS v4 |
+| Scroll Animation | GSAP + ScrollTrigger |
+| UI Animation | Framer Motion |
+| Smooth Scroll | Lenis |
+| State | Zustand |
+| Contact | Resend |
+| Images | Generated via Google Stitch |
+| Deploy | Vercel |
+
+## Sections
+
+1. **Hero** — Kinetic text reveal, floating code card, parallax layers
+2. **About** — Bio + animated stat counters
+3. **Experience** — Scroll-drawn timeline with 6 roles
+4. **Projects** — Pinned asymmetric masonry with hover effects (dark section)
+5. **Skills** — Cascading tech grid (dark section)
+6. **Teaching** — AWS Educator featured card (return to light)
+7. **Contact** — Text reveal heading, form with Resend
+8. **Footer** — Minimal
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+## Key Design Decisions
 
-To learn more about Next.js, take a look at the following resources:
+- **No dark/light toggle** — the page IS the gradient from light to dark and back
+- **Copper (#B87333) is the only accent** — one color, used with intention
+- **Sage green (#7A8B6F) appears once** — in the Teaching section, making it special
+- **GSAP for scroll, Framer for interactions** — no conflicts, clear separation of concerns
+- **Lenis smooth scroll** — foundation layer, synced with ScrollTrigger
+- **JetBrains Mono for all metadata** — reinforces the "developer" identity without code blocks everywhere
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Performance
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Targeting 95+ Lighthouse across all categories. Static generation, optimized images, font preloading, code splitting per section.
