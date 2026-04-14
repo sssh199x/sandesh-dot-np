@@ -8,6 +8,7 @@ export function ScrollProgress() {
 
   useGSAP(() => {
     if (!barRef.current) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     gsap.to(barRef.current, {
       scaleX: 1,

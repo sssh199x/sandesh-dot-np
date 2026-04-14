@@ -7,4 +7,7 @@ import { useGSAP } from "@gsap/react";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
+// Prevent ScrollTrigger refresh when only viewport height changes (mobile address bar)
+ScrollTrigger.config({ ignoreMobileResize: true });
+
 export { gsap, ScrollTrigger, SplitText, useGSAP };

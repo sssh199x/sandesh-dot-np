@@ -5,49 +5,86 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { navItems } from "@/data/personal";
 import { useNavigationStore } from "@/store/navigation";
+import { useLenis } from "@/components/layout/SmoothScroll";
 
 const darkSections = new Set(["projects", "skills", "contact"]);
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  const { activeSection, isMenuOpen, toggleMenu, closeMenu } =
+  const [mounted, setMounted] = useState(false);
+  const { activeSection, navbarSection, isMenuOpen, toggleMenu, closeMenu } =
     useNavigationStore();
+  const lenis = useLenis();
 
-  const isDark = darkSections.has(activeSection);
+  // activeSection = what user is reading (drives underline)
+  // navbarSection = what's behind the navbar (drives color)
+  const isDark = darkSections.has(navbarSection);
+
+  // Track mount state to avoid hydration mismatch
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { setMounted(true) }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Lock/unlock Lenis when mobile menu opens/closes
+  useEffect(() => {
+    if (!lenis) return;
+    if (isMenuOpen) {
+      lenis.stop();
+    } else {
+      lenis.start();
+    }
+  }, [isMenuOpen, lenis]);
+
+  // Close menu if resized past lg breakpoint (1024px)
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const onChange = (e: MediaQueryListEvent) => {
+      if (e.matches) closeMenu();
+    };
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, [closeMenu]);
+
   const scrollTo = (id: string) => {
     closeMenu();
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
+    if (lenis) {
+      lenis.scrollTo(`#${id}`, { offset: 0 });
+    } else {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: "smooth" });
     }
   };
+
+  // Determine header background
+  const headerBg = !mounted
+    ? "bg-transparent"
+    : scrolled && isDark
+      ? "bg-[#1A1714]/85 backdrop-blur-md shadow-[0_1px_0_rgba(255,255,255,0.04)]"
+      : scrolled && !isDark
+        ? "bg-cream/85 backdrop-blur-md shadow-[0_1px_0_rgba(26,23,20,0.06)]"
+        : isDark
+          ? "bg-[#1A1714]/60 backdrop-blur-sm"
+          : "bg-transparent";
 
   return (
     <>
       <header
         className={cn(
-          "fixed top-0 left-0 z-40 w-full transition-all duration-300",
-          scrolled && !isDark
-            ? "bg-cream/80 backdrop-blur-md shadow-[0_1px_0_rgba(26,23,20,0.06)]"
-            : scrolled && isDark
-              ? "bg-[#1A1714]/80 backdrop-blur-md shadow-[0_1px_0_rgba(255,255,255,0.04)]"
-              : "bg-transparent"
+          "fixed top-0 left-0 z-40 w-full transition-[background-color,box-shadow,backdrop-filter] duration-300",
+          headerBg
         )}
       >
-        <nav className="mx-auto flex max-w-[1280px] items-center justify-between px-[var(--spacing-container-px)] py-4">
+        <nav className="mx-auto flex max-w-[1280px] items-center justify-between px-[var(--spacing-container-px)] pt-[max(1rem,env(safe-area-inset-top))] pb-4">
           {/* Logo */}
           <button
             onClick={() => scrollTo("hero")}
-            className={cn(
-              "font-[family-name:var(--font-heading)] text-xl font-semibold text-copper cursor-pointer transition-colors duration-300"
-            )}
+            className="font-[family-name:var(--font-heading)] text-xl font-semibold text-copper cursor-pointer focus-visible:ring-2 focus-visible:ring-copper focus-visible:outline-none rounded-sm"
           >
             sandesh.
           </button>
@@ -59,11 +96,11 @@ export function Navbar() {
                 key={item.href}
                 onClick={() => scrollTo(item.href)}
                 className={cn(
-                  "relative cursor-pointer font-[family-name:var(--font-mono)] text-sm tracking-wide transition-colors duration-300",
+                  "relative cursor-pointer font-[family-name:var(--font-mono)] text-sm tracking-wide transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-copper focus-visible:outline-none rounded-sm",
                   activeSection === item.href
                     ? "text-copper"
                     : isDark
-                      ? "text-cream/50 hover:text-cream"
+                      ? "text-cream/60 hover:text-cream"
                       : "text-slate hover:text-charcoal"
                 )}
               >
@@ -74,8 +111,8 @@ export function Navbar() {
                     className="absolute -bottom-1 left-0 h-[2px] w-full bg-copper"
                     transition={{
                       type: "spring" as const,
-                      stiffness: 400,
-                      damping: 30,
+                      stiffness: 500,
+                      damping: 35,
                     }}
                   />
                 )}
@@ -83,7 +120,7 @@ export function Navbar() {
             ))}
             <button
               onClick={() => scrollTo("contact")}
-              className="rounded-pill bg-copper px-7 py-3 font-[family-name:var(--font-mono)] text-sm font-medium tracking-wide text-cream transition-colors duration-200 hover:bg-copper-dark cursor-pointer"
+              className="rounded-pill bg-copper px-7 py-3 font-[family-name:var(--font-mono)] text-sm font-medium tracking-wide text-cream transition-colors duration-200 hover:bg-copper-dark cursor-pointer focus-visible:ring-2 focus-visible:ring-copper focus-visible:outline-none"
             >
               Get in Touch
             </button>
@@ -92,7 +129,7 @@ export function Navbar() {
           {/* Mobile Hamburger */}
           <button
             onClick={toggleMenu}
-            className="relative z-50 flex size-10 flex-col items-center justify-center gap-1.5 lg:hidden cursor-pointer"
+            className="relative z-50 flex size-11 flex-col items-center justify-center gap-1.5 lg:hidden cursor-pointer focus-visible:ring-2 focus-visible:ring-copper focus-visible:outline-none rounded-sm"
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
           >
             <motion.span
@@ -101,11 +138,17 @@ export function Navbar() {
                   ? { rotate: 45, y: 6 }
                   : { rotate: 0, y: 0 }
               }
-              className="block h-[2px] w-6 bg-copper"
+              className={cn(
+                "block h-[2px] w-6 transition-colors duration-300",
+                isMenuOpen ? "bg-copper" : isDark ? "bg-cream" : "bg-copper"
+              )}
             />
             <motion.span
               animate={isMenuOpen ? { opacity: 0 } : { opacity: 1 }}
-              className="block h-[2px] w-6 bg-copper"
+              className={cn(
+                "block h-[2px] w-6 transition-colors duration-300",
+                isDark ? "bg-cream" : "bg-copper"
+              )}
             />
             <motion.span
               animate={
@@ -113,7 +156,10 @@ export function Navbar() {
                   ? { rotate: -45, y: -6 }
                   : { rotate: 0, y: 0 }
               }
-              className="block h-[2px] w-6 bg-copper"
+              className={cn(
+                "block h-[2px] w-6 transition-colors duration-300",
+                isMenuOpen ? "bg-copper" : isDark ? "bg-cream" : "bg-copper"
+              )}
             />
           </button>
         </nav>
@@ -127,7 +173,11 @@ export function Navbar() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: "100%" }}
             transition={{ type: "spring" as const, stiffness: 300, damping: 30 }}
-            className="fixed inset-0 z-30 flex flex-col items-center justify-center gap-8 bg-cream lg:hidden"
+            className={cn(
+              "fixed inset-0 z-30 flex flex-col items-center justify-center gap-8 lg:hidden",
+              "pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]",
+              isDark ? "bg-[#1A1714]" : "bg-cream"
+            )}
           >
             {navItems.map((item, i) => (
               <motion.button
@@ -140,7 +190,9 @@ export function Navbar() {
                   "typ-h2 cursor-pointer transition-colors",
                   activeSection === item.href
                     ? "text-copper"
-                    : "text-charcoal"
+                    : isDark
+                      ? "text-cream/70"
+                      : "text-charcoal"
                 )}
               >
                 {item.label}

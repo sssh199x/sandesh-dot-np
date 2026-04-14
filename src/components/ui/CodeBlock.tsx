@@ -98,7 +98,7 @@ export function CodeBlock({
           <span className="size-3 rounded-full bg-[#FFBD2E]" />
           <span className="size-3 rounded-full bg-[#28C840]" />
         </div>
-        <span className="typ-tag text-slate ml-2">{filename}</span>
+        <span className="typ-tag text-cream/50 ml-2">{filename}</span>
       </div>
       <pre className="p-5 overflow-x-auto">
         <code className="font-[family-name:var(--font-mono)] text-[0.8125rem] leading-relaxed text-cream/70">

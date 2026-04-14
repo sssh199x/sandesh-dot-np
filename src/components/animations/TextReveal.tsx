@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { gsap, SplitText, useGSAP } from "@/lib/gsap";
+import { gsap, ScrollTrigger, SplitText, useGSAP } from "@/lib/gsap";
 import { cn } from "@/lib/utils";
 
 interface TextRevealProps {
@@ -12,6 +12,8 @@ interface TextRevealProps {
   duration?: number;
   delay?: number;
   className?: string;
+  /** When true, animation fires on scroll into view instead of on mount */
+  scrollTriggered?: boolean;
 }
 
 export function TextReveal({
@@ -22,6 +24,7 @@ export function TextReveal({
   duration = 0.8,
   delay = 0,
   className,
+  scrollTriggered = false,
 }: TextRevealProps) {
   const textRef = useRef<HTMLElement>(null);
 
@@ -42,6 +45,13 @@ export function TextReveal({
         duration,
         delay,
         ease: "back.out(1.7)",
+        ...(scrollTriggered && {
+          scrollTrigger: {
+            trigger: textRef.current,
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+        }),
       });
 
       return () => {

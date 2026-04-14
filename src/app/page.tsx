@@ -25,22 +25,29 @@ export default function Home() {
       <Navbar />
 
       <main id="main-content">
-        <Hero />
+        {/* Hero stays fixed — sections scroll over it */}
+        <div className="sticky top-0 z-0">
+          <Hero />
+        </div>
 
-        <About />
+        {/* Content scrolls over the pinned hero */}
+        <div className="relative z-10">
+          <div className="pointer-events-none h-0 w-full shadow-[0_-20px_60px_rgba(26,23,20,0.15)]" />
+          <About />
 
-        <Experience />
+          <Experience />
 
-        <Projects />
+          <Projects />
 
-        <Skills />
+          <Skills />
 
-        <Teaching />
+          <Teaching />
 
-        <Contact />
+          <Contact />
+
+          <Footer />
+        </div>
       </main>
-
-      <Footer />
     </>
   );
 }

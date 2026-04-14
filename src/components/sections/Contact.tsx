@@ -55,6 +55,7 @@ export function Contact() {
           splitType="words"
           stagger={0.06}
           delay={0.2}
+          scrollTriggered
         >
           Let&apos;s Build Together
         </TextReveal>
@@ -143,7 +144,7 @@ export function Contact() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Visit GitHub profile"
-              className="group flex size-11 items-center justify-center rounded-full border border-cream/[0.08] text-cream/50 transition-all duration-200 hover:border-copper/40 hover:text-copper hover:bg-copper/[0.06]"
+              className="group flex size-11 items-center justify-center rounded-full border border-cream/[0.08] text-cream/50 transition-all duration-200 hover:border-copper/40 hover:text-copper hover:bg-copper/[0.06] focus-visible:ring-2 focus-visible:ring-copper focus-visible:outline-none"
             >
               <SiGithub className="text-[18px] transition-transform duration-200 group-hover:scale-110" />
             </a>
@@ -152,14 +153,14 @@ export function Contact() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Visit LinkedIn profile"
-              className="group flex size-11 items-center justify-center rounded-full border border-cream/[0.08] text-cream/50 transition-all duration-200 hover:border-copper/40 hover:text-copper hover:bg-copper/[0.06]"
+              className="group flex size-11 items-center justify-center rounded-full border border-cream/[0.08] text-cream/50 transition-all duration-200 hover:border-copper/40 hover:text-copper hover:bg-copper/[0.06] focus-visible:ring-2 focus-visible:ring-copper focus-visible:outline-none"
             >
               <FaLinkedinIn className="text-[18px] transition-transform duration-200 group-hover:scale-110" />
             </a>
             <a
               href={`mailto:${personal.email}`}
               aria-label="Send email"
-              className="group flex size-11 items-center justify-center rounded-full border border-cream/[0.08] text-cream/50 transition-all duration-200 hover:border-copper/40 hover:text-copper hover:bg-copper/[0.06]"
+              className="group flex size-11 items-center justify-center rounded-full border border-cream/[0.08] text-cream/50 transition-all duration-200 hover:border-copper/40 hover:text-copper hover:bg-copper/[0.06] focus-visible:ring-2 focus-visible:ring-copper focus-visible:outline-none"
             >
               <Mail className="size-[18px] transition-transform duration-200 group-hover:scale-110" />
             </a>
@@ -188,7 +189,7 @@ function InputField({
   required?: boolean;
 }) {
   const shared =
-    "w-full rounded-md border border-cream/[0.08] bg-cream/[0.03] px-4 py-3.5 font-[family-name:var(--font-body)] text-base text-cream placeholder:text-cream/25 outline-none transition-all duration-200 focus:border-copper/50 focus:bg-cream/[0.05] focus:ring-1 focus:ring-copper/20 sm:py-3 sm:text-sm";
+    "w-full rounded-md border border-cream/[0.08] bg-cream/[0.03] px-4 py-3.5 font-[family-name:var(--font-body)] text-base text-cream placeholder:text-cream/25 outline-none transition-all duration-200 focus:border-copper/50 focus:bg-cream/[0.05] focus-visible:ring-2 focus-visible:ring-copper sm:py-3 sm:text-sm";
 
   return (
     <label className="block">

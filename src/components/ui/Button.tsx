@@ -26,6 +26,7 @@ export function Button({
     "font-[family-name:var(--font-mono)] text-[0.8125rem] font-medium tracking-[0.04em] uppercase",
     "transition-colors duration-200",
     "cursor-pointer",
+    "focus-visible:ring-2 focus-visible:ring-copper focus-visible:outline-none",
     variant === "solid" && [
       "bg-copper text-cream",
       "hover:bg-copper-dark",

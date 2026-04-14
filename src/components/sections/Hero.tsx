@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowDown, Download } from "lucide-react";
 import { TextReveal } from "@/components/animations/TextReveal";
 import { ParallaxLayer } from "@/components/animations/ParallaxLayer";
@@ -33,19 +33,28 @@ const fadeIn = {
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
 
+  // Scroll-driven fade + scale for cinematic recession
+  const { scrollY } = useScroll();
+  const heroOpacity = useTransform(scrollY, [0, 600], [1, 0]);
+  const heroScale = useTransform(scrollY, [0, 600], [1, 0.95]);
+  const heroY = useTransform(scrollY, [0, 600], [0, 60]);
+
   return (
     <section
       id="hero"
       ref={sectionRef}
-      className="relative min-h-screen overflow-hidden bg-dusk-hero"
+      className="relative min-h-dvh overflow-hidden bg-dusk-hero"
     >
       {/* Warm radial gradient background */}
       <ParallaxLayer speed={-15} className="absolute inset-0">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_30%_40%,rgba(184,115,51,0.06),transparent)]" />
       </ParallaxLayer>
 
-      {/* Main content */}
-      <div className="relative mx-auto flex min-h-screen max-w-[1280px] items-center px-[var(--spacing-container-px)] pt-20 pb-12">
+      {/* Main content — fades and recedes as user scrolls */}
+      <motion.div
+        style={{ opacity: heroOpacity, scale: heroScale, y: heroY }}
+        className="relative mx-auto flex min-h-dvh max-w-[1280px] items-center px-[var(--spacing-container-px)] pt-20 pb-12"
+      >
         <div className="grid w-full grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-8">
           {/* Left column — Text content */}
           <div className="lg:col-span-7">
@@ -132,10 +141,10 @@ export function Hero() {
             </FadeUp>
           </div>
         </div>
-      </div>
+      </motion.div>
 
-      {/* Bottom bar */}
-      <div className="absolute bottom-0 left-0 w-full px-[var(--spacing-container-px)] pb-6 sm:pb-8">
+      {/* Bottom bar — also fades with scroll */}
+      <motion.div style={{ opacity: heroOpacity }} className="absolute bottom-0 left-0 w-full px-[var(--spacing-container-px)] pb-6 sm:pb-8">
         <div className="mx-auto flex max-w-[1280px] items-end justify-center sm:justify-between">
           {/* Location */}
           <motion.div
@@ -165,7 +174,7 @@ export function Hero() {
             />
           </motion.div>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }

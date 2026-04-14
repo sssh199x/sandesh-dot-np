@@ -143,9 +143,9 @@ export function Projects() {
                     href={project.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex size-7 items-center justify-center rounded-full bg-copper/[0.08] text-copper transition-all duration-200 hover:bg-copper/20"
+                    className="flex size-11 items-center justify-center rounded-full bg-copper/[0.08] text-copper transition-all duration-200 hover:bg-copper/20"
                   >
-                    <ArrowUpRight className="size-3.5" />
+                    <ArrowUpRight className="size-4" />
                   </a>
                 )}
               </div>
