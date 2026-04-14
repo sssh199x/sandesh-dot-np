@@ -167,11 +167,31 @@ export function Hero() {
             <span className="font-[family-name:var(--font-mono)] text-[0.625rem] tracking-widest text-slate/60 uppercase">
               Scroll
             </span>
-            <motion.div
-              animate={{ y: [0, 6, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-              className="h-8 w-px bg-copper/40"
-            />
+            <svg
+              width="20"
+              height="34"
+              viewBox="0 0 20 34"
+              fill="none"
+              className="text-copper/50"
+            >
+              <rect
+                x="1"
+                y="1"
+                width="18"
+                height="32"
+                rx="9"
+                stroke="currentColor"
+                strokeWidth="1.5"
+              />
+              <motion.circle
+                cx="10"
+                cy="10"
+                r="3"
+                fill="currentColor"
+                animate={{ y: [0, 12, 0] }}
+                transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+              />
+            </svg>
           </motion.div>
         </div>
       </motion.div>

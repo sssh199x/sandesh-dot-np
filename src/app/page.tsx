@@ -33,9 +33,16 @@ export default function Home() {
           <Hero />
         </div>
 
-        {/* Content scrolls over the pinned hero */}
-        <div className="relative z-10">
-          <div className="pointer-events-none h-0 w-full shadow-[0_-20px_60px_rgba(26,23,20,0.15)]" />
+        {/* Content scrolls over the pinned hero — like warm parchment lifting */}
+        <div
+          className="relative z-10"
+          style={{
+            boxShadow: "0 -8px 30px rgba(26, 23, 20, 0.12), 0 -2px 8px rgba(26, 23, 20, 0.06)",
+          }}
+        >
+          {/* Copper horizon line — where the light meets the page */}
+          <div className="pointer-events-none absolute top-0 left-1/2 z-10 h-px w-3/5 max-w-md -translate-x-1/2 rounded-full bg-gradient-to-r from-transparent via-copper/25 to-transparent" />
+
           <About />
 
           <Experience />
