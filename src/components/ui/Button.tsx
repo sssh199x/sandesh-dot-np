@@ -32,8 +32,8 @@ export function Button({
       "hover:bg-copper-dark",
     ],
     variant === "ghost" && [
-      "border border-copper/40 text-copper",
-      "hover:bg-ghost-strong hover:border-copper",
+      "border border-copper/40 text-copper-btn",
+      "hover:bg-ghost-strong hover:border-copper hover:text-copper-dark",
     ],
     className
   );

@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { navItems } from "@/data/personal";
 import { useNavigationStore } from "@/store/navigation";
 import { useLenis } from "@/components/layout/SmoothScroll";
+import Image from "next/image";
 
 const darkSections = new Set(["projects", "skills", "contact"]);
 
@@ -137,12 +138,22 @@ export function Navbar() {
         )}
       >
         <nav className="mx-auto flex max-w-[1280px] items-center justify-between px-[var(--spacing-container-px)] pt-[max(1rem,env(safe-area-inset-top))] pb-4">
-          {/* Logo */}
+          {/* Logo — avatar + monogram */}
           <button
             onClick={() => scrollTo("hero")}
-            className="font-[family-name:var(--font-heading)] text-xl font-semibold text-copper cursor-pointer focus-visible:ring-2 focus-visible:ring-copper focus-visible:outline-none rounded-sm"
+            className="flex items-center gap-2.5 cursor-pointer focus-visible:ring-2 focus-visible:ring-copper focus-visible:outline-none rounded-sm"
           >
-            sandesh.
+            <Image
+              src="/images/avatar.webp"
+              alt=""
+              width={28}
+              height={28}
+              sizes="28px"
+              className="size-7 rounded-full object-cover object-top ring-1 ring-copper/20"
+            />
+            <span className="font-[family-name:var(--font-heading)] text-[0.9375rem] font-semibold tracking-wide text-copper">
+              SHT
+            </span>
           </button>
 
           {/* Desktop Nav */}

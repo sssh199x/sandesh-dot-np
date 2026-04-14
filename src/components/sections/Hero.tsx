@@ -116,8 +116,23 @@ export function Hero() {
         <div className="grid w-full grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-8">
           {/* Left column — Text content */}
           <div className="lg:col-span-7">
+            {/* Mobile/Tablet avatar — circular, above label */}
+            <div className="hero-hide hero-avatar mb-6 lg:hidden">
+              <div className="relative size-20 overflow-hidden rounded-full ring-2 ring-copper/20 ring-offset-2 ring-offset-dusk-hero sm:size-24">
+                <div className="absolute inset-0 -z-10 scale-110 bg-[radial-gradient(ellipse_at_center,rgba(184,115,51,0.14),transparent_70%)] blur-xl animate-glow-breathe" />
+                <Image
+                  src="/images/avatar.webp"
+                  alt=""
+                  width={96}
+                  height={96}
+                  sizes="(min-width: 640px) 96px, 80px"
+                  className="size-full object-cover object-top"
+                />
+              </div>
+            </div>
+
             {/* Label */}
-            <span className="hero-hide hero-label typ-label mb-6 block text-copper">
+            <span className="hero-hide hero-label typ-label mb-6 block text-copper-btn">
               Full Stack Developer
             </span>
 
