@@ -14,6 +14,8 @@ interface TextRevealProps {
   className?: string;
   /** When true, animation fires on scroll into view instead of on mount */
   scrollTriggered?: boolean;
+  /** Gate animation — waits until enabled is true (default: true) */
+  enabled?: boolean;
 }
 
 export function TextReveal({
@@ -25,11 +27,13 @@ export function TextReveal({
   delay = 0,
   className,
   scrollTriggered = false,
+  enabled = true,
 }: TextRevealProps) {
   const textRef = useRef<HTMLElement>(null);
 
   useGSAP(
     () => {
+      if (!enabled) return;
       if (!textRef.current) return;
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
@@ -58,7 +62,7 @@ export function TextReveal({
         split.revert();
       };
     },
-    { scope: textRef }
+    { scope: textRef, dependencies: [enabled] }
   );
 
   return (

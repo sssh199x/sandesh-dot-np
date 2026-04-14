@@ -9,6 +9,8 @@ interface FadeUpProps {
   duration?: number;
   y?: number;
   className?: string;
+  /** Gate animation — waits until enabled is true (default: true) */
+  enabled?: boolean;
 }
 
 export function FadeUp({
@@ -17,6 +19,7 @@ export function FadeUp({
   duration = 0.6,
   y = 40,
   className,
+  enabled = true,
 }: FadeUpProps) {
   const reduced = useReducedMotion();
 
@@ -27,7 +30,9 @@ export function FadeUp({
   return (
     <motion.div
       initial={{ opacity: 0, y }}
-      whileInView={{ opacity: 1, y: 0 }}
+      {...(enabled
+        ? { whileInView: { opacity: 1, y: 0 } }
+        : {})}
       viewport={{ once: true, margin: "-50px" }}
       transition={{
         duration,

@@ -1,35 +1,40 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useNavigationStore } from "@/store/navigation";
 
 const TOTAL_DURATION = 5850;
 
 export function IntroOverlay() {
   // null = not yet determined (matches server), true = show, false = hide
   const [state, setState] = useState<"pending" | "show" | "dismissed">("pending");
+  const setIntroComplete = useNavigationStore((s) => s.setIntroComplete);
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setState("dismissed"); // eslint-disable-line react-hooks/set-state-in-effect
+      setState("dismissed");
+      setIntroComplete();
       return;
     }
     // Skip intro on mobile — cinema is for the big screen
     if (window.innerWidth < 768) {
       setState("dismissed");
+      setIntroComplete();
       return;
     }
     if (sessionStorage.getItem("intro-seen")) {
       setState("dismissed");
+      setIntroComplete();
       return;
     }
     sessionStorage.setItem("intro-seen", "1");
     setState("show");
-  }, []);
+  }, [setIntroComplete]);
 
   // Server + first client render: return null (matches, no hydration mismatch)
   if (state !== "show") return null;
 
-  return <IntroOverlayInner onComplete={() => setState("dismissed")} />;
+  return <IntroOverlayInner onComplete={() => { setState("dismissed"); setIntroComplete(); }} />;
 }
 
 function IntroOverlayInner({ onComplete }: { onComplete: () => void }) {

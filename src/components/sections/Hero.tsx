@@ -2,42 +2,100 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import Image from "next/image";
 import { ArrowDown, Download } from "lucide-react";
-import { TextReveal } from "@/components/animations/TextReveal";
+import { gsap, SplitText, useGSAP } from "@/lib/gsap";
 import { ParallaxLayer } from "@/components/animations/ParallaxLayer";
-import { FadeUp } from "@/components/animations/FadeUp";
 import { Button } from "@/components/ui/Button";
-import { CodeBlock } from "@/components/ui/CodeBlock";
 import { personal } from "@/data/personal";
-
-const heroCode = `const developer = {
-  name: "Sandesh Hamal Thakuri",
-  location: "Pokhara, Nepal",
-  stack: ["React", "Next.js", "Node.js",
-          "Spring Boot", "Flutter", "AWS"],
-  passion: "Building things that matter",
-  remote: true,
-};
-
-export default developer;`;
-
-const fadeIn = {
-  hidden: { opacity: 0, y: 20 },
-  visible: (delay: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, delay, ease: [0.25, 1, 0.5, 1] as const },
-  }),
-};
+import { useNavigationStore } from "@/store/navigation";
 
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
+  const introComplete = useNavigationStore((s) => s.introComplete);
 
   // Scroll-driven fade + scale for cinematic recession
   const { scrollY } = useScroll();
   const heroOpacity = useTransform(scrollY, [0, 600], [1, 0]);
   const heroScale = useTransform(scrollY, [0, 600], [1, 0.95]);
   const heroY = useTransform(scrollY, [0, 600], [0, 60]);
+
+  // Single GSAP timeline — frame-perfect choreography
+  useGSAP(
+    () => {
+      if (!sectionRef.current) return;
+
+      // Immediately hide everything (before intro completes)
+      gsap.set(".hero-hide", { opacity: 0 });
+
+      if (!introComplete) return;
+
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        gsap.set(".hero-hide", { opacity: 1, y: 0, scale: 1, filter: "none" });
+        return;
+      }
+
+      const nameEl = sectionRef.current.querySelector(".hero-name");
+      // Restore name container opacity — SplitText chars handle their own opacity
+      if (nameEl) gsap.set(nameEl, { opacity: 1 });
+      const split = nameEl ? new SplitText(nameEl, { type: "chars,words" }) : null;
+      // Hide the individual chars (they start visible after split)
+      if (split) gsap.set(split.chars, { opacity: 0 });
+
+      const tl = gsap.timeline();
+
+      // 1. Label
+      tl.fromTo(".hero-label",
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" },
+        0.15);
+
+      // 2. Name — char-by-char reveal
+      if (split) {
+        tl.fromTo(split.chars,
+          { y: 80, opacity: 0, rotateX: -90 },
+          { y: 0, opacity: 1, rotateX: 0, stagger: 0.04, duration: 0.9, ease: "back.out(1.4)" },
+          0.3);
+      }
+
+      // 3. Tagline then avatar (100ms apart)
+      tl.fromTo(".hero-tagline",
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" },
+        0.8);
+      tl.fromTo(".hero-avatar",
+        { opacity: 0, scale: 1.08, filter: "blur(8px)" },
+        { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.9, ease: "power3.out" },
+        0.9);
+
+      // 4. Buttons
+      tl.fromTo(".hero-buttons",
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" },
+        1.0);
+
+      // 5. Trust bar
+      tl.fromTo(".hero-trust",
+        { y: 15, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" },
+        1.15);
+
+      // 6. Bottom bar
+      tl.fromTo(".hero-location",
+        { opacity: 0 },
+        { opacity: 1, duration: 0.4, ease: "power3.out" },
+        1.3);
+      tl.fromTo(".hero-scroll",
+        { opacity: 0 },
+        { opacity: 1, duration: 0.4, ease: "power3.out" },
+        1.5);
+
+      return () => {
+        if (split) split.revert();
+      };
+    },
+    { scope: sectionRef, dependencies: [introComplete] }
+  );
 
   return (
     <section
@@ -59,36 +117,27 @@ export function Hero() {
           {/* Left column — Text content */}
           <div className="lg:col-span-7">
             {/* Label */}
-            <motion.span
-              initial="hidden"
-              animate="visible"
-              custom={0.2}
-              variants={fadeIn}
-              className="typ-label mb-6 block text-copper"
-            >
+            <span className="hero-hide hero-label typ-label mb-6 block text-copper">
               Full Stack Developer
-            </motion.span>
+            </span>
 
             {/* Name */}
-            <TextReveal
-              as="h1"
-              className="typ-display text-charcoal mb-6"
-              delay={0.4}
-              stagger={0.04}
-              duration={0.9}
+            <h1
+              className="hero-hide hero-name typ-display text-charcoal mb-6 overflow-hidden"
+              style={{ perspective: "500px" }}
             >
               {personal.name}
-            </TextReveal>
+            </h1>
 
             {/* Tagline */}
-            <FadeUp delay={1.0} y={20}>
+            <div className="hero-hide hero-tagline">
               <p className="typ-body-lg max-w-[540px] text-slate">
                 {personal.tagline}
               </p>
-            </FadeUp>
+            </div>
 
             {/* Buttons */}
-            <FadeUp delay={1.2} y={20}>
+            <div className="hero-hide hero-buttons">
               <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
                 <Button variant="solid" href="#projects">
                   Explore My Work
@@ -99,10 +148,10 @@ export function Hero() {
                   Resume
                 </Button>
               </div>
-            </FadeUp>
+            </div>
 
             {/* Trust bar */}
-            <FadeUp delay={1.4} y={15}>
+            <div className="hero-hide hero-trust">
               <div className="mt-10 flex flex-wrap items-center gap-4 sm:gap-6">
                 <div className="flex items-center gap-2">
                   <span className="inline-block size-2 rounded-full bg-sage" />
@@ -125,20 +174,25 @@ export function Hero() {
                   </span>
                 </div>
               </div>
-            </FadeUp>
+            </div>
           </div>
 
-          {/* Right column — Code card */}
+          {/* Right column — Avatar */}
           <div className="hidden lg:col-span-5 lg:flex lg:justify-end">
-            <FadeUp delay={1.0} y={30}>
-              <ParallaxLayer speed={-8}>
-                <CodeBlock
-                  code={heroCode}
-                  filename="developer.ts"
-                  className="w-[380px] xl:w-[420px]"
+            <ParallaxLayer speed={-8}>
+              <div className="hero-hide hero-avatar relative w-[340px] xl:w-[380px]">
+                {/* Breathing copper glow behind avatar */}
+                <div className="absolute inset-0 translate-y-4 scale-90 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(184,115,51,0.14),transparent_70%)] blur-2xl animate-glow-breathe" />
+                <Image
+                  src="/images/avatar.webp"
+                  alt="Sandesh Hamal Thakuri — illustrated portrait waving hello"
+                  width={1203}
+                  height={1307}
+                  priority
+                  className="relative animate-wave-tilt drop-shadow-[0_8px_24px_rgba(26,23,20,0.1)]"
                 />
-              </ParallaxLayer>
-            </FadeUp>
+              </div>
+            </ParallaxLayer>
           </div>
         </div>
       </motion.div>
@@ -147,23 +201,14 @@ export function Hero() {
       <motion.div style={{ opacity: heroOpacity }} className="absolute bottom-0 left-0 w-full px-[var(--spacing-container-px)] pb-6 sm:pb-8">
         <div className="mx-auto flex max-w-[1280px] items-end justify-center sm:justify-between">
           {/* Location */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.6, duration: 0.6 }}
-          >
+          <div className="hero-hide hero-location">
             <span className="font-[family-name:var(--font-mono)] text-[0.625rem] tracking-wider text-slate sm:text-xs">
               {personal.location} &middot; {personal.availability}
             </span>
-          </motion.div>
+          </div>
 
           {/* Scroll indicator — hidden on mobile */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.8, duration: 0.6 }}
-            className="hidden flex-col items-center gap-2 sm:flex"
-          >
+          <div className="hero-hide hero-scroll hidden flex-col items-center gap-2 sm:flex">
             <span className="font-[family-name:var(--font-mono)] text-[0.625rem] tracking-widest text-slate/60 uppercase">
               Scroll
             </span>
@@ -192,7 +237,7 @@ export function Hero() {
                 transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
               />
             </svg>
-          </motion.div>
+          </div>
         </div>
       </motion.div>
     </section>

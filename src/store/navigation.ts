@@ -9,6 +9,8 @@ interface NavigationState {
   isMenuOpen: boolean;
   toggleMenu: () => void;
   closeMenu: () => void;
+  introComplete: boolean;         // True after intro overlay dismisses (or skips)
+  setIntroComplete: () => void;
 }
 
 export const useNavigationStore = create<NavigationState>((set) => ({
@@ -19,4 +21,6 @@ export const useNavigationStore = create<NavigationState>((set) => ({
   isMenuOpen: false,
   toggleMenu: () => set((state) => ({ isMenuOpen: !state.isMenuOpen })),
   closeMenu: () => set({ isMenuOpen: false }),
+  introComplete: false,
+  setIntroComplete: () => set({ introComplete: true }),
 }));

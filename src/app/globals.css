@@ -220,6 +220,28 @@ body::after {
   animation: bob 4s ease-in-out infinite;
 }
 
+@keyframes glow-breathe {
+  0%, 100% { opacity: 0.10; }
+  50% { opacity: 0.20; }
+}
+
+.animate-glow-breathe {
+  animation: glow-breathe 4s ease-in-out infinite;
+}
+
+@keyframes wave-tilt {
+  0%, 100% { transform: rotate(0deg); }
+  20% { transform: rotate(-2deg); }
+  40% { transform: rotate(1.5deg); }
+  60% { transform: rotate(-1.5deg); }
+  80% { transform: rotate(1deg); }
+}
+
+.animate-wave-tilt {
+  transform-origin: 50% 80%;
+  animation: wave-tilt 3s ease-in-out 2s infinite;
+}
+
 /* ========================================
    Intro Overlay (wrapper fade-out only —
    all other keyframes live inside the SVG)

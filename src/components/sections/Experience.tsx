@@ -63,18 +63,27 @@ export function Experience() {
         {/* Copper timeline line */}
         <div
           ref={lineRef}
-          className="absolute left-3 top-0 h-full w-[2px] origin-top bg-copper/30 sm:left-4 lg:left-6"
+          className="absolute left-[11px] top-0 h-full w-[2px] origin-top bg-copper/30 sm:left-[15px] lg:left-[25px]"
         />
 
         {/* Role cards */}
-        <div className="flex flex-col gap-8 sm:gap-10 lg:gap-14">
-          {experiences.map((exp) => (
+        <div className="flex flex-col gap-10 sm:gap-14 lg:gap-20">
+          {experiences.map((exp) => {
+            // Extract abbreviated start year: "Jan 2026" → "'26"
+            const yearMatch = exp.startDate.match(/\d{4}/);
+            const yearLabel = yearMatch ? `'${yearMatch[0].slice(2)}` : "";
+
+            return (
             <div
               key={exp.company}
               className="timeline-card relative pl-10 sm:pl-12 lg:pl-16"
             >
-              {/* Dot on timeline */}
-              <div className="absolute left-[7px] top-1 size-3 rounded-full border-2 border-copper bg-dusk-experience sm:left-[11px] lg:left-[19px]" />
+              {/* Year circle on timeline */}
+              <div className="absolute left-0 top-0.5 flex size-6 items-center justify-center rounded-full border-[1.5px] border-copper bg-dusk-experience sm:left-0.5 sm:size-7 lg:left-2.5 lg:size-8">
+                <span className="font-[family-name:var(--font-mono)] text-[9px] font-medium tracking-tight text-copper sm:text-[10px]">
+                  {yearLabel}
+                </span>
+              </div>
 
               {/* Card content */}
               <div className="rounded-lg border border-charcoal/[0.06] bg-surface-light p-4 shadow-[0_2px_16px_rgba(26,23,20,0.04)] sm:p-6 lg:p-8">
@@ -100,7 +109,8 @@ export function Experience() {
                 </div>
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </SectionWrapper>
