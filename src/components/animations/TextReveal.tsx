@@ -41,10 +41,10 @@ export function TextReveal({
 
       const targets = splitType.includes("chars") ? split.chars : split.words;
 
-      gsap.from(targets, {
-        y: 80,
-        opacity: 0,
-        rotateX: -90,
+      gsap.fromTo(targets,
+        { y: 80, opacity: 0, rotateX: -90 },
+        {
+        y: 0, opacity: 1, rotateX: 0,
         stagger,
         duration,
         delay,

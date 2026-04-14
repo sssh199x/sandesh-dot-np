@@ -3,6 +3,9 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigationStore } from "@/store/navigation";
 
+// Iris-close starts at 4900ms — fire introComplete here so hero animates
+// behind the closing iris instead of after overlay unmounts (no blank flash)
+const IRIS_START = 4900;
 const TOTAL_DURATION = 5850;
 
 export function IntroOverlay() {
@@ -22,28 +25,41 @@ export function IntroOverlay() {
       setIntroComplete();
       return;
     }
-    if (sessionStorage.getItem("intro-seen")) {
+    try {
+      if (sessionStorage.getItem("intro-seen")) {
+        setState("dismissed");
+        setIntroComplete();
+        return;
+      }
+      sessionStorage.setItem("intro-seen", "1");
+    } catch {
+      // sessionStorage unavailable (private browsing, storage full)
       setState("dismissed");
       setIntroComplete();
       return;
     }
-    sessionStorage.setItem("intro-seen", "1");
     setState("show");
   }, [setIntroComplete]);
 
   // Server + first client render: return null (matches, no hydration mismatch)
   if (state !== "show") return null;
 
-  return <IntroOverlayInner onComplete={() => { setState("dismissed"); setIntroComplete(); }} />;
+  return <IntroOverlayInner onComplete={() => setState("dismissed")} setIntroComplete={setIntroComplete} />;
 }
 
-function IntroOverlayInner({ onComplete }: { onComplete: () => void }) {
+function IntroOverlayInner({ onComplete, setIntroComplete }: { onComplete: () => void; setIntroComplete: () => void }) {
   const handleComplete = useCallback(() => onComplete(), [onComplete]);
 
   useEffect(() => {
-    const timer = setTimeout(handleComplete, TOTAL_DURATION);
-    return () => clearTimeout(timer);
-  }, [handleComplete]);
+    // Fire introComplete at iris-start so hero begins animating behind closing iris
+    const irisTimer = setTimeout(setIntroComplete, IRIS_START);
+    // Unmount overlay after all animations finish
+    const dismissTimer = setTimeout(handleComplete, TOTAL_DURATION);
+    return () => {
+      clearTimeout(irisTimer);
+      clearTimeout(dismissTimer);
+    };
+  }, [handleComplete, setIntroComplete]);
 
   return (
     <div
