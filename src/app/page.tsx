@@ -6,6 +6,8 @@ import { Hero } from "@/components/sections/Hero";
 import { ScrollObserver } from "@/components/layout/ScrollObserver";
 import { DuskGradient } from "@/components/layout/DuskGradient";
 import { Footer } from "@/components/layout/Footer";
+import { IntroOverlay } from "@/components/animations/IntroOverlay";
+
 
 // Below-fold sections — lazy loaded for faster initial paint
 const About = dynamic(() => import("@/components/sections/About").then((m) => m.About));
@@ -18,6 +20,7 @@ const Contact = dynamic(() => import("@/components/sections/Contact").then((m) =
 export default function Home() {
   return (
     <>
+      <IntroOverlay />
       <CustomCursor />
       <ScrollProgress />
       <ScrollObserver />

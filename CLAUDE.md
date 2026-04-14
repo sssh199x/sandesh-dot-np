@@ -1,4 +1,5 @@
 @AGENTS.md
+@INTRO_ANIMATION_PLAN.md
 
 # Sandesh Hamal Thakuri — Developer Portfolio
 
