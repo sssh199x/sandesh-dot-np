@@ -259,19 +259,18 @@ Each feature is a self-contained unit of work. Build in order — each depends o
 
 ## Phase 7: Images & Assets
 
-### F-35: Generate Project Mockups (Stitch)
-- Use Stitch MCP to generate 4 project mockup images:
+### F-35: Add Project Mockup Images
+- Add 4 project mockup images:
   - Kaya e-commerce dashboard/product page
   - Exosolve analytics dashboard with charts
   - Rebuzz POS retail interface
   - Krofile business profile platform
-- Export as optimized WebP, place in `public/images/projects/`
+- Place as optimized WebP in `public/images/projects/`
 - Wire into project cards with `next/image`
 - **Done when:** All 4 project cards show real mockup images
 
 ### F-36: OG Image
 - Create `src/app/opengraph-image.tsx` using `ImageResponse`
-- Or generate static OG image via Stitch
 - Shows name, role, copper accent
 - **Done when:** Social preview card shows when link is shared
 
@@ -332,7 +331,7 @@ Each feature is a self-contained unit of work. Build in order — each depends o
 | 4. Animations | F-18 → F-22 | Animation wrappers |
 | 5. Sections | F-23 → F-31 | All 8 sections + navbar |
 | 6. Backend | F-32 → F-34 | Contact form, scroll state, dusk gradient |
-| 7. Images | F-35 → F-37 | Stitch mockups, OG image, favicon |
+| 7. Images | F-35 → F-37 | Project mockups, OG image, favicon |
 | 8. Polish | F-38 → F-42 | Responsive, a11y, perf, deploy |
 
 **Total: 42 features across 8 phases.**

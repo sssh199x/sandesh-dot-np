@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+import { BadgeCheck } from "lucide-react";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { FadeUp } from "@/components/animations/FadeUp";
@@ -21,13 +23,23 @@ export function Teaching() {
       <FadeUp delay={0.15}>
         <div className="rounded-lg border border-charcoal/[0.06] bg-surface-light p-5 shadow-[0_2px_20px_rgba(26,23,20,0.06)] sm:p-8 lg:p-12">
           {/* Badge + Heading */}
-          <div className="mb-6 flex flex-wrap items-center gap-3">
-            <h3 className="typ-h2 text-charcoal">
-              AWS Academy Educator
-            </h3>
-            <span className="inline-block rounded-pill bg-sage/15 px-3 py-1 font-[family-name:var(--font-mono)] text-xs font-medium tracking-wide text-sage">
-              Verified
-            </span>
+          <div className="mb-6 flex flex-wrap items-center gap-4">
+            <Image
+              src="/images/aws-academy-educator.webp"
+              alt="AWS Academy Educator Badge"
+              width={56}
+              height={56}
+              className="size-14 shrink-0"
+            />
+            <div className="flex flex-wrap items-center gap-3">
+              <h3 className="typ-h2 text-charcoal">
+                AWS Academy Educator
+              </h3>
+              <span className="inline-flex items-center gap-1.5 rounded-pill bg-sage/15 px-3 py-1 font-[family-name:var(--font-mono)] text-xs font-medium tracking-wide text-sage">
+                <BadgeCheck className="size-3.5" />
+                Verified
+              </span>
+            </div>
           </div>
 
           {/* Description */}
@@ -44,7 +56,7 @@ export function Teaching() {
           </p>
 
           {/* Stats */}
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             {teachingStats.map((stat, i) => (
               <FadeUp key={stat.label} delay={0.2 + i * 0.1}>
                 <StatCard value={stat.value} label={stat.label} />

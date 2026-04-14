@@ -1,11 +1,21 @@
 "use client";
 
 import { useRef } from "react";
+import { Monitor, Server, BarChart3, Database, Cloud, Smartphone } from "lucide-react";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { FadeUp } from "@/components/animations/FadeUp";
 import { skillCategories } from "@/data/skills";
+
+const categoryIcons: Record<string, React.ReactNode> = {
+  Frontend: <Monitor className="size-5" />,
+  Backend: <Server className="size-5" />,
+  "Data Visualization": <BarChart3 className="size-5" />,
+  "Database & ORM": <Database className="size-5" />,
+  "Cloud & DevOps": <Cloud className="size-5" />,
+  Mobile: <Smartphone className="size-5" />,
+};
 
 export function Skills() {
   const gridRef = useRef<HTMLDivElement>(null);
@@ -64,7 +74,12 @@ export function Skills() {
             key={cat.category}
             className="skill-card rounded-lg border border-white/[0.06] bg-surface-dark p-6"
           >
-            <h3 className="typ-h2 mb-4 text-cream">{cat.category}</h3>
+            <div className="mb-4 flex items-center gap-3">
+              <span className="flex size-9 items-center justify-center rounded-md bg-copper/[0.08] text-copper">
+                {categoryIcons[cat.category]}
+              </span>
+              <h3 className="typ-h2 text-cream">{cat.category}</h3>
+            </div>
             <div className="flex flex-wrap gap-2">
               {cat.skills.map((skill) => (
                 <span

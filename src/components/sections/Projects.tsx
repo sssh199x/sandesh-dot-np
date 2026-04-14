@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { motion } from "framer-motion";
+import { ArrowUpRight, ShoppingCart, BarChart3, Monitor, Users } from "lucide-react";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -14,6 +15,34 @@ const cardSizes = [
   "lg:col-span-5",
   "lg:col-span-5",
   "lg:col-span-7",
+];
+
+/* Unique visual identity per project — gradient + icon + pattern */
+const projectVisuals = [
+  {
+    gradient: "from-[#B87333]/20 via-[#D4944D]/10 to-transparent",
+    icon: <ShoppingCart className="size-10 sm:size-12" />,
+    pattern: "radial-gradient(circle at 80% 20%, rgba(184,115,51,0.12) 0%, transparent 50%)",
+    label: "E-Commerce Platform",
+  },
+  {
+    gradient: "from-[#7A8B6F]/20 via-[#7A8B6F]/10 to-transparent",
+    icon: <BarChart3 className="size-10 sm:size-12" />,
+    pattern: "radial-gradient(circle at 20% 80%, rgba(122,139,111,0.12) 0%, transparent 50%)",
+    label: "Analytics Dashboard",
+  },
+  {
+    gradient: "from-[#D4944D]/15 via-[#B87333]/10 to-transparent",
+    icon: <Monitor className="size-10 sm:size-12" />,
+    pattern: "radial-gradient(circle at 70% 70%, rgba(212,148,77,0.12) 0%, transparent 50%)",
+    label: "Retail Solution",
+  },
+  {
+    gradient: "from-[#B87333]/15 via-[#7A8B6F]/10 to-transparent",
+    icon: <Users className="size-10 sm:size-12" />,
+    pattern: "radial-gradient(circle at 30% 30%, rgba(184,115,51,0.12) 0%, transparent 50%)",
+    label: "Business Platform",
+  },
 ];
 
 export function Projects() {
@@ -86,13 +115,24 @@ export function Projects() {
               transition={{ duration: 0.25 }}
               className="group h-full rounded-lg border border-white/[0.06] bg-surface-dark p-6 lg:p-8"
             >
-              {/* Placeholder image area */}
-              <div className="mb-5 aspect-[16/10] overflow-hidden rounded-md bg-white/[0.03]">
-                <div className="flex h-full items-center justify-center">
-                  <span className="font-[family-name:var(--font-mono)] text-xs tracking-wider text-cream/30 uppercase">
-                    Mockup coming soon
+              {/* Project visual */}
+              <div
+                className={`mb-5 aspect-[16/10] overflow-hidden rounded-md bg-gradient-to-br ${projectVisuals[i]?.gradient} relative`}
+                style={{ backgroundImage: projectVisuals[i]?.pattern }}
+              >
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
+                  <span className="text-copper/40 transition-colors duration-300 group-hover:text-copper/70">
+                    {projectVisuals[i]?.icon}
+                  </span>
+                  <span className="font-[family-name:var(--font-mono)] text-[0.625rem] tracking-widest text-cream/25 uppercase">
+                    {projectVisuals[i]?.label}
                   </span>
                 </div>
+                {/* Decorative grid lines */}
+                <div className="absolute inset-0 opacity-[0.03]" style={{
+                  backgroundImage: "linear-gradient(rgba(250,247,242,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(250,247,242,0.3) 1px, transparent 1px)",
+                  backgroundSize: "40px 40px",
+                }} />
               </div>
 
               {/* Title + link */}
@@ -103,9 +143,9 @@ export function Projects() {
                     href={project.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-[family-name:var(--font-mono)] text-xs text-copper transition-colors hover:text-copper-light"
+                    className="flex size-7 items-center justify-center rounded-full bg-copper/[0.08] text-copper transition-all duration-200 hover:bg-copper/20"
                   >
-                    ↗
+                    <ArrowUpRight className="size-3.5" />
                   </a>
                 )}
               </div>

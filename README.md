@@ -18,7 +18,7 @@ The scroll is a sunset. Background transitions from warm cream through amber to 
 | Smooth Scroll | Lenis |
 | State | Zustand |
 | Contact | Resend |
-| Images | Generated via Google Stitch |
+| Images | Optimized with next/image |
 | Deploy | Vercel |
 
 ## Sections

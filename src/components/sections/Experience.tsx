@@ -95,7 +95,7 @@ export function Experience() {
 
                 <div className="flex flex-wrap gap-2">
                   {exp.tech.map((t) => (
-                    <Tag key={t}>{t}</Tag>
+                    <Tag key={t} variant="light">{t}</Tag>
                   ))}
                 </div>
               </div>

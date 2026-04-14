@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { motion } from "framer-motion";
+import { ArrowDown, Download } from "lucide-react";
 import { TextReveal } from "@/components/animations/TextReveal";
 import { ParallaxLayer } from "@/components/animations/ParallaxLayer";
 import { FadeUp } from "@/components/animations/FadeUp";
@@ -82,8 +83,10 @@ export function Hero() {
               <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
                 <Button variant="solid" href="#projects">
                   Explore My Work
+                  <ArrowDown className="size-3.5" />
                 </Button>
                 <Button variant="ghost" href="/resume.pdf">
+                  <Download className="size-3.5" />
                   Resume
                 </Button>
               </div>

@@ -13,7 +13,7 @@ Personal portfolio for a Full Stack Developer (5+ years, remote US companies), A
 - **Email:** Resend (contact form backend via server action)
 - **Fonts:** next/font/google — Sora (headings), Outfit (body), JetBrains Mono (code/labels)
 - **Deploy:** Vercel
-- **Images:** Generated via Google Stitch MCP, optimized with next/image
+- **Images:** Optimized with next/image
 
 ## Dependencies to Add
 ```bash
@@ -32,7 +32,7 @@ npm install gsap @gsap/react
 - Framer Motion for entry animations, hover/tap states, and AnimatePresence
 - GSAP for scroll-scrubbed parallax, timeline drawing, pinned sections, text splits
 - Section data lives in `src/data/` as typed constants — never hardcoded in components
-- Images in `public/images/projects/` — generated from Stitch, exported as optimized PNGs
+- Images in `public/images/projects/` — optimized PNGs
 - Use `@/*` path alias (maps to `./src/*`)
 - `page.tsx` is a server component that composes client section components
 - All section/animation components must be `"use client"`

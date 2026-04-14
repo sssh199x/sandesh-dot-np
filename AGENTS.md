@@ -162,7 +162,7 @@ These fire once when entering viewport or on user action:
 ### 4. Projects (Dark Section — The Flip)
 - **Background flips to dark (#2C2826)**. This is the dramatic moment. Text becomes cream.
 - **Layout:** 4 cards, asymmetric masonry. Cards have different heights/widths.
-- **Cards:** Project mockup image (from Stitch) fills top, content below. Title in Sora heading-2, description in Outfit, tech tags as pills.
+- **Cards:** Project mockup image fills top, content below. Title in Sora heading-2, description in Outfit, tech tags as pills.
 - **Animation:** Section pins. Cards animate in sequence (GSAP ScrollTrigger scrub). Each card scales from 0.9 to 1.0 and fades in. On hover: card lifts, copper shadow glows.
 - **Projects:** Kaya E-Commerce, Exosolve Analytics, Rebuzz POS, Krofile Platform — real data from resume.
 
@@ -238,16 +238,6 @@ src/
 └── types/
     └── index.ts            # Shared TypeScript interfaces
 ```
-
----
-
-## Image Generation (Stitch MCP)
-Use Google Stitch to generate:
-1. **Project mockups** — clean, realistic browser/device frames showing each project's UI
-2. **Hero code card background** — or just use a styled `<pre>` with real code
-3. **OG image** — social sharing card for the portfolio
-
-Stitch prompts for project mockups should describe a realistic screenshot of the project UI, not a generic placeholder.
 
 ---
 
@@ -406,5 +396,5 @@ const springY = useSpring(y, { stiffness: 150, damping: 15 });
 6. **Sections (top-down)** — Hero → About → Experience → Projects → Skills → Teaching → Contact → Footer
 7. **Navigation** — Navbar with scroll-aware active state
 8. **Contact Backend** — Server action with Resend
-9. **Images** — Generate project mockups via Stitch MCP
+9. **Images** — Add project mockup images
 10. **Polish** — OG image, favicon, responsive tuning, reduced-motion, Lighthouse audit

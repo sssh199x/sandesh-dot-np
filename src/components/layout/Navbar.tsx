@@ -6,10 +6,14 @@ import { cn } from "@/lib/utils";
 import { navItems } from "@/data/personal";
 import { useNavigationStore } from "@/store/navigation";
 
+const darkSections = new Set(["projects", "skills", "contact"]);
+
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const { activeSection, isMenuOpen, toggleMenu, closeMenu } =
     useNavigationStore();
+
+  const isDark = darkSections.has(activeSection);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -30,16 +34,20 @@ export function Navbar() {
       <header
         className={cn(
           "fixed top-0 left-0 z-40 w-full transition-all duration-300",
-          scrolled
+          scrolled && !isDark
             ? "bg-cream/80 backdrop-blur-md shadow-[0_1px_0_rgba(26,23,20,0.06)]"
-            : "bg-transparent"
+            : scrolled && isDark
+              ? "bg-[#1A1714]/80 backdrop-blur-md shadow-[0_1px_0_rgba(255,255,255,0.04)]"
+              : "bg-transparent"
         )}
       >
         <nav className="mx-auto flex max-w-[1280px] items-center justify-between px-[var(--spacing-container-px)] py-4">
           {/* Logo */}
           <button
             onClick={() => scrollTo("hero")}
-            className="font-[family-name:var(--font-heading)] text-xl font-semibold text-copper cursor-pointer"
+            className={cn(
+              "font-[family-name:var(--font-heading)] text-xl font-semibold text-copper cursor-pointer transition-colors duration-300"
+            )}
           >
             sandesh.
           </button>
@@ -51,10 +59,12 @@ export function Navbar() {
                 key={item.href}
                 onClick={() => scrollTo(item.href)}
                 className={cn(
-                  "relative cursor-pointer font-[family-name:var(--font-mono)] text-sm tracking-wide transition-colors duration-200",
+                  "relative cursor-pointer font-[family-name:var(--font-mono)] text-sm tracking-wide transition-colors duration-300",
                   activeSection === item.href
                     ? "text-copper"
-                    : "text-slate hover:text-charcoal"
+                    : isDark
+                      ? "text-cream/50 hover:text-cream"
+                      : "text-slate hover:text-charcoal"
                 )}
               >
                 {item.label}

@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { Mail, Send } from "lucide-react";
+import { SiGithub } from "react-icons/si";
+import { FaLinkedinIn } from "react-icons/fa6";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { TextReveal } from "@/components/animations/TextReveal";
 import { FadeUp } from "@/components/animations/FadeUp";
@@ -102,7 +105,12 @@ export function Contact() {
                   ? "Sending..."
                   : status === "success"
                     ? "Sent!"
-                    : "Send Message"}
+                    : (
+                      <>
+                        <Send className="size-3.5" />
+                        Send Message
+                      </>
+                    )}
               </Button>
             </div>
 
@@ -129,33 +137,31 @@ export function Contact() {
 
         {/* Social links */}
         <FadeUp delay={0.6}>
-          <div className="mt-14 flex flex-wrap items-center justify-center gap-4 sm:gap-8">
+          <div className="mt-14 flex items-center justify-center gap-5">
             <a
               href={personal.socials.github}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Visit GitHub profile"
-              className="font-[family-name:var(--font-mono)] text-sm tracking-wide text-cream/50 transition-colors hover:text-copper"
+              className="group flex size-11 items-center justify-center rounded-full border border-cream/[0.08] text-cream/50 transition-all duration-200 hover:border-copper/40 hover:text-copper hover:bg-copper/[0.06]"
             >
-              GitHub
+              <SiGithub className="text-[18px] transition-transform duration-200 group-hover:scale-110" />
             </a>
-            <div className="h-3 w-px bg-cream/10" aria-hidden="true" />
             <a
               href={personal.socials.linkedin}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Visit LinkedIn profile"
-              className="font-[family-name:var(--font-mono)] text-sm tracking-wide text-cream/50 transition-colors hover:text-copper"
+              className="group flex size-11 items-center justify-center rounded-full border border-cream/[0.08] text-cream/50 transition-all duration-200 hover:border-copper/40 hover:text-copper hover:bg-copper/[0.06]"
             >
-              LinkedIn
+              <FaLinkedinIn className="text-[18px] transition-transform duration-200 group-hover:scale-110" />
             </a>
-            <div className="h-3 w-px bg-cream/10" aria-hidden="true" />
             <a
               href={`mailto:${personal.email}`}
               aria-label="Send email"
-              className="font-[family-name:var(--font-mono)] text-sm tracking-wide text-cream/50 transition-colors hover:text-copper"
+              className="group flex size-11 items-center justify-center rounded-full border border-cream/[0.08] text-cream/50 transition-all duration-200 hover:border-copper/40 hover:text-copper hover:bg-copper/[0.06]"
             >
-              Email
+              <Mail className="size-[18px] transition-transform duration-200 group-hover:scale-110" />
             </a>
           </div>
         </FadeUp>
