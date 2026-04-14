@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
 export function CustomCursor() {
   const [isHovering, setIsHovering] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(true);
+  const isVisibleRef = useRef(false);
 
   const cursorX = useMotionValue(0);
   const cursorY = useMotionValue(0);
@@ -16,13 +17,17 @@ export function CustomCursor() {
   useEffect(() => {
     const hasTouch = window.matchMedia("(pointer: coarse)").matches;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsTouchDevice(hasTouch || reducedMotion);
     if (hasTouch || reducedMotion) return;
 
     const move = (e: MouseEvent) => {
       cursorX.set(e.clientX);
       cursorY.set(e.clientY);
-      if (!isVisible) setIsVisible(true);
+      if (!isVisibleRef.current) {
+        isVisibleRef.current = true;
+        setIsVisible(true);
+      }
     };
 
     // Event delegation — works for dynamically rendered elements
@@ -49,7 +54,8 @@ export function CustomCursor() {
       document.removeEventListener("mouseover", handleOver);
       document.removeEventListener("mouseout", handleOut);
     };
-  }, [cursorX, cursorY, isVisible]);
+    // cursorX/cursorY are stable MotionValue refs — no need in deps
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (isTouchDevice) return null;
 

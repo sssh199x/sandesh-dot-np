@@ -115,24 +115,26 @@ export function Contact() {
               </Button>
             </div>
 
-            {status === "success" && (
-              <motion.p
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mt-2 text-center font-[family-name:var(--font-mono)] text-sm text-sage"
-              >
-                Thanks! I&apos;ll be in touch soon.
-              </motion.p>
-            )}
-            {status === "error" && (
-              <motion.p
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mt-2 text-center font-[family-name:var(--font-mono)] text-sm text-red-400"
-              >
-                {errorMsg}
-              </motion.p>
-            )}
+            <div aria-live="polite" aria-atomic="true">
+              {status === "success" && (
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-2 text-center font-[family-name:var(--font-mono)] text-sm text-sage"
+                >
+                  Thanks! I&apos;ll be in touch soon.
+                </motion.p>
+              )}
+              {status === "error" && (
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-2 text-center font-[family-name:var(--font-mono)] text-sm text-red-400"
+                >
+                  {errorMsg}
+                </motion.p>
+              )}
+            </div>
           </form>
         </FadeUp>
 

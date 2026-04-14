@@ -28,7 +28,7 @@ export function Button({
     "cursor-pointer",
     "focus-visible:ring-2 focus-visible:ring-copper focus-visible:outline-none",
     variant === "solid" && [
-      "bg-copper text-cream",
+      "bg-copper-btn text-cream",
       "hover:bg-copper-dark",
     ],
     variant === "ghost" && [

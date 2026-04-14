@@ -14,6 +14,8 @@ const sectionColors = [
 
 export function DuskGradient() {
   useGSAP(() => {
+    const triggers: ReturnType<typeof ScrollTrigger.create>[] = [];
+
     sectionColors.forEach(({ id, color }, i) => {
       const el = document.getElementById(id);
       if (!el) return;
@@ -25,7 +27,7 @@ export function DuskGradient() {
       if (i < sectionColors.length - 1) {
         const nextColor = sectionColors[i + 1].color;
 
-        gsap.to("body", {
+        const tween = gsap.to("body", {
           backgroundColor: nextColor,
           ease: "none",
           scrollTrigger: {
@@ -35,10 +37,16 @@ export function DuskGradient() {
             scrub: true,
           },
         });
+
+        if (tween.scrollTrigger) triggers.push(tween.scrollTrigger);
       }
     });
 
     ScrollTrigger.refresh();
+
+    return () => {
+      triggers.forEach((t) => t.kill());
+    };
   });
 
   return null;

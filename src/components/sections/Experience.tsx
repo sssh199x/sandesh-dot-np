@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
+import { gsap, useGSAP } from "@/lib/gsap";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Tag } from "@/components/ui/Tag";
@@ -68,7 +68,7 @@ export function Experience() {
 
         {/* Role cards */}
         <div className="flex flex-col gap-8 sm:gap-10 lg:gap-14">
-          {experiences.map((exp, i) => (
+          {experiences.map((exp) => (
             <div
               key={exp.company}
               className="timeline-card relative pl-10 sm:pl-12 lg:pl-16"

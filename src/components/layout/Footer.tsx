@@ -15,7 +15,7 @@ export function Footer() {
         <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:justify-between sm:text-left">
           <div className="flex flex-col items-center gap-3 sm:flex-row sm:gap-5">
             <span className="font-[family-name:var(--font-mono)] text-[0.625rem] tracking-wider text-cream/50 sm:text-xs">
-              Sandesh Hamal Thakuri &middot; Pokhara, Nepal &middot; 2026
+              Sandesh Hamal Thakuri &middot; Pokhara, Nepal &middot; {new Date().getFullYear()}
             </span>
             <div className="flex items-center gap-1">
               <a
@@ -45,7 +45,7 @@ export function Footer() {
               </a>
             </div>
           </div>
-          <span className="font-[family-name:var(--font-mono)] text-[0.5625rem] tracking-wider text-cream/40 sm:text-[0.625rem]">
+          <span className="font-[family-name:var(--font-mono)] text-[0.5625rem] tracking-wider text-cream/60 sm:text-[0.625rem]">
             Built with Next.js, Tailwind &amp; Framer Motion
           </span>
         </div>

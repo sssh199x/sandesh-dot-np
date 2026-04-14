@@ -78,7 +78,7 @@ export function SmoothScrollProvider({
     window.addEventListener("resize", onResize);
     ScrollTrigger.addEventListener("refresh", onRefresh);
 
-    setLenis(instance);
+    setLenis(instance); // eslint-disable-line react-hooks/set-state-in-effect
 
     return () => {
       window.removeEventListener("resize", onResize);

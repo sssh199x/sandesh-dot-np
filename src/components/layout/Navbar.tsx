@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { navItems } from "@/data/personal";
 import { useNavigationStore } from "@/store/navigation";
@@ -12,6 +12,7 @@ const darkSections = new Set(["projects", "skills", "contact"]);
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const reducedMotion = useReducedMotion();
   const { activeSection, navbarSection, isMenuOpen, toggleMenu, closeMenu } =
     useNavigationStore();
   const lenis = useLenis();
@@ -54,6 +55,11 @@ export function Navbar() {
   const scrollTo = (id: string) => {
     closeMenu();
     if (lenis) {
+      // Restart Lenis synchronously before scrolling — closeMenu() sets
+      // isMenuOpen:false but the useEffect that calls lenis.start() is
+      // deferred until after render. Without this, lenis.scrollTo() is
+      // a no-op because Lenis is still in stopped state.
+      lenis.start();
       lenis.scrollTo(`#${id}`, { offset: 0 });
     } else {
       const el = document.getElementById(id);
@@ -74,6 +80,56 @@ export function Navbar() {
 
   return (
     <>
+      {/* Mobile Menu — rendered BEFORE header so header's hamburger stays on top */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Navigation menu"
+            data-lenis-prevent
+            initial={reducedMotion ? false : { opacity: 0, x: "100%" }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={reducedMotion ? { opacity: 0 } : { opacity: 0, x: "100%" }}
+            transition={reducedMotion ? { duration: 0.01 } : { type: "spring" as const, stiffness: 300, damping: 30 }}
+            className={cn(
+              "fixed inset-0 z-40 flex flex-col items-center justify-center gap-8 lg:hidden",
+              "pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]",
+              isDark ? "bg-[#1A1714]" : "bg-cream"
+            )}
+          >
+            {navItems.map((item, i) => (
+              <motion.button
+                key={item.href}
+                initial={reducedMotion ? false : { opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={reducedMotion ? { duration: 0.01 } : { delay: 0.1 + i * 0.05 }}
+                onClick={() => scrollTo(item.href)}
+                className={cn(
+                  "typ-h2 cursor-pointer transition-colors",
+                  activeSection === item.href
+                    ? "text-copper"
+                    : isDark
+                      ? "text-cream/70"
+                      : "text-charcoal"
+                )}
+              >
+                {item.label}
+              </motion.button>
+            ))}
+            <motion.button
+              initial={reducedMotion ? false : { opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={reducedMotion ? { duration: 0.01 } : { delay: 0.1 + navItems.length * 0.05 }}
+              onClick={() => scrollTo("contact")}
+              className="mt-4 rounded-pill bg-copper-btn px-8 py-3.5 font-[family-name:var(--font-mono)] text-base font-medium tracking-wide text-cream cursor-pointer"
+            >
+              Get in Touch
+            </motion.button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <header
         className={cn(
           "fixed top-0 left-0 z-40 w-full transition-[background-color,box-shadow,backdrop-filter] duration-300",
@@ -120,7 +176,7 @@ export function Navbar() {
             ))}
             <button
               onClick={() => scrollTo("contact")}
-              className="rounded-pill bg-copper px-7 py-3 font-[family-name:var(--font-mono)] text-sm font-medium tracking-wide text-cream transition-colors duration-200 hover:bg-copper-dark cursor-pointer focus-visible:ring-2 focus-visible:ring-copper focus-visible:outline-none"
+              className="rounded-pill bg-copper-btn px-7 py-3 font-[family-name:var(--font-mono)] text-sm font-medium tracking-wide text-cream transition-colors duration-200 hover:bg-copper-dark cursor-pointer focus-visible:ring-2 focus-visible:ring-copper focus-visible:outline-none"
             >
               Get in Touch
             </button>
@@ -129,7 +185,7 @@ export function Navbar() {
           {/* Mobile Hamburger */}
           <button
             onClick={toggleMenu}
-            className="relative z-50 flex size-11 flex-col items-center justify-center gap-1.5 lg:hidden cursor-pointer focus-visible:ring-2 focus-visible:ring-copper focus-visible:outline-none rounded-sm"
+            className="relative z-10 flex size-11 flex-col items-center justify-center gap-1.5 lg:hidden cursor-pointer focus-visible:ring-2 focus-visible:ring-copper focus-visible:outline-none rounded-sm"
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
           >
             <motion.span
@@ -164,52 +220,6 @@ export function Navbar() {
           </button>
         </nav>
       </header>
-
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {isMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, x: "100%" }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: "100%" }}
-            transition={{ type: "spring" as const, stiffness: 300, damping: 30 }}
-            className={cn(
-              "fixed inset-0 z-30 flex flex-col items-center justify-center gap-8 lg:hidden",
-              "pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]",
-              isDark ? "bg-[#1A1714]" : "bg-cream"
-            )}
-          >
-            {navItems.map((item, i) => (
-              <motion.button
-                key={item.href}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 + i * 0.05 }}
-                onClick={() => scrollTo(item.href)}
-                className={cn(
-                  "typ-h2 cursor-pointer transition-colors",
-                  activeSection === item.href
-                    ? "text-copper"
-                    : isDark
-                      ? "text-cream/70"
-                      : "text-charcoal"
-                )}
-              >
-                {item.label}
-              </motion.button>
-            ))}
-            <motion.button
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 + navItems.length * 0.05 }}
-              onClick={() => scrollTo("contact")}
-              className="mt-4 rounded-pill bg-copper px-8 py-3.5 font-[family-name:var(--font-mono)] text-base font-medium tracking-wide text-cream cursor-pointer"
-            >
-              Get in Touch
-            </motion.button>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </>
   );
 }

@@ -10,6 +10,11 @@ export function IntroOverlay() {
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setState("dismissed"); // eslint-disable-line react-hooks/set-state-in-effect
+      return;
+    }
+    // Skip intro on mobile — cinema is for the big screen
+    if (window.innerWidth < 768) {
       setState("dismissed");
       return;
     }

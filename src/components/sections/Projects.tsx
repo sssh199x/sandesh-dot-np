@@ -143,6 +143,7 @@ export function Projects() {
                     href={project.href}
                     target="_blank"
                     rel="noopener noreferrer"
+                    aria-label={`Visit ${project.title}`}
                     className="flex size-11 items-center justify-center rounded-full bg-copper/[0.08] text-copper transition-all duration-200 hover:bg-copper/20"
                   >
                     <ArrowUpRight className="size-4" />
