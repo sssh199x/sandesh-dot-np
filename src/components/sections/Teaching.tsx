@@ -21,7 +21,16 @@ export function Teaching() {
       </FadeUp>
 
       <FadeUp delay={0.15}>
-        <div className="rounded-lg border border-charcoal/[0.06] bg-surface-light p-5 shadow-[0_2px_20px_rgba(26,23,20,0.06)] sm:p-8 lg:p-12">
+        <div className="relative overflow-hidden rounded-lg border border-charcoal/[0.06] bg-surface-light p-5 shadow-[0_2px_20px_rgba(26,23,20,0.06)] sm:p-8 lg:p-12">
+          {/* Decorative marigold — Nepali botanical accent */}
+          <Image
+            src="/images/flower-orange-3-svgrepo-com.svg"
+            alt=""
+            width={280}
+            height={280}
+            className="pointer-events-none absolute -bottom-10 -right-10 size-48 opacity-[0.07] sm:size-56 lg:-bottom-8 lg:-right-8 lg:size-72"
+            aria-hidden="true"
+          />
           {/* Badge + Heading */}
           <div className="mb-6 flex flex-wrap items-center gap-4">
             <Image
