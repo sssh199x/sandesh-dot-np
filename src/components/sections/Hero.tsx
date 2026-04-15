@@ -1,9 +1,9 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef, useState, useEffect } from "react";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { ArrowDown, Download } from "lucide-react";
+import { ArrowDown, Download, Globe, Award, Layers } from "lucide-react";
 import { gsap, SplitText, useGSAP } from "@/lib/gsap";
 import { ParallaxLayer } from "@/components/animations/ParallaxLayer";
 import { Button } from "@/components/ui/Button";
@@ -74,10 +74,11 @@ export function Hero() {
         { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" },
         1.0);
 
-      // 5. Trust bar
-      tl.fromTo(".hero-trust",
-        { y: 15, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" },
+      // 5. Trust badges — reveal parent, then stagger pills
+      tl.set(".hero-trust", { opacity: 1 }, 1.15);
+      tl.fromTo(".hero-trust-pill",
+        { y: 12, opacity: 0, scale: 0.95 },
+        { y: 0, opacity: 1, scale: 1, duration: 0.4, ease: "power3.out", stagger: 0.1 },
         1.15);
 
       // 6. Bottom bar
@@ -117,7 +118,7 @@ export function Hero() {
           {/* Left column — Text content */}
           <div className="lg:col-span-7">
             {/* Mobile/Tablet avatar — circular, above label */}
-            <div className="hero-hide hero-avatar mb-6 lg:hidden">
+            <div className="hero-hide hero-avatar mb-6 lg:hidden" style={{ opacity: 0 }}>
               <div className="relative size-20 overflow-hidden rounded-full ring-2 ring-copper/20 ring-offset-2 ring-offset-dusk-hero sm:size-24">
                 <div className="absolute inset-0 -z-10 scale-110 bg-[radial-gradient(ellipse_at_center,rgba(184,115,51,0.14),transparent_70%)] blur-xl animate-glow-breathe" />
                 <Image
@@ -133,30 +134,30 @@ export function Hero() {
             </div>
 
             {/* Label */}
-            <span className="hero-hide hero-label typ-label mb-6 block text-copper-btn">
-              Full Stack Developer
+            <span className="hero-hide hero-label typ-label mb-6 block text-copper-btn" style={{ opacity: 0 }}>
+              Full Stack Engineer
             </span>
 
             {/* Name */}
             <h1
               className="hero-hide hero-name typ-display text-charcoal mb-6 overflow-hidden"
-              style={{ perspective: "500px" }}
+              style={{ opacity: 0, perspective: "500px" }}
             >
               {personal.name}
             </h1>
 
             {/* Tagline */}
-            <div className="hero-hide hero-tagline">
+            <div className="hero-hide hero-tagline" style={{ opacity: 0 }}>
               <p className="typ-body-lg max-w-[540px] text-slate">
                 {personal.tagline}
               </p>
             </div>
 
             {/* Buttons */}
-            <div className="hero-hide hero-buttons">
+            <div className="hero-hide hero-buttons" style={{ opacity: 0 }}>
               <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
                 <Button variant="solid" href="#projects">
-                  Explore My Work
+                  View Projects
                   <ArrowDown className="size-3.5" />
                 </Button>
                 <Button variant="ghost" href="/resume.pdf">
@@ -166,29 +167,27 @@ export function Hero() {
               </div>
             </div>
 
-            {/* Trust bar */}
-            <div className="hero-hide hero-trust">
-              <div className="mt-10 flex flex-wrap items-center gap-4 sm:gap-6">
-                <div className="flex items-center gap-2">
-                  <span className="inline-block size-2 rounded-full bg-sage" />
-                  <span className="font-[family-name:var(--font-mono)] text-xs tracking-wide text-slate">
+            {/* Trust badges */}
+            <div className="hero-hide hero-trust" style={{ opacity: 0 }}>
+              <div className="mt-10 flex flex-wrap items-center gap-2.5 sm:gap-3">
+                <span className="hero-trust-pill inline-flex items-center gap-2 rounded-full border border-copper/15 bg-[rgba(184,115,51,0.05)] px-3.5 py-1.5 transition-colors duration-200 hover:bg-[rgba(184,115,51,0.1)]">
+                  <Globe className="size-3.5 text-sage" />
+                  <span className="font-[family-name:var(--font-mono)] text-[0.6875rem] tracking-wide text-slate">
                     5+ Years Remote
                   </span>
-                </div>
-                <div className="h-3 w-px bg-charcoal/10" />
-                <div className="flex items-center gap-2">
-                  <span className="inline-block size-2 rounded-full bg-copper" />
-                  <span className="font-[family-name:var(--font-mono)] text-xs tracking-wide text-slate">
-                    AWS Educator
+                </span>
+                <span className="hero-trust-pill inline-flex items-center gap-2 rounded-full border border-copper/15 bg-[rgba(184,115,51,0.05)] px-3.5 py-1.5 transition-colors duration-200 hover:bg-[rgba(184,115,51,0.1)]">
+                  <Award className="size-3.5 text-copper" />
+                  <span className="font-[family-name:var(--font-mono)] text-[0.6875rem] tracking-wide text-slate">
+                    AWS Academy Educator
                   </span>
-                </div>
-                <div className="hidden h-3 w-px bg-charcoal/10 sm:block" />
-                <div className="hidden items-center gap-2 sm:flex">
-                  <span className="inline-block size-2 rounded-full bg-copper/50" />
-                  <span className="font-[family-name:var(--font-mono)] text-xs tracking-wide text-slate">
+                </span>
+                <span className="hero-trust-pill hidden items-center gap-2 rounded-full border border-copper/15 bg-[rgba(184,115,51,0.05)] px-3.5 py-1.5 transition-colors duration-200 hover:bg-[rgba(184,115,51,0.1)] sm:inline-flex">
+                  <Layers className="size-3.5 text-copper/60" />
+                  <span className="font-[family-name:var(--font-mono)] text-[0.6875rem] tracking-wide text-slate">
                     50+ Projects
                   </span>
-                </div>
+                </span>
               </div>
             </div>
           </div>
@@ -196,7 +195,7 @@ export function Hero() {
           {/* Right column — Avatar */}
           <div className="hidden lg:col-span-5 lg:flex lg:justify-end">
             <ParallaxLayer speed={-8}>
-              <div className="hero-hide hero-avatar relative w-[340px] xl:w-[380px]">
+              <div className="hero-hide hero-avatar relative w-[340px] xl:w-[380px]" style={{ opacity: 0 }}>
                 {/* Breathing copper glow behind avatar */}
                 <div className="absolute inset-0 translate-y-4 scale-90 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(184,115,51,0.14),transparent_70%)] blur-2xl animate-glow-breathe" />
                 <Image
@@ -217,14 +216,14 @@ export function Hero() {
       <motion.div style={{ opacity: heroOpacity }} className="absolute bottom-0 left-0 w-full px-[var(--spacing-container-px)] pb-6 sm:pb-8">
         <div className="mx-auto flex max-w-[1280px] items-end justify-center sm:justify-between">
           {/* Location */}
-          <div className="hero-hide hero-location">
+          <div className="hero-hide hero-location" style={{ opacity: 0 }}>
             <span className="font-[family-name:var(--font-mono)] text-[0.625rem] tracking-wider text-slate sm:text-xs">
               {personal.location} &middot; {personal.availability}
             </span>
           </div>
 
           {/* Scroll indicator — hidden on mobile */}
-          <div className="hero-hide hero-scroll hidden flex-col items-center gap-2 sm:flex">
+          <div className="hero-hide hero-scroll hidden flex-col items-center gap-2 sm:flex" style={{ opacity: 0 }}>
             <span className="font-[family-name:var(--font-mono)] text-[0.625rem] tracking-widest text-slate/60 uppercase">
               Scroll
             </span>
@@ -256,6 +255,151 @@ export function Hero() {
           </div>
         </div>
       </motion.div>
+
+      {/* Peek avatar — slides up when user hasn't scrolled */}
+      <PeekAvatar introComplete={introComplete} />
     </section>
+  );
+}
+
+/* ═══════════════════════════════════════════
+   Peek Avatar — pops up from bottom edge
+   after 4s of no scrolling, hides on scroll.
+   Speech bubble staggers in after entrance.
+   ═══════════════════════════════════════════ */
+function PeekAvatar({ introComplete }: { introComplete: boolean }) {
+  const [visible, setVisible] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout>>(null);
+
+  // Show/hide timer logic
+  useEffect(() => {
+    if (!introComplete) return;
+    if (window.matchMedia("(max-width: 767px)").matches) return;
+
+    const startTimer = () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+      setVisible(false);
+      timerRef.current = setTimeout(() => {
+        if (window.scrollY < 200) setVisible(true);
+      }, 4000);
+    };
+
+    const onScroll = () => startTimer();
+
+    startTimer();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, [introComplete]);
+
+  return (
+    <AnimatePresence>
+      {visible && (
+        <motion.div
+          initial={{ y: 120, opacity: 0 }}
+          animate={{
+            y: 0,
+            opacity: 1,
+            transition: {
+              type: "spring",
+              stiffness: 260,
+              damping: 18,
+              mass: 0.8,
+            },
+          }}
+          exit={{
+            y: 120,
+            opacity: 0,
+            transition: { duration: 0.25, ease: [0.25, 0, 0.5, 0] },
+          }}
+          className="pointer-events-none absolute bottom-0 left-1/2 z-10 -translate-x-1/2"
+        >
+          {/*
+            Peek cycle — 6s, asymmetric timing for character:
+            0–47%  (2.85s): Visible, holding — time to read speech bubble
+            47–53% (0.35s): Duck down FAST (easeIn — snap! scared)
+            53–87% (2.0s):  Hidden — anticipation builds
+            87–100%(0.8s):  Peek up SLOW (easeOut — cautious, curious)
+          */}
+          <motion.div
+            animate={{
+              y: [0, 0, 120, 120, 0],
+            }}
+            transition={{
+              duration: 6,
+              times: [0, 0.47, 0.53, 0.87, 1],
+              repeat: Infinity,
+              ease: ["linear", "easeIn", "linear", "easeOut"],
+              delay: 2.0,
+            }}
+            className="relative"
+          >
+            <Image
+              src="/images/peek-avatar.svg"
+              alt=""
+              width={160}
+              height={73}
+              className="object-contain object-bottom drop-shadow-[0_-4px_12px_rgba(26,23,20,0.12)]"
+              aria-hidden="true"
+            />
+
+            {/* Eye sparkle glints — tiny stars that appear after avatar settles */}
+            <svg
+              viewBox="0 240 1536 700"
+              className="absolute inset-0 size-full"
+              aria-hidden="true"
+            >
+              {/* Left eye glint */}
+              <motion.g
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: [0, 1, 0.6, 1], scale: [0, 1.2, 0.8, 1] }}
+                transition={{ delay: 0.5, duration: 0.6, ease: "easeOut" }}
+              >
+                <motion.g
+                  animate={{ opacity: [1, 0.4, 1], scale: [1, 0.7, 1] }}
+                  transition={{ delay: 1.5, duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <path
+                    d="M610,840 L616,852 L610,864 L604,852 Z"
+                    fill="white"
+                    opacity="0.9"
+                  />
+                  <path
+                    d="M610,852 L622,846 L610,852 L598,846 Z"
+                    fill="white"
+                    opacity="0.7"
+                  />
+                </motion.g>
+              </motion.g>
+
+              {/* Right eye glint */}
+              <motion.g
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: [0, 1, 0.6, 1], scale: [0, 1.2, 0.8, 1] }}
+                transition={{ delay: 0.8, duration: 0.6, ease: "easeOut" }}
+              >
+                <motion.g
+                  animate={{ opacity: [1, 0.4, 1], scale: [1, 0.7, 1] }}
+                  transition={{ delay: 2.0, duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <path
+                    d="M940,807 L946,819 L940,831 L934,819 Z"
+                    fill="white"
+                    opacity="0.9"
+                  />
+                  <path
+                    d="M940,819 L952,813 L940,819 L928,813 Z"
+                    fill="white"
+                    opacity="0.7"
+                  />
+                </motion.g>
+              </motion.g>
+            </svg>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }

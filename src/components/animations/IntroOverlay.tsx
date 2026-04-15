@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigationStore } from "@/store/navigation";
 
 // Iris-close starts at 4900ms — fire introComplete here so hero animates
@@ -93,8 +93,8 @@ function IntroOverlayInner({ onComplete, setIntroComplete }: { onComplete: () =>
           animation: "sht-grain-shift 600ms steps(4) infinite",
         }}
       />
-      {/* Floating copper dust motes — golden hour atmosphere */}
-      <DustMotes />
+      {/* Canvas copper sparkles — golden hour atmosphere */}
+      <CopperSparkles />
       {/* Anamorphic light sweep across wordmark */}
       <div
         style={{
@@ -116,32 +116,123 @@ function IntroOverlayInner({ onComplete, setIntroComplete }: { onComplete: () =>
 }
 
 /* ═══════════════════════════════════════════
-   Floating copper dust motes — like dust
-   caught in Himalayan golden hour light
+   Canvas sparkles — copper particles that
+   drift, twinkle, and pulse like dust caught
+   in Himalayan golden hour light
    ═══════════════════════════════════════════ */
-const MOTES = [
-  { x: "18%", y: "38%", size: 2,   delay: 1.4, dur: 8,   drift: -30, sway: 12 },
-  { x: "75%", y: "55%", size: 1.5, delay: 1.8, dur: 10,  drift: -25, sway: -8 },
-  { x: "30%", y: "62%", size: 2.5, delay: 2.2, dur: 7,   drift: -35, sway: 15 },
-  { x: "82%", y: "42%", size: 1,   delay: 1.6, dur: 9,   drift: -20, sway: -10 },
-  { x: "45%", y: "68%", size: 1.8, delay: 2.5, dur: 11,  drift: -28, sway: 6 },
-  { x: "62%", y: "35%", size: 2,   delay: 1.9, dur: 8.5, drift: -32, sway: -14 },
-  { x: "25%", y: "50%", size: 1.2, delay: 2.8, dur: 9.5, drift: -22, sway: 10 },
-  { x: "55%", y: "58%", size: 2.2, delay: 2.0, dur: 7.5, drift: -26, sway: -7 },
-  { x: "70%", y: "45%", size: 1.4, delay: 3.0, dur: 10,  drift: -18, sway: 11 },
-  { x: "38%", y: "40%", size: 1.6, delay: 2.4, dur: 8,   drift: -30, sway: -9 },
-];
+const PARTICLE_COUNT = 80;
+const COPPER_COLORS = [
+  [184, 115, 51],  // #B87333 copper
+  [212, 148, 77],  // #D4944D copper-light
+  [143, 90, 40],   // #8F5A28 copper-dark
+] as const;
 
-function DustMotes() {
+interface Particle {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  size: number;
+  color: readonly [number, number, number];
+  opacity: number;
+  maxOpacity: number;
+  fadeSpeed: number;
+  phase: number; // twinkle phase offset
+}
+
+function createParticle(w: number, h: number): Particle {
+  return {
+    x: Math.random() * w,
+    y: Math.random() * h,
+    vx: (Math.random() - 0.5) * 0.3,
+    vy: -Math.random() * 0.4 - 0.1, // drift upward
+    size: Math.random() * 2.5 + 0.5,
+    color: COPPER_COLORS[Math.floor(Math.random() * COPPER_COLORS.length)],
+    opacity: 0,
+    maxOpacity: Math.random() * 0.7 + 0.2,
+    fadeSpeed: Math.random() * 0.008 + 0.003,
+    phase: Math.random() * Math.PI * 2,
+  };
+}
+
+function CopperSparkles() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let raf: number;
+    let particles: Particle[] = [];
+
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resize();
+    window.addEventListener("resize", resize);
+
+    // Spawn particles with staggered delays
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      particles.push(createParticle(canvas.width, canvas.height));
+    }
+
+    let time = 0;
+    const draw = () => {
+      time += 0.016;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (const p of particles) {
+        // Twinkle — sinusoidal opacity pulse
+        const twinkle = Math.sin(time * 2 + p.phase) * 0.3 + 0.7;
+
+        // Fade in
+        if (p.opacity < p.maxOpacity) {
+          p.opacity = Math.min(p.opacity + p.fadeSpeed, p.maxOpacity);
+        }
+
+        // Move
+        p.x += p.vx;
+        p.y += p.vy;
+
+        // Wrap around
+        if (p.y < -10) { p.y = canvas.height + 10; p.x = Math.random() * canvas.width; }
+        if (p.x < -10) p.x = canvas.width + 10;
+        if (p.x > canvas.width + 10) p.x = -10;
+
+        // Draw with glow
+        const [r, g, b] = p.color;
+        const alpha = p.opacity * twinkle;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
+        ctx.fill();
+
+        // Soft glow halo
+        if (p.size > 1.5) {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size * 3, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${r},${g},${b},${alpha * 0.1})`;
+          ctx.fill();
+        }
+      }
+
+      raf = requestAnimationFrame(draw);
+    };
+    raf = requestAnimationFrame(draw);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", resize);
+    };
+  }, []);
+
   return (
     <>
       <style>{`
-        @keyframes sht-mote-drift {
-          0%   { opacity: 0; transform: translateY(0) translateX(0); }
-          15%  { opacity: 0.6; }
-          85%  { opacity: 0.4; }
-          100% { opacity: 0; transform: translateY(var(--drift)) translateX(var(--sway)); }
-        }
         @keyframes sht-grain-shift {
           0%   { transform: translate(0, 0); }
           25%  { transform: translate(-60px, -40px); }
@@ -155,25 +246,16 @@ function DustMotes() {
           100% { opacity: 0; transform: translateX(200%) scaleY(1); }
         }
       `}</style>
-      {MOTES.map((m, i) => (
-        <div
-          key={i}
-          style={{
-            position: "absolute",
-            left: m.x,
-            top: m.y,
-            width: m.size,
-            height: m.size,
-            borderRadius: "50%",
-            backgroundColor: "#B87333",
-            pointerEvents: "none",
-            "--drift": `${m.drift}px`,
-            "--sway": `${m.sway}px`,
-            opacity: 0,
-            animation: `sht-mote-drift ${m.dur}s ease-in-out ${m.delay}s both`,
-          } as React.CSSProperties}
-        />
-      ))}
+      <canvas
+        ref={canvasRef}
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          pointerEvents: "none",
+        }}
+      />
     </>
   );
 }

@@ -213,6 +213,34 @@ body::after {
 }
 
 /* ========================================
+   Button Effects
+   ======================================== */
+
+/* Liquid fill — copper ghost rises from bottom on ghost buttons */
+.btn-liquid-fill::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  background: rgba(184, 115, 51, 0.08);
+  transform: translateY(100%);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.btn-liquid-fill:hover::after {
+  transform: translateY(0);
+}
+
+.btn-liquid-fill:hover {
+  border-color: var(--color-copper);
+  color: var(--color-copper-dark);
+}
+
+/* ========================================
    Ambient Animations
    ======================================== */
 
