@@ -1,16 +1,17 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import { useInView } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface StatCardProps {
   value: string;
   label: string;
+  children?: React.ReactNode;
   className?: string;
 }
 
-export function StatCard({ value, label, className }: StatCardProps) {
+export function StatCard({ value, label, children, className }: StatCardProps) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
 
@@ -19,26 +20,31 @@ export function StatCard({ value, label, className }: StatCardProps) {
   const suffix = numericMatch ? numericMatch[2] : "";
 
   return (
-    <div
+    <motion.div
       ref={ref}
+      whileHover={{ y: -2 }}
+      transition={{ type: "spring", stiffness: 400, damping: 25 }}
       className={cn(
-        "rounded-lg bg-surface-light border border-charcoal/[0.06] p-6 text-center",
+        "relative overflow-hidden rounded-lg border border-charcoal/[0.06] bg-surface-light p-5 pl-7 transition-[shadow,border-color] duration-200 hover:border-copper/30 hover:shadow-warm-sm",
+        "before:absolute before:left-0 before:top-0 before:h-full before:w-[3px] before:bg-copper/40",
         className
       )}
     >
       <div className="typ-display text-copper">
-        {numericValue !== null ? (
-          <CountUpValue
-            target={numericValue}
-            suffix={suffix}
-            animate={isInView}
-          />
-        ) : (
-          <span>{value}</span>
+        {children ?? (
+          numericValue !== null ? (
+            <CountUpValue
+              target={numericValue}
+              suffix={suffix}
+              animate={isInView}
+            />
+          ) : (
+            <span>{value}</span>
+          )
         )}
       </div>
       <p className="typ-caption mt-2">{label}</p>
-    </div>
+    </motion.div>
   );
 }
 

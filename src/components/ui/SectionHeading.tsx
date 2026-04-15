@@ -4,6 +4,7 @@ interface SectionHeadingProps {
   heading: string;
   label?: string;
   dark?: boolean;
+  accent?: boolean;
   className?: string;
 }
 
@@ -11,6 +12,7 @@ export function SectionHeading({
   heading,
   label,
   dark = false,
+  accent = true,
   className,
 }: SectionHeadingProps) {
   return (
@@ -30,7 +32,7 @@ export function SectionHeading({
       >
         {heading}
       </h2>
-      <div className="mt-4 h-[2px] w-12 bg-copper" />
+      {accent && <div className="mt-4 h-[2px] w-12 bg-copper" />}
     </div>
   );
 }

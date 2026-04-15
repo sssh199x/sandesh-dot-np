@@ -103,8 +103,8 @@ export function CodeBlock({
         </div>
         <span className="typ-tag text-cream/50 ml-2">{filename}</span>
       </div>
-      <pre className="p-5 overflow-x-auto">
-        <code className="font-[family-name:var(--font-mono)] text-[0.8125rem] leading-relaxed text-cream/70">
+      <pre className="p-4 sm:p-5 overflow-hidden">
+        <code className="font-[family-name:var(--font-mono)] text-[0.75rem] sm:text-[0.8125rem] leading-relaxed text-cream/70">
           {highlighted}
         </code>
       </pre>

@@ -3,7 +3,7 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform, useMotionValueEvent, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { ArrowDown, Download, Globe, Award, Layers } from "lucide-react";
+import { ArrowDown, Download, Globe, Layers } from "lucide-react";
 import { gsap, SplitText, useGSAP } from "@/lib/gsap";
 import { ParallaxLayer } from "@/components/animations/ParallaxLayer";
 import { Button } from "@/components/ui/Button";
@@ -181,7 +181,13 @@ export function Hero() {
                   </span>
                 </span>
                 <span className="hero-trust-pill inline-flex items-center gap-2 rounded-full border border-copper/15 bg-[rgba(184,115,51,0.05)] px-3.5 py-1.5 transition-colors duration-200 hover:bg-[rgba(184,115,51,0.1)]">
-                  <Award className="size-3.5 text-copper" />
+                  <Image
+                    src="/images/aws-academy-educator.webp"
+                    alt=""
+                    width={16}
+                    height={16}
+                    className="size-4 shrink-0"
+                  />
                   <span className="font-[family-name:var(--font-mono)] text-[0.6875rem] tracking-wide text-slate">
                     AWS Academy Educator
                   </span>
