@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { motion, useScroll, useTransform, useMotionValueEvent, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { ArrowDown, Download, Globe, Award, Layers } from "lucide-react";
 import { gsap, SplitText, useGSAP } from "@/lib/gsap";
@@ -19,6 +19,10 @@ export function Hero() {
   const heroOpacity = useTransform(scrollY, [0, 600], [1, 0]);
   const heroScale = useTransform(scrollY, [0, 600], [1, 0.95]);
   const heroY = useTransform(scrollY, [0, 600], [0, 60]);
+
+  // Pause scroll indicator animation when hero is invisible
+  const [heroVisible, setHeroVisible] = useState(true);
+  useMotionValueEvent(heroOpacity, "change", (v) => setHeroVisible(v > 0.1));
 
   // Single GSAP timeline — frame-perfect choreography
   useGSAP(
@@ -118,7 +122,7 @@ export function Hero() {
           {/* Left column — Text content */}
           <div className="lg:col-span-7">
             {/* Mobile/Tablet avatar — circular, above label */}
-            <div className="hero-hide hero-avatar mb-6 lg:hidden" style={{ opacity: 0 }}>
+            <div className="hero-hide hero-avatar mb-6 lg:hidden">
               <div className="relative size-20 overflow-hidden rounded-full ring-2 ring-copper/20 ring-offset-2 ring-offset-dusk-hero sm:size-24">
                 <div className="absolute inset-0 -z-10 scale-110 bg-[radial-gradient(ellipse_at_center,rgba(184,115,51,0.14),transparent_70%)] blur-xl animate-glow-breathe" />
                 <Image
@@ -134,27 +138,27 @@ export function Hero() {
             </div>
 
             {/* Label */}
-            <span className="hero-hide hero-label typ-label mb-6 block text-copper-btn" style={{ opacity: 0 }}>
+            <span className="hero-hide hero-label typ-label mb-6 block text-copper-btn">
               Full Stack Engineer
             </span>
 
             {/* Name */}
             <h1
               className="hero-hide hero-name typ-display text-charcoal mb-6 overflow-hidden"
-              style={{ opacity: 0, perspective: "500px" }}
+              style={{ perspective: "500px" }}
             >
               {personal.name}
             </h1>
 
             {/* Tagline */}
-            <div className="hero-hide hero-tagline" style={{ opacity: 0 }}>
+            <div className="hero-hide hero-tagline">
               <p className="typ-body-lg max-w-[540px] text-slate">
                 {personal.tagline}
               </p>
             </div>
 
             {/* Buttons */}
-            <div className="hero-hide hero-buttons" style={{ opacity: 0 }}>
+            <div className="hero-hide hero-buttons">
               <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
                 <Button variant="solid" href="#projects">
                   View Projects
@@ -168,10 +172,10 @@ export function Hero() {
             </div>
 
             {/* Trust badges */}
-            <div className="hero-hide hero-trust" style={{ opacity: 0 }}>
+            <div className="hero-hide hero-trust">
               <div className="mt-10 flex flex-wrap items-center gap-2.5 sm:gap-3">
                 <span className="hero-trust-pill inline-flex items-center gap-2 rounded-full border border-copper/15 bg-[rgba(184,115,51,0.05)] px-3.5 py-1.5 transition-colors duration-200 hover:bg-[rgba(184,115,51,0.1)]">
-                  <Globe className="size-3.5 text-sage" />
+                  <Globe className="size-3.5 text-copper" />
                   <span className="font-[family-name:var(--font-mono)] text-[0.6875rem] tracking-wide text-slate">
                     5+ Years Remote
                   </span>
@@ -183,7 +187,7 @@ export function Hero() {
                   </span>
                 </span>
                 <span className="hero-trust-pill hidden items-center gap-2 rounded-full border border-copper/15 bg-[rgba(184,115,51,0.05)] px-3.5 py-1.5 transition-colors duration-200 hover:bg-[rgba(184,115,51,0.1)] sm:inline-flex">
-                  <Layers className="size-3.5 text-copper/60" />
+                  <Layers className="size-3.5 text-copper" />
                   <span className="font-[family-name:var(--font-mono)] text-[0.6875rem] tracking-wide text-slate">
                     50+ Projects
                   </span>
@@ -195,9 +199,60 @@ export function Hero() {
           {/* Right column — Avatar */}
           <div className="hidden lg:col-span-5 lg:flex lg:justify-end">
             <ParallaxLayer speed={-8}>
-              <div className="hero-hide hero-avatar relative w-[340px] xl:w-[380px]" style={{ opacity: 0 }}>
-                {/* Breathing copper glow behind avatar */}
-                <div className="absolute inset-0 translate-y-4 scale-90 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(184,115,51,0.14),transparent_70%)] blur-2xl animate-glow-breathe" />
+              <div className="hero-hide hero-avatar relative w-[340px] xl:w-[380px]">
+                {/* Decorative ring system — mandala-inspired geometric backdrop */}
+                <svg
+                  viewBox="0 0 400 400"
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[58%] w-[115%] aspect-square pointer-events-none"
+                  aria-hidden="true"
+                >
+                  {/* Filled zone — cool charcoal tint as contrast stage */}
+                  <circle
+                    cx="200" cy="200" r="197"
+                    fill="rgba(26,23,20,0.035)"
+                  />
+
+                  {/* Outermost ring */}
+                  <circle
+                    cx="200" cy="200" r="196"
+                    fill="none"
+                    stroke="rgba(143,90,40,0.30)"
+                    strokeWidth="0.75"
+                  />
+
+                  {/* Outer ring — dotted, slow rotation */}
+                  <circle
+                    cx="200" cy="200" r="190"
+                    fill="none"
+                    stroke="rgba(143,90,40,0.45)"
+                    strokeWidth="1"
+                    strokeDasharray="2 10"
+                    className="animate-ring-spin"
+                  />
+
+                  {/* Inner ring — solid, static, recedes */}
+                  <circle
+                    cx="200" cy="200" r="150"
+                    fill="none"
+                    stroke="rgba(143,90,40,0.35)"
+                    strokeWidth="1.25"
+                  />
+
+                  {/* Cardinal tick marks — counter-rotating */}
+                  <g className="animate-ring-spin-reverse">
+                    {[0, 90, 180, 270].map((deg) => (
+                      <line
+                        key={deg}
+                        x1="200" y1="2"
+                        x2="200" y2="18"
+                        stroke="rgba(143,90,40,0.50)"
+                        strokeWidth="1"
+                        transform={`rotate(${deg} 200 200)`}
+                      />
+                    ))}
+                  </g>
+                </svg>
+
                 <Image
                   src="/images/avatar.webp"
                   alt="Sandesh Hamal Thakuri — illustrated portrait waving hello"
@@ -216,14 +271,14 @@ export function Hero() {
       <motion.div style={{ opacity: heroOpacity }} className="absolute bottom-0 left-0 w-full px-[var(--spacing-container-px)] pb-6 sm:pb-8">
         <div className="mx-auto flex max-w-[1280px] items-end justify-center sm:justify-between">
           {/* Location */}
-          <div className="hero-hide hero-location" style={{ opacity: 0 }}>
+          <div className="hero-hide hero-location">
             <span className="font-[family-name:var(--font-mono)] text-[0.625rem] tracking-wider text-slate sm:text-xs">
               {personal.location} &middot; {personal.availability}
             </span>
           </div>
 
           {/* Scroll indicator — hidden on mobile */}
-          <div className="hero-hide hero-scroll hidden flex-col items-center gap-2 sm:flex" style={{ opacity: 0 }}>
+          <div className="hero-hide hero-scroll hidden flex-col items-center gap-2 sm:flex">
             <span className="font-[family-name:var(--font-mono)] text-[0.625rem] tracking-widest text-slate/60 uppercase">
               Scroll
             </span>
@@ -233,6 +288,8 @@ export function Hero() {
               viewBox="0 0 20 34"
               fill="none"
               className="text-copper/50"
+              role="img"
+              aria-label="Scroll down"
             >
               <rect
                 x="1"
@@ -248,8 +305,8 @@ export function Hero() {
                 cy="10"
                 r="3"
                 fill="currentColor"
-                animate={{ y: [0, 12, 0] }}
-                transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+                animate={heroVisible ? { y: [0, 12, 0] } : { y: 0 }}
+                transition={heroVisible ? { duration: 1.8, repeat: Infinity, ease: "easeInOut" } : { duration: 0 }}
               />
             </svg>
           </div>
@@ -270,6 +327,10 @@ export function Hero() {
 function PeekAvatar({ introComplete }: { introComplete: boolean }) {
   const [visible, setVisible] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout>>(null);
+  const visibleRef = useRef(false);
+
+  // Keep ref in sync to avoid closure stale reads
+  useEffect(() => { visibleRef.current = visible; }, [visible]);
 
   // Show/hide timer logic
   useEffect(() => {
@@ -278,19 +339,29 @@ function PeekAvatar({ introComplete }: { introComplete: boolean }) {
 
     const startTimer = () => {
       if (timerRef.current) clearTimeout(timerRef.current);
-      setVisible(false);
+      // Only update state if currently visible (avoid unnecessary re-renders)
+      if (visibleRef.current) setVisible(false);
       timerRef.current = setTimeout(() => {
         if (window.scrollY < 200) setVisible(true);
       }, 4000);
     };
 
-    const onScroll = () => startTimer();
+    // Debounced scroll handler — fires at most once per 200ms
+    let scrollTimeout: ReturnType<typeof setTimeout> | null = null;
+    const onScroll = () => {
+      if (scrollTimeout) return;
+      scrollTimeout = setTimeout(() => {
+        scrollTimeout = null;
+        startTimer();
+      }, 200);
+    };
 
     startTimer();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", onScroll);
       if (timerRef.current) clearTimeout(timerRef.current);
+      if (scrollTimeout) clearTimeout(scrollTimeout);
     };
   }, [introComplete]);
 

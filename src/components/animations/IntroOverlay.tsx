@@ -8,43 +8,43 @@ import { useNavigationStore } from "@/store/navigation";
 const IRIS_START = 4900;
 const TOTAL_DURATION = 5850;
 
+/** Check if intro should play — only callable on the client */
+function shouldShowIntro(): boolean {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
+  if (window.matchMedia("(max-width: 767px)").matches) return false;
+  try {
+    if (sessionStorage.getItem("intro-seen")) return false;
+    sessionStorage.setItem("intro-seen", "1");
+  } catch {
+    return false;
+  }
+  return true;
+}
+
 export function IntroOverlay() {
-  // null = not yet determined (matches server), true = show, false = hide
-  const [state, setState] = useState<"pending" | "show" | "dismissed">("pending");
+  const [show, setShow] = useState(false);
   const setIntroComplete = useNavigationStore((s) => s.setIntroComplete);
+  const checkedRef = useRef(false);
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setState("dismissed");
+    if (checkedRef.current) return;
+    checkedRef.current = true;
+
+    if (shouldShowIntro()) {
+      setShow(true); // eslint-disable-line react-hooks/set-state-in-effect -- must check browser APIs (matchMedia, sessionStorage) client-side
+    } else {
       setIntroComplete();
-      return;
     }
-    // Skip intro on mobile — cinema is for the big screen
-    if (window.matchMedia("(max-width: 767px)").matches) {
-      setState("dismissed");
-      setIntroComplete();
-      return;
-    }
-    try {
-      if (sessionStorage.getItem("intro-seen")) {
-        setState("dismissed");
-        setIntroComplete();
-        return;
-      }
-      sessionStorage.setItem("intro-seen", "1");
-    } catch {
-      // sessionStorage unavailable (private browsing, storage full)
-      setState("dismissed");
-      setIntroComplete();
-      return;
-    }
-    setState("show");
   }, [setIntroComplete]);
 
-  // Server + first client render: return null (matches, no hydration mismatch)
-  if (state !== "show") return null;
+  if (!show) return null;
 
-  return <IntroOverlayInner onComplete={() => setState("dismissed")} setIntroComplete={setIntroComplete} />;
+  return (
+    <IntroOverlayInner
+      onComplete={() => setShow(false)}
+      setIntroComplete={setIntroComplete}
+    />
+  );
 }
 
 function IntroOverlayInner({ onComplete, setIntroComplete }: { onComplete: () => void; setIntroComplete: () => void }) {
@@ -165,7 +165,7 @@ function CopperSparkles() {
     if (!ctx) return;
 
     let raf: number;
-    let particles: Particle[] = [];
+    const particles: Particle[] = [];
 
     const resize = () => {
       canvas.width = window.innerWidth;

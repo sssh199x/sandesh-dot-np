@@ -213,6 +213,14 @@ body::after {
 }
 
 /* ========================================
+   Hero Hide — prevents FOUC before GSAP
+   ======================================== */
+
+.hero-hide {
+  opacity: 0;
+}
+
+/* ========================================
    Button Effects
    ======================================== */
 
@@ -268,6 +276,26 @@ body::after {
   40% { transform: rotate(1.5deg); }
   60% { transform: rotate(-1.5deg); }
   80% { transform: rotate(1deg); }
+}
+
+@keyframes ring-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes ring-spin-reverse {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+.animate-ring-spin {
+  transform-origin: 200px 200px;
+  animation: ring-spin 60s linear infinite;
+}
+
+.animate-ring-spin-reverse {
+  transform-origin: 200px 200px;
+  animation: ring-spin-reverse 90s linear infinite;
 }
 
 .animate-wave-tilt {

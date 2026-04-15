@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { motion, useMotionValue, useSpring, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useLenis } from "@/components/layout/SmoothScroll";
 
@@ -30,16 +30,18 @@ export function Button({
 }: ButtonProps) {
   const lenis = useLenis();
   const isHash = href?.startsWith("#");
+  const reducedMotion = useReducedMotion();
   const buttonRef = useRef<HTMLButtonElement>(null);
   const anchorRef = useRef<HTMLAnchorElement>(null);
 
-  // Magnetic hover — button gently follows cursor
+  // Magnetic hover — button gently follows cursor (disabled for reduced motion)
   const rawX = useMotionValue(0);
   const rawY = useMotionValue(0);
   const x = useSpring(rawX, SPRING_CONFIG);
   const y = useSpring(rawY, SPRING_CONFIG);
 
   const handleMouseMove = (e: React.MouseEvent) => {
+    if (reducedMotion) return;
     const el = buttonRef.current ?? anchorRef.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
@@ -50,6 +52,7 @@ export function Button({
   };
 
   const handleMouseLeave = () => {
+    if (reducedMotion) return;
     rawX.set(0);
     rawY.set(0);
   };
@@ -72,8 +75,8 @@ export function Button({
   );
 
   const sharedMotionProps = {
-    style: { x, y },
-    whileTap: { scale: 0.97 },
+    style: reducedMotion ? undefined : { x, y },
+    whileTap: reducedMotion ? undefined : { scale: 0.97 },
     transition: { type: "spring" as const, stiffness: 400, damping: 17 },
     onMouseMove: handleMouseMove,
     onMouseLeave: handleMouseLeave,
