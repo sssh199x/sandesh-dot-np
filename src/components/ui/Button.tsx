@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { useLenis } from "@/components/layout/SmoothScroll";
 
 interface ButtonProps {
   children: React.ReactNode;
@@ -12,6 +13,9 @@ interface ButtonProps {
   type?: "button" | "submit";
 }
 
+/** Expo ease-out for buttery long-distance scrolls */
+const scrollEasing = (t: number) => 1 - Math.pow(1 - t, 4);
+
 export function Button({
   children,
   variant = "solid",
@@ -20,6 +24,9 @@ export function Button({
   className,
   type = "button",
 }: ButtonProps) {
+  const lenis = useLenis();
+  const isHash = href?.startsWith("#");
+
   const baseStyles = cn(
     "inline-flex items-center justify-center gap-2",
     "rounded-pill px-7 py-3",
@@ -43,6 +50,30 @@ export function Button({
     transition: { type: "spring" as const, stiffness: 400, damping: 17 },
   };
 
+  // Hash links → Lenis smooth scroll instead of native jump
+  if (isHash) {
+    const handleHashClick = () => {
+      if (lenis) {
+        lenis.scrollTo(href!, { duration: 1.6, easing: scrollEasing, offset: 0 });
+      } else {
+        const el = document.querySelector(href!);
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+      }
+    };
+
+    return (
+      <motion.button
+        type="button"
+        onClick={handleHashClick}
+        className={baseStyles}
+        {...motionProps}
+      >
+        {children}
+      </motion.button>
+    );
+  }
+
+  // External / non-hash links → regular <a>
   if (href) {
     return (
       <motion.a

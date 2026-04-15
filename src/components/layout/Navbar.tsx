@@ -6,13 +6,14 @@ import { cn } from "@/lib/utils";
 import { navItems } from "@/data/personal";
 import { useNavigationStore } from "@/store/navigation";
 import { useLenis } from "@/components/layout/SmoothScroll";
+import { useHydrated } from "@/hooks/useHydrated";
 import Image from "next/image";
 
 const darkSections = new Set(["projects", "skills", "contact"]);
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const mounted = useHydrated();
   const reducedMotion = useReducedMotion();
   const { activeSection, navbarSection, isMenuOpen, toggleMenu, closeMenu } =
     useNavigationStore();
@@ -21,10 +22,6 @@ export function Navbar() {
   // activeSection = what user is reading (drives underline)
   // navbarSection = what's behind the navbar (drives color)
   const isDark = darkSections.has(navbarSection);
-
-  // Track mount state to avoid hydration mismatch
-  // eslint-disable-next-line react-hooks/set-state-in-effect
-  useEffect(() => { setMounted(true) }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -61,7 +58,11 @@ export function Navbar() {
       // deferred until after render. Without this, lenis.scrollTo() is
       // a no-op because Lenis is still in stopped state.
       lenis.start();
-      lenis.scrollTo(`#${id}`, { offset: 0 });
+      lenis.scrollTo(`#${id}`, {
+        offset: 0,
+        duration: 1.6,
+        easing: (t: number) => 1 - Math.pow(1 - t, 4),
+      });
     } else {
       const el = document.getElementById(id);
       if (el) el.scrollIntoView({ behavior: "smooth" });
@@ -111,7 +112,7 @@ export function Navbar() {
                   activeSection === item.href
                     ? "text-copper"
                     : isDark
-                      ? "text-cream/70"
+                      ? "text-cream/80"
                       : "text-charcoal"
                 )}
               >
@@ -148,6 +149,7 @@ export function Navbar() {
               alt=""
               width={28}
               height={28}
+              loading="eager"
               sizes="28px"
               className="size-7 rounded-full object-cover object-top ring-1 ring-copper/20"
             />
@@ -167,7 +169,7 @@ export function Navbar() {
                   activeSection === item.href
                     ? "text-copper"
                     : isDark
-                      ? "text-cream/60 hover:text-cream"
+                      ? "text-cream/80 hover:text-cream"
                       : "text-slate hover:text-charcoal"
                 )}
               >

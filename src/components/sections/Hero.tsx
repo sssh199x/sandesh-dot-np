@@ -122,9 +122,10 @@ export function Hero() {
                 <div className="absolute inset-0 -z-10 scale-110 bg-[radial-gradient(ellipse_at_center,rgba(184,115,51,0.14),transparent_70%)] blur-xl animate-glow-breathe" />
                 <Image
                   src="/images/avatar.webp"
-                  alt=""
+                  alt="Sandesh Hamal Thakuri"
                   width={96}
                   height={96}
+                  loading="eager"
                   sizes="(min-width: 640px) 96px, 80px"
                   className="size-full object-cover object-top"
                 />

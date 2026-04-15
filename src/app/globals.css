@@ -57,6 +57,11 @@
   --radius-xl: 24px;
   --radius-pill: 9999px;
 
+  /* --- Shadows --- */
+  --shadow-warm-sm: 0 2px 8px rgba(26, 23, 20, 0.06);
+  --shadow-warm-md: 0 4px 20px rgba(26, 23, 20, 0.08);
+  --shadow-warm-lg: 0 8px 40px rgba(26, 23, 20, 0.15);
+
   /* --- Transitions --- */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);

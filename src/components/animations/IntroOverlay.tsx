@@ -20,7 +20,7 @@ export function IntroOverlay() {
       return;
     }
     // Skip intro on mobile — cinema is for the big screen
-    if (window.innerWidth < 768) {
+    if (window.matchMedia("(max-width: 767px)").matches) {
       setState("dismissed");
       setIntroComplete();
       return;
@@ -78,20 +78,103 @@ function IntroOverlayInner({ onComplete, setIntroComplete }: { onComplete: () =>
       }}
       aria-hidden="true"
     >
-      {/* Noise grain texture */}
+      {/* Animated film grain — stepped position shift for real film-stock feel */}
       <div
         style={{
           position: "absolute",
-          inset: 0,
+          inset: "-50%",
+          width: "200%",
+          height: "200%",
           opacity: 0.03,
           pointerEvents: "none",
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
           backgroundRepeat: "repeat",
           backgroundSize: "180px 180px",
+          animation: "sht-grain-shift 600ms steps(4) infinite",
+        }}
+      />
+      {/* Floating copper dust motes — golden hour atmosphere */}
+      <DustMotes />
+      {/* Anamorphic light sweep across wordmark */}
+      <div
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: 0,
+          width: "100%",
+          height: "2px",
+          marginTop: "-8px",
+          background: "linear-gradient(90deg, transparent 0%, rgba(184,115,51,0) 30%, rgba(184,115,51,0.14) 50%, rgba(184,115,51,0) 70%, transparent 100%)",
+          opacity: 0,
+          pointerEvents: "none",
+          animation: "sht-light-sweep 800ms cubic-bezier(0.16, 1, 0.3, 1) 3950ms both",
         }}
       />
       <AnimatedNameSVG />
     </div>
+  );
+}
+
+/* ═══════════════════════════════════════════
+   Floating copper dust motes — like dust
+   caught in Himalayan golden hour light
+   ═══════════════════════════════════════════ */
+const MOTES = [
+  { x: "18%", y: "38%", size: 2,   delay: 1.4, dur: 8,   drift: -30, sway: 12 },
+  { x: "75%", y: "55%", size: 1.5, delay: 1.8, dur: 10,  drift: -25, sway: -8 },
+  { x: "30%", y: "62%", size: 2.5, delay: 2.2, dur: 7,   drift: -35, sway: 15 },
+  { x: "82%", y: "42%", size: 1,   delay: 1.6, dur: 9,   drift: -20, sway: -10 },
+  { x: "45%", y: "68%", size: 1.8, delay: 2.5, dur: 11,  drift: -28, sway: 6 },
+  { x: "62%", y: "35%", size: 2,   delay: 1.9, dur: 8.5, drift: -32, sway: -14 },
+  { x: "25%", y: "50%", size: 1.2, delay: 2.8, dur: 9.5, drift: -22, sway: 10 },
+  { x: "55%", y: "58%", size: 2.2, delay: 2.0, dur: 7.5, drift: -26, sway: -7 },
+  { x: "70%", y: "45%", size: 1.4, delay: 3.0, dur: 10,  drift: -18, sway: 11 },
+  { x: "38%", y: "40%", size: 1.6, delay: 2.4, dur: 8,   drift: -30, sway: -9 },
+];
+
+function DustMotes() {
+  return (
+    <>
+      <style>{`
+        @keyframes sht-mote-drift {
+          0%   { opacity: 0; transform: translateY(0) translateX(0); }
+          15%  { opacity: 0.6; }
+          85%  { opacity: 0.4; }
+          100% { opacity: 0; transform: translateY(var(--drift)) translateX(var(--sway)); }
+        }
+        @keyframes sht-grain-shift {
+          0%   { transform: translate(0, 0); }
+          25%  { transform: translate(-60px, -40px); }
+          50%  { transform: translate(40px, -80px); }
+          75%  { transform: translate(-80px, 60px); }
+          100% { transform: translate(0, 0); }
+        }
+        @keyframes sht-light-sweep {
+          0%   { opacity: 0; transform: translateX(-100%) scaleY(1); }
+          15%  { opacity: 1; scaleY: 1.5; }
+          100% { opacity: 0; transform: translateX(200%) scaleY(1); }
+        }
+      `}</style>
+      {MOTES.map((m, i) => (
+        <div
+          key={i}
+          style={{
+            position: "absolute",
+            left: m.x,
+            top: m.y,
+            width: m.size,
+            height: m.size,
+            borderRadius: "50%",
+            backgroundColor: "#B87333",
+            pointerEvents: "none",
+            "--drift": `${m.drift}px`,
+            "--sway": `${m.sway}px`,
+            opacity: 0,
+            animation: `sht-mote-drift ${m.dur}s ease-in-out ${m.delay}s both`,
+          } as React.CSSProperties}
+        />
+      ))}
+    </>
   );
 }
 

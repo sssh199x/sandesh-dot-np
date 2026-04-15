@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { cn } from "@/lib/utils";
 
 interface CodeBlockProps {
@@ -83,6 +84,8 @@ export function CodeBlock({
   filename = "developer.ts",
   className,
 }: CodeBlockProps) {
+  const highlighted = useMemo(() => highlightTS(code), [code]);
+
   return (
     <div
       className={cn(
@@ -102,7 +105,7 @@ export function CodeBlock({
       </div>
       <pre className="p-5 overflow-x-auto">
         <code className="font-[family-name:var(--font-mono)] text-[0.8125rem] leading-relaxed text-cream/70">
-          {highlightTS(code)}
+          {highlighted}
         </code>
       </pre>
     </div>
