@@ -307,6 +307,15 @@ body::after {
   animation: wave-tilt 3s ease-in-out 2s infinite;
 }
 
+@keyframes pulse-live {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.animate-pulse-live {
+  animation: pulse-live 2s ease-in-out infinite;
+}
+
 /* ========================================
    Intro Overlay (wrapper fade-out only —
    all other keyframes live inside the SVG)
