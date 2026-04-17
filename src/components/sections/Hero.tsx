@@ -206,59 +206,6 @@ export function Hero() {
           <div className="hidden lg:col-span-5 lg:flex lg:justify-end">
             <ParallaxLayer speed={-8}>
               <div className="hero-hide hero-avatar relative w-[340px] xl:w-[380px]">
-                {/* Decorative ring system — mandala-inspired geometric backdrop */}
-                <svg
-                  viewBox="0 0 400 400"
-                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[58%] w-[115%] aspect-square pointer-events-none"
-                  aria-hidden="true"
-                >
-                  {/* Filled zone — cool charcoal tint as contrast stage */}
-                  <circle
-                    cx="200" cy="200" r="197"
-                    fill="rgba(26,23,20,0.035)"
-                  />
-
-                  {/* Outermost ring */}
-                  <circle
-                    cx="200" cy="200" r="196"
-                    fill="none"
-                    stroke="rgba(143,90,40,0.30)"
-                    strokeWidth="0.75"
-                  />
-
-                  {/* Outer ring — dotted, slow rotation */}
-                  <circle
-                    cx="200" cy="200" r="190"
-                    fill="none"
-                    stroke="rgba(143,90,40,0.45)"
-                    strokeWidth="1"
-                    strokeDasharray="2 10"
-                    className="animate-ring-spin"
-                  />
-
-                  {/* Inner ring — solid, static, recedes */}
-                  <circle
-                    cx="200" cy="200" r="150"
-                    fill="none"
-                    stroke="rgba(143,90,40,0.35)"
-                    strokeWidth="1.25"
-                  />
-
-                  {/* Cardinal tick marks — counter-rotating */}
-                  <g className="animate-ring-spin-reverse">
-                    {[0, 90, 180, 270].map((deg) => (
-                      <line
-                        key={deg}
-                        x1="200" y1="2"
-                        x2="200" y2="18"
-                        stroke="rgba(143,90,40,0.50)"
-                        strokeWidth="1"
-                        transform={`rotate(${deg} 200 200)`}
-                      />
-                    ))}
-                  </g>
-                </svg>
-
                 <Image
                   src="/images/avatar.webp"
                   alt="Sandesh Hamal Thakuri — illustrated portrait waving hello"

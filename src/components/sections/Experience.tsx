@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -8,8 +9,11 @@ import { Tag } from "@/components/ui/Tag";
 import { FadeUp } from "@/components/animations/FadeUp";
 import { experiences } from "@/data/experience";
 
+const TIMELINE_ICON = "/images/signpost-3d.png";
+
 export function Experience() {
   const containerRef = useRef<HTMLDivElement>(null);
+
   useGSAP(
     () => {
       if (!containerRef.current) return;
@@ -36,31 +40,63 @@ export function Experience() {
 
       const entries = containerRef.current.querySelectorAll(".timeline-entry");
       entries.forEach((entry) => {
-        gsap.from(entry, {
-          opacity: 0,
-          y: 40,
-          duration: 0.8,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: entry,
-            start: "top 85%",
-            toggleActions: "play none none reverse",
-          },
+        // Fade up the entry — fromTo for Strict Mode safety
+        gsap.fromTo(
+          entry,
+          { opacity: 0, y: 40 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: entry,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+
+        // Stagger inner reveals — fromTo for Strict Mode safety
+        const children = entry.querySelectorAll(".reveal-child");
+        children.forEach((child, i) => {
+          gsap.fromTo(
+            child,
+            { opacity: 0, y: 15 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.5,
+              ease: "power2.out",
+              delay: i * 0.08,
+              scrollTrigger: {
+                trigger: entry,
+                start: "top 80%",
+                toggleActions: "play none none reverse",
+              },
+            }
+          );
         });
 
-        const children = entry.querySelectorAll(".reveal-child");
-        gsap.from(children, {
-          opacity: 0,
-          y: 15,
-          duration: 0.5,
-          ease: "power2.out",
-          stagger: 0.08,
-          scrollTrigger: {
-            trigger: entry,
-            start: "top 80%",
-            toggleActions: "play none none reverse",
-          },
-        });
+        // Icon pop — scale bounce when timeline reaches it
+        const icon = entry.querySelector(".timeline-icon");
+        if (icon) {
+          gsap.fromTo(
+            icon,
+            { scale: 0, rotate: -15 },
+            {
+              scale: 1,
+              rotate: 0,
+              duration: 0.6,
+              ease: "back.out(2.5)",
+              scrollTrigger: {
+                trigger: entry,
+                start: "top 82%",
+                toggleActions: "play none none reverse",
+              },
+            }
+          );
+        }
       });
     },
     { scope: containerRef }
@@ -73,84 +109,87 @@ export function Experience() {
       </FadeUp>
 
       <div ref={containerRef} className="relative">
-        {/* ===== MOBILE/TABLET: single-column with left timeline ===== */}
+        {/* ===== MOBILE/TABLET ===== */}
         <div className="lg:hidden relative">
-          {/* Scroll-drawn line */}
           <div
-            className="timeline-line absolute left-[7px] sm:left-[9px] top-0 h-full w-[1.5px] origin-top bg-copper/25"
+            className="timeline-line absolute left-[16px] sm:left-[18px] top-0 h-full w-[1.5px] origin-top bg-copper/25"
           />
 
-          <div className="flex flex-col gap-14 sm:gap-16">
+          <ol className="flex flex-col gap-14 sm:gap-16 list-none">
             {experiences.map((exp) => {
               const isActive = exp.endDate === "Present";
 
               return (
-                <div key={exp.company} className="timeline-entry relative pl-8 sm:pl-10">
-                  {/* Timeline node */}
+                <li key={exp.company} className="timeline-entry relative pl-12 sm:pl-14">
+                  {/* Timeline icon */}
                   <div
-                    className={`absolute left-0 top-1 size-[15px] rounded-full border-2 sm:left-[1px] sm:size-[17px] ${
-                      isActive
-                        ? "border-copper bg-copper shadow-[0_0_0_4px_rgba(184,115,51,0.12)]"
-                        : "border-copper/40 bg-dusk-experience"
+                    className={`timeline-icon absolute left-0 top-0 z-10 size-8 sm:size-9 ${
+                      isActive ? "opacity-100" : "opacity-65"
                     }`}
-                  />
-
-                  <div className="reveal-child mb-2 flex items-center gap-2">
-                    {isActive && (
-                      <span className="size-1.5 rounded-full bg-copper animate-pulse-live" />
-                    )}
-                    <span className="font-[family-name:var(--font-mono)] text-[0.6875rem] tracking-widest text-slate uppercase">
-                      {exp.startDate} — {exp.endDate}
-                    </span>
+                  >
+                    <Image
+                      src={TIMELINE_ICON}
+                      alt=""
+                      width={36}
+                      height={36}
+                      sizes="36px"
+                      className="size-full object-contain drop-shadow-sm"
+                    />
                   </div>
 
-                  <h3 className="reveal-child typ-h2 text-charcoal leading-tight">
-                    {exp.company}
-                  </h3>
+                  {/* Content — glow wraps only this, not the icon */}
+                  <div
+                    className={isActive
+                      ? "rounded-lg bg-copper/[0.04] px-4 py-3 -mx-2"
+                      : ""
+                    }
+                  >
+                    <div className="reveal-child mb-2 flex items-center gap-2">
+                      {isActive && (
+                        <span className="size-1.5 rounded-full bg-copper animate-pulse-live" />
+                      )}
+                      <span className="typ-tag tracking-widest text-slate">
+                        {exp.startDate} — {exp.endDate}
+                      </span>
+                    </div>
 
-                  <p className="reveal-child mt-1 font-[family-name:var(--font-mono)] text-[0.6875rem] font-medium tracking-wide text-copper">
-                    {exp.role}
-                  </p>
+                    <h3 className="reveal-child typ-h2 text-charcoal leading-tight">
+                      {exp.company}
+                    </h3>
 
-                  <p className="reveal-child typ-body mt-3 text-charcoal/60 leading-[1.75]">
-                    {exp.description}
-                  </p>
+                    <p className="reveal-child mt-1 typ-tag font-medium text-copper">
+                      {exp.role}
+                    </p>
 
-                  {exp.highlights.length > 0 && (
-                    <div className="reveal-child mt-3 flex flex-wrap gap-x-4 gap-y-1">
-                      {exp.highlights.map((h) => (
-                        <span
-                          key={h}
-                          className="inline-flex items-center gap-1.5 font-[family-name:var(--font-mono)] text-[0.625rem] font-medium tracking-wide text-copper-dark"
-                        >
-                          <span className="size-1 rounded-full bg-copper/40" />
-                          {h}
-                        </span>
+                    <div className="reveal-child my-3 h-px w-8 bg-copper/25" />
+
+                    <p className="reveal-child typ-body text-charcoal/60 leading-[1.75]">
+                      {exp.description}
+                    </p>
+
+                    <EntryHighlights highlights={exp.highlights} />
+
+                    <div className="reveal-child mt-4 flex flex-wrap gap-1.5">
+                      {exp.tech.map((t) => (
+                        <Tag key={t} variant="light">{t}</Tag>
                       ))}
                     </div>
-                  )}
-
-                  <div className="reveal-child mt-4 flex flex-wrap gap-1.5">
-                    {exp.tech.map((t) => (
-                      <Tag key={t} variant="light">{t}</Tag>
-                    ))}
                   </div>
-                </div>
+                </li>
               );
             })}
-          </div>
+          </ol>
         </div>
 
-        {/* ===== DESKTOP: 3-column grid — year | timeline | content ===== */}
+        {/* ===== DESKTOP: 3-column grid — year | icon | content ===== */}
         <div className="hidden lg:block">
-          {/* The timeline line spans the full height of this wrapper */}
           <div className="relative">
-            {/* Scroll-drawn line — positioned over the middle column */}
+            {/* Scroll-drawn line — centered in the 46px icon column: 180 + 20(gap) + 23 = 223 */}
             <div
-              className="timeline-line absolute left-[203px] top-0 h-full w-[1.5px] origin-top bg-copper/25"
+              className="timeline-line absolute left-[223px] top-0 h-full w-[1.5px] origin-top bg-copper/25"
             />
 
-            <div className="flex flex-col gap-20">
+            <ol className="flex flex-col gap-20 list-none">
               {experiences.map((exp) => {
                 const isActive = exp.endDate === "Present";
                 const yearMatch = exp.startDate.match(/\d{4}/);
@@ -158,13 +197,16 @@ export function Experience() {
                 const yearShort = yearMatch ? `'${yearMatch[0].slice(2)}` : "";
 
                 return (
-                  <div
+                  <li
                     key={exp.company}
-                    className="timeline-entry grid grid-cols-[180px_46px_1fr] items-start"
+                    className="timeline-entry grid grid-cols-[180px_46px_1fr] gap-x-5 items-start"
                   >
-                    {/* COL 1 — Year + metadata (right-aligned) */}
+                    {/* COL 1 — Year + metadata */}
                     <div className="text-right pt-1">
-                      <span className="reveal-child block font-[family-name:var(--font-heading)] text-[3.25rem] font-semibold leading-none tracking-tight text-copper/[0.18]">
+                      <span
+                        className="reveal-child block font-[family-name:var(--font-heading)] text-[3.25rem] font-semibold leading-none tracking-tight text-copper/[0.18]"
+                        aria-hidden="true"
+                      >
                         {yearFull}
                       </span>
 
@@ -172,33 +214,42 @@ export function Experience() {
                         {isActive && (
                           <span className="size-1.5 rounded-full bg-copper animate-pulse-live" />
                         )}
-                        <span className="font-[family-name:var(--font-mono)] text-[0.6875rem] tracking-widest text-slate uppercase">
+                        <span className="typ-tag tracking-widest text-slate">
                           {yearShort} — {isActive ? "Now" : `'${exp.endDate.match(/\d{4}/)?.[0]?.slice(2) ?? exp.endDate}`}
                         </span>
                       </div>
 
-                      <p className="reveal-child mt-1 font-[family-name:var(--font-mono)] text-[0.625rem] font-medium tracking-wide text-copper/70">
+                      <p className="reveal-child mt-1 typ-tag text-[0.625rem] font-medium text-copper/70">
                         {exp.role}
                       </p>
                     </div>
 
-                    {/* COL 2 — Timeline node (centered in 46px column) */}
-                    <div className="flex justify-center pt-3">
+                    {/* COL 2 — Timeline icon */}
+                    <div className="relative z-10 flex justify-center pt-1">
                       <div
-                        className={`size-[13px] rounded-full border-2 ${
-                          isActive
-                            ? "border-copper bg-copper shadow-[0_0_0_4px_rgba(184,115,51,0.12)]"
-                            : "border-copper/40 bg-dusk-experience"
+                        className={`timeline-icon size-10 ${
+                          isActive ? "opacity-100" : "opacity-60"
                         }`}
-                      />
+                      >
+                        <Image
+                          src={TIMELINE_ICON}
+                          alt=""
+                          width={40}
+                          height={40}
+                          sizes="40px"
+                          className="size-full object-contain drop-shadow-md"
+                        />
+                      </div>
                     </div>
 
                     {/* COL 3 — Company + content */}
-                    <div className="relative">
-                      {isActive && (
-                        <div className="absolute -inset-5 -z-10 rounded-xl bg-copper/[0.04]" />
-                      )}
-
+                    <div
+                      className={`relative ${
+                        isActive
+                          ? "rounded-lg bg-copper/[0.04] px-5 py-4 -mx-5 -my-4"
+                          : ""
+                      }`}
+                    >
                       <h3 className="reveal-child typ-h1 text-charcoal leading-[1.15] tracking-[-0.01em]">
                         {exp.company}
                       </h3>
@@ -209,19 +260,7 @@ export function Experience() {
                         {exp.description}
                       </p>
 
-                      {exp.highlights.length > 0 && (
-                        <div className="reveal-child mt-3 flex flex-wrap gap-x-5 gap-y-1.5">
-                          {exp.highlights.map((h) => (
-                            <span
-                              key={h}
-                              className="inline-flex items-center gap-1.5 font-[family-name:var(--font-mono)] text-[0.6875rem] font-medium tracking-wide text-copper-dark"
-                            >
-                              <span className="size-1 rounded-full bg-copper/40" />
-                              {h}
-                            </span>
-                          ))}
-                        </div>
-                      )}
+                      <EntryHighlights highlights={exp.highlights} />
 
                       <div className="reveal-child mt-5 flex flex-wrap gap-1.5">
                         {exp.tech.map((t) => (
@@ -229,13 +268,32 @@ export function Experience() {
                         ))}
                       </div>
                     </div>
-                  </div>
+                  </li>
                 );
               })}
-            </div>
+            </ol>
           </div>
         </div>
       </div>
     </SectionWrapper>
+  );
+}
+
+/** Shared highlight metrics — used in both mobile and desktop layouts */
+function EntryHighlights({ highlights }: { highlights: string[] }) {
+  if (highlights.length === 0) return null;
+
+  return (
+    <div className="reveal-child mt-3 flex flex-wrap gap-x-4 gap-y-1 lg:gap-x-5 lg:gap-y-1.5">
+      {highlights.map((h) => (
+        <span
+          key={h}
+          className="inline-flex items-center gap-1.5 typ-tag font-medium text-copper-dark"
+        >
+          <span className="size-1 rounded-full bg-copper/40" />
+          {h}
+        </span>
+      ))}
+    </div>
   );
 }

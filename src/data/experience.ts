@@ -3,7 +3,6 @@ import type { Experience } from "@/types";
 export const experiences: Experience[] = [
   {
     company: "Silverline Educational Consultancy",
-    monogram: "S",
     role: "Freelance Web Developer",
     startDate: "Jan 2026",
     endDate: "Present",
@@ -23,7 +22,6 @@ export const experiences: Experience[] = [
   },
   {
     company: "Two Ace Solutions (Kaya)",
-    monogram: "K",
     role: "Full Stack Developer",
     startDate: "Jul 2025",
     endDate: "Feb 2026",
@@ -43,7 +41,6 @@ export const experiences: Experience[] = [
   },
   {
     company: "Informatics College Pokhara",
-    monogram: "I",
     role: "Computing Instructor",
     startDate: "Jul 2025",
     endDate: "Present",
@@ -54,7 +51,6 @@ export const experiences: Experience[] = [
   },
   {
     company: "Exosolve",
-    monogram: "E",
     role: "Senior Full Stack Developer",
     startDate: "May 2024",
     endDate: "May 2025",
@@ -74,7 +70,6 @@ export const experiences: Experience[] = [
   },
   {
     company: "Krofile",
-    monogram: "K",
     role: "Full Stack Engineer II",
     startDate: "Jan 2023",
     endDate: "Apr 2024",
@@ -94,7 +89,6 @@ export const experiences: Experience[] = [
   },
   {
     company: "Brand Builders",
-    monogram: "B",
     role: "Flutter/Web Developer",
     startDate: "Dec 2020",
     endDate: "Jan 2023",

@@ -49,8 +49,11 @@ export function IntroOverlay() {
 
 function IntroOverlayInner({ onComplete, setIntroComplete }: { onComplete: () => void; setIntroComplete: () => void }) {
   const handleComplete = useCallback(() => onComplete(), [onComplete]);
+  const setIntroPlayed = useNavigationStore((s) => s.setIntroPlayed);
 
   useEffect(() => {
+    // Mark that the cinematic intro actually rendered (not skipped)
+    setIntroPlayed();
     // Fire introComplete at iris-start so hero begins animating behind closing iris
     const irisTimer = setTimeout(setIntroComplete, IRIS_START);
     // Unmount overlay after all animations finish
@@ -59,7 +62,7 @@ function IntroOverlayInner({ onComplete, setIntroComplete }: { onComplete: () =>
       clearTimeout(irisTimer);
       clearTimeout(dismissTimer);
     };
-  }, [handleComplete, setIntroComplete]);
+  }, [handleComplete, setIntroComplete, setIntroPlayed]);
 
   return (
     <div

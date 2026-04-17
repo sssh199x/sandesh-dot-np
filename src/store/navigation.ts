@@ -11,6 +11,8 @@ interface NavigationState {
   closeMenu: () => void;
   introComplete: boolean;         // True after intro overlay dismisses (or skips)
   setIntroComplete: () => void;
+  introPlayed: boolean;           // True only if cinematic intro actually rendered (not skipped)
+  setIntroPlayed: () => void;
 }
 
 export const useNavigationStore = create<NavigationState>((set) => ({
@@ -23,4 +25,6 @@ export const useNavigationStore = create<NavigationState>((set) => ({
   closeMenu: () => set({ isMenuOpen: false }),
   introComplete: false,
   setIntroComplete: () => set({ introComplete: true }),
+  introPlayed: false,
+  setIntroPlayed: () => set({ introPlayed: true }),
 }));

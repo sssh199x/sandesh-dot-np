@@ -19,7 +19,6 @@ export interface StatItem {
 
 export interface Experience {
   company: string;
-  monogram: string;
   role: string;
   startDate: string;
   endDate: string;
