@@ -86,9 +86,11 @@ export function Projects() {
         ref={containerRef}
         className="grid grid-cols-1 gap-5 sm:gap-6 lg:grid-cols-12 lg:gap-7"
       >
+        {/* Per-card phase offsets so slideshows don't sync across cards */}
         {projects.map((project, i) => {
           const domain = getDomain(project.href);
           const isWide = i === 4;
+          const cardOffset = [0, 2.3, 4.1, 1.7, 3.5][i] ?? 0;
 
           return (
             <div
@@ -97,8 +99,8 @@ export function Projects() {
             >
               <div className="group h-full overflow-hidden rounded-xl border border-white/[0.06] bg-[#302C29] transition-[transform,box-shadow] duration-300 ease-out hover:-translate-y-1.5 hover:[box-shadow:0_12px_48px_rgba(184,115,51,0.12)]">
 
-                {/* Browser chrome + screenshot */}
-                {project.image && (
+                {/* Browser chrome + screenshot slideshow */}
+                {project.images.length > 0 && (
                   <div>
                     {/* Browser chrome bar */}
                     <div className="flex items-center gap-2 border-b border-white/[0.06] bg-white/[0.03] px-4 py-2.5">
@@ -118,16 +120,32 @@ export function Projects() {
                       </div>
                     </div>
 
-                    {/* Screenshot */}
+                    {/* Screenshot crossfade slideshow */}
                     <div className={`relative overflow-hidden ${isWide ? "aspect-[2/1]" : "aspect-video"}`}>
-                      <Image
-                        src={project.image}
-                        alt={`${project.title} screenshot`}
-                        fill
-                        sizes={isWide ? "(min-width: 1024px) 80vw, 100vw" : "(min-width: 1024px) 55vw, 100vw"}
-                        className="object-cover object-top lg:brightness-[0.85] lg:saturate-[0.9] lg:transition-[filter] lg:duration-500 lg:ease-out lg:group-hover:brightness-100 lg:group-hover:saturate-100"
-                        loading="lazy"
-                      />
+                      {project.images.map((src, imgIdx) => {
+                        const count = project.images.length;
+                        const isSingle = count <= 1;
+                        const duration = count * 5;
+                        const delay = imgIdx * 5 + cardOffset;
+                        const animName = count <= 3 ? "crossfade-3" : "crossfade-4";
+
+                        return (
+                          <Image
+                            key={src}
+                            src={src}
+                            alt={imgIdx === 0 ? `${project.title} screenshot` : ""}
+                            fill
+                            sizes={isWide ? "(min-width: 1024px) 80vw, 100vw" : "(min-width: 1024px) 55vw, 100vw"}
+                            className="absolute inset-0 object-cover object-top lg:brightness-[0.85] lg:saturate-[0.9] lg:group-hover:brightness-100 lg:group-hover:saturate-100"
+                            loading="lazy"
+                            aria-hidden={imgIdx > 0 ? true : undefined}
+                            style={isSingle ? undefined : {
+                              animation: `${animName} ${duration}s ease-in-out ${delay}s infinite`,
+                              opacity: imgIdx === 0 ? 1 : 0,
+                            }}
+                          />
+                        );
+                      })}
                     </div>
                   </div>
                 )}

@@ -13,7 +13,11 @@ export const projects: Project[] = [
       "GSAP",
       "Framer Motion",
     ],
-    image: "/images/projects/silverline.webp",
+    images: [
+      "/images/projects/silverline/silverline.webp",
+      "/images/projects/silverline/silverline-2.webp",
+      "/images/projects/silverline/silverline-3.webp",
+    ],
     href: "https://consultsilverline.net",
   },
   {
@@ -28,7 +32,11 @@ export const projects: Project[] = [
       "NextAuth 5",
       "Radix UI",
     ],
-    image: "/images/projects/kaya.webp",
+    images: [
+      "/images/projects/kaya/kaya.webp",
+      "/images/projects/kaya/kaya-2.webp",
+      "/images/projects/kaya/kaya-3.webp",
+    ],
     href: "https://thehouseofkaya.com",
   },
   {
@@ -43,7 +51,12 @@ export const projects: Project[] = [
       "GraphQL",
       "AWS",
     ],
-    image: "/images/projects/exosolve.webp",
+    images: [
+      "/images/projects/exosolve/exosolve.webp",
+      "/images/projects/exosolve/exosolve-2.webp",
+      "/images/projects/exosolve/exosolve-3.webp",
+      "/images/projects/exosolve/exosolve-4.webp",
+    ],
     href: "https://exosolve.io",
   },
   {
@@ -51,7 +64,12 @@ export const projects: Project[] = [
     description:
       "Retail management solution deployed to 30+ retailers. Led a 6-member team building Flutter frontend with real-time inventory tracking, multi-gateway payments, offline-first architecture, and interactive sales analytics dashboards.",
     tech: ["Flutter", "Node.js", "MongoDB", "fl_chart", "IoT", "SQLite"],
-    image: "/images/projects/rebuzz.webp",
+    images: [
+      "/images/projects/rebuzz/rebuzz.webp",
+      "/images/projects/rebuzz/rebuzz-2.webp",
+      "/images/projects/rebuzz/rebuzz-3.webp",
+      "/images/projects/rebuzz/rebuzz-4.webp",
+    ],
     href: "https://rebuzzpos.com",
   },
   {
@@ -66,7 +84,12 @@ export const projects: Project[] = [
       "GraphQL",
       "WebSockets",
     ],
-    image: "/images/projects/krofile.webp",
+    images: [
+      "/images/projects/krofile/krofile.webp",
+      "/images/projects/krofile/krofile-2.webp",
+      "/images/projects/krofile/krofile-3.webp",
+      "/images/projects/krofile/krofile-4.webp",
+    ],
     href: "https://krofile.com",
   },
 ];
