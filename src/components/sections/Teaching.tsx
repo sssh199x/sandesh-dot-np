@@ -10,13 +10,20 @@ import { FadeUp } from "@/components/animations/FadeUp";
 import { StatCard } from "@/components/ui/StatCard";
 import { Tag } from "@/components/ui/Tag";
 
-/* Decorative AWS service icons — fill empty space in credential card */
+/* AWS service icons — decorative grid in credential card */
 const awsServices = [
-  { name: "EC2", src: "/images/teaching/aws-ec2.svg" },
-  { name: "S3", src: "/images/teaching/aws-s3.svg" },
-  { name: "Lambda", src: "/images/teaching/aws-lambda.svg" },
-  { name: "CloudFront", src: "/images/teaching/aws-cloudfront.svg" },
-  { name: "DynamoDB", src: "/images/teaching/aws-dynamodb.svg" },
+  { name: "EC2", src: "/images/teaching/ec2.svg" },
+  { name: "S3", src: "/images/teaching/s3.svg" },
+  { name: "Lambda", src: "/images/teaching/lambda.svg" },
+  { name: "RDS", src: "/images/teaching/rds.svg" },
+  { name: "IAM", src: "/images/teaching/iam.svg" },
+  { name: "CloudWatch", src: "/images/teaching/cloudwatch.svg" },
+  { name: "DynamoDB", src: "/images/teaching/dynamodb.svg" },
+  { name: "CloudFront", src: "/images/teaching/cloudfront.svg" },
+  { name: "API Gateway", src: "/images/teaching/api-gateway.svg" },
+  { name: "VPC", src: "/images/teaching/vpc.svg" },
+  { name: "SQS", src: "/images/teaching/sqs.svg" },
+  { name: "Route 53", src: "/images/teaching/route53.svg" },
 ];
 
 const teachingStats = [
@@ -84,6 +91,27 @@ export function Teaching() {
               trigger: shimmerRef.current,
               start: "top 88%",
               toggleActions: "play none none none",
+            },
+          }
+        );
+      }
+
+      // AWS service icons cascade in
+      const svcIcons = sectionRef.current.querySelectorAll(".aws-svc-icon");
+      if (svcIcons.length) {
+        gsap.fromTo(
+          svcIcons,
+          { opacity: 0, scale: 0.7 },
+          {
+            opacity: 1,
+            scale: 1,
+            duration: 0.4,
+            ease: "back.out(1.4)",
+            stagger: 0.05,
+            scrollTrigger: {
+              trigger: svcIcons[0],
+              start: "top 90%",
+              toggleActions: "play none none reverse",
             },
           }
         );
@@ -170,25 +198,27 @@ export function Teaching() {
                   for students pursuing computing degrees.
                 </p>
 
-                {/* AWS service icons — decorative, fills empty space */}
+                {/* AWS service icon grid — fills empty space */}
                 <div
-                  className="mt-8 flex items-center gap-5 sm:gap-7 lg:mt-12"
+                  className="mt-8 flex flex-wrap items-center gap-2.5 sm:gap-3 lg:mt-10"
                   aria-hidden="true"
                 >
                   {awsServices.map((svc) => (
                     <div
                       key={svc.name}
-                      className="flex flex-col items-center gap-1.5"
+                      className="aws-svc-icon group/icon relative"
+                      title={svc.name}
                     >
                       <img
                         src={svc.src}
                         alt=""
-                        width={36}
-                        height={36}
+                        width={40}
+                        height={40}
                         loading="lazy"
-                        className="size-8 opacity-[0.08] sm:size-9"
+                        className="size-9 opacity-[0.14] transition-opacity duration-300 hover:opacity-[0.35] sm:size-10"
                       />
-                      <span className="font-[family-name:var(--font-mono)] text-[9px] uppercase tracking-[0.1em] text-charcoal/[0.15]">
+                      {/* Label on hover */}
+                      <span className="pointer-events-none absolute -bottom-5 left-1/2 -translate-x-1/2 whitespace-nowrap font-[family-name:var(--font-mono)] text-[8px] uppercase tracking-[0.08em] text-charcoal/30 opacity-0 transition-opacity duration-200 group-hover/icon:opacity-100">
                         {svc.name}
                       </span>
                     </div>
