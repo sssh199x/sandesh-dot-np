@@ -65,7 +65,7 @@ function CollegeBgMark() {
       src={collegeBg}
       alt=""
       aria-hidden="true"
-      className="pointer-events-none absolute left-1/2 top-1/2 w-[85%] max-w-[280px] -translate-x-1/2 -translate-y-1/2 object-contain opacity-[0.12]"
+      className="pointer-events-none absolute left-[62%] top-1/2 w-[85%] max-w-[280px] -translate-x-1/2 -translate-y-1/2 object-contain opacity-[0.12]"
     />
   );
 }
@@ -239,7 +239,7 @@ export function Teaching() {
               </div>
 
               {/* Right: Stats — stretch to match left column */}
-              <div className="relative flex flex-col overflow-hidden border-t border-charcoal/[0.06] p-5 sm:p-8 lg:col-span-4 lg:border-l lg:border-t-0 lg:p-10">
+              <div className="relative flex flex-col border-t border-charcoal/[0.06] p-5 sm:p-8 lg:col-span-4 lg:border-l lg:border-t-0 lg:p-10">
                 <CollegeBgMark />
                 <span className="typ-label mb-5 block text-sage">
                   By the Numbers
