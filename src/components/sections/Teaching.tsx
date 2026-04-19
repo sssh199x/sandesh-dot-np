@@ -58,13 +58,14 @@ const courses = [
 
 const collegeBg = "/images/teaching/informatics-college-pokhara.webp";
 
-/** Watermark background — Informatics College Pokhara logo */
+/** Watermark — Informatics College Pokhara logo */
 function CollegeBgMark() {
   return (
-    <div
-      className="pointer-events-none absolute bottom-4 left-4 right-4 top-4 bg-contain bg-center bg-no-repeat opacity-[0.12]"
-      style={{ backgroundImage: `url(${collegeBg})` }}
+    <img
+      src={collegeBg}
+      alt=""
       aria-hidden="true"
+      className="pointer-events-none absolute left-1/2 top-1/2 w-[85%] max-w-[280px] -translate-x-1/2 -translate-y-1/2 object-contain opacity-[0.12]"
     />
   );
 }
