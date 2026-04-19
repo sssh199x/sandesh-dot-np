@@ -238,7 +238,7 @@ export function Teaching() {
                     src="/images/teaching/informatics-college-pokhara.webp"
                     alt="Informatics College Pokhara"
                     width={640}
-                    height={170}
+                    height={120}
                     loading="lazy"
                     className="h-auto w-full opacity-70"
                   />
