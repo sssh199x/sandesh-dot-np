@@ -237,10 +237,10 @@ export function Teaching() {
                   <Image
                     src="/images/teaching/informatics-college-pokhara.webp"
                     alt="Informatics College Pokhara"
-                    width={400}
-                    height={160}
+                    width={620}
+                    height={280}
                     loading="lazy"
-                    className="h-auto w-full max-h-20 object-contain object-left sm:max-h-24"
+                    className="h-auto w-full"
                   />
                 </div>
 
