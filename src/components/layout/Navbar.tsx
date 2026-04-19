@@ -143,7 +143,7 @@ export function Navbar() {
 
       <header
         className={cn(
-          "fixed top-0 left-0 z-40 w-full transition-[background-color,box-shadow,backdrop-filter] duration-300",
+          "fixed top-0 left-0 z-40 w-full transform-gpu transition-[background-color,box-shadow,backdrop-filter] duration-300",
           headerBg
         )}
       >
