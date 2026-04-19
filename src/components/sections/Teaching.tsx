@@ -171,7 +171,7 @@ export function Teaching() {
 
             <div className="relative grid grid-cols-1 lg:grid-cols-12">
               {/* Left: Badge + Description */}
-              <div className="p-5 sm:p-8 lg:col-span-8 lg:p-10">
+              <div className="flex flex-col p-5 sm:p-8 lg:col-span-8 lg:p-10">
                 {/* Badge row */}
                 <div className="mb-5 flex flex-wrap items-center gap-4">
                   <Image
@@ -232,25 +232,17 @@ export function Teaching() {
                   </div>
                 </div>
 
-                {/* Informatics College Pokhara banner */}
-                <div className="mt-8 lg:mt-10">
+                {/* Informatics College Pokhara banner — fills remaining space */}
+                <div className="mt-auto flex items-end pt-6 lg:pt-8">
                   <Image
                     src="/images/teaching/informatics-college-pokhara.webp"
                     alt="Informatics College Pokhara"
                     width={620}
                     height={280}
                     loading="lazy"
-                    className="h-auto w-full"
+                    className="h-auto w-full max-w-[360px] opacity-70"
                   />
                 </div>
-
-                {/* Sage verification line — draws on scroll */}
-                <div
-                  ref={verifyLineRef}
-                  className="mt-6 h-[2px] w-full origin-left bg-sage/30"
-                  style={{ transform: "scaleX(0)" }}
-                  aria-hidden="true"
-                />
               </div>
 
               {/* Right: Stats — integrated, not appended */}
