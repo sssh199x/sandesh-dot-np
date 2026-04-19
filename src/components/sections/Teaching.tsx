@@ -240,7 +240,7 @@ export function Teaching() {
                     width={400}
                     height={160}
                     loading="lazy"
-                    className="h-auto w-full max-w-[320px] opacity-80 sm:max-w-[360px]"
+                    className="h-auto w-full"
                   />
                 </div>
 
