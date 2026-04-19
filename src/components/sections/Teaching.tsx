@@ -240,7 +240,7 @@ export function Teaching() {
                     width={400}
                     height={160}
                     loading="lazy"
-                    className="h-auto w-full"
+                    className="h-auto w-full max-h-20 object-contain object-left sm:max-h-24"
                   />
                 </div>
 
