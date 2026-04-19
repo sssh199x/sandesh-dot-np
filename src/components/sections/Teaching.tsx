@@ -237,20 +237,20 @@ export function Teaching() {
                   <Image
                     src="/images/teaching/informatics-college-pokhara.webp"
                     alt="Informatics College Pokhara"
-                    width={620}
-                    height={280}
+                    width={560}
+                    height={220}
                     loading="lazy"
                     className="h-auto w-full max-w-[360px] opacity-70"
                   />
                 </div>
               </div>
 
-              {/* Right: Stats — integrated, not appended */}
-              <div className="border-t border-charcoal/[0.06] p-5 sm:p-8 lg:col-span-4 lg:border-l lg:border-t-0 lg:p-10">
+              {/* Right: Stats — stretch to match left column */}
+              <div className="flex flex-col border-t border-charcoal/[0.06] p-5 sm:p-8 lg:col-span-4 lg:border-l lg:border-t-0 lg:p-10">
                 <span className="typ-label mb-5 block text-sage">
                   By the Numbers
                 </span>
-                <div className="grid grid-cols-3 gap-4 lg:grid-cols-1 lg:gap-5">
+                <div className="flex flex-1 flex-col justify-between gap-4 sm:flex-row lg:flex-col lg:gap-0">
                   {teachingStats.map((stat) => (
                     <StatCard
                       key={stat.label}
