@@ -40,7 +40,7 @@ export function Contact() {
   };
 
   return (
-    <SectionWrapper id="contact" background="#1A1714">
+    <SectionWrapper id="contact" background="#1A1714" className="pb-40 sm:pb-48">
       <div className="mx-auto max-w-[680px] text-center">
         {/* Heading */}
         <FadeUp>

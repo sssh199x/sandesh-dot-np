@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import { BadgeCheck, Code2, Cloud, GitBranch } from "lucide-react";
+import { BadgeCheck } from "lucide-react";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -39,20 +39,46 @@ const teachingStats = [
   { value: "2", label: "Courses Designed" },
 ];
 
+const javaTopics = [
+  { name: "Servlets", src: "/images/teaching/servlet.svg" },
+  { name: "JSP", src: "/images/teaching/jsp.svg" },
+  { name: "JSTL", src: "/images/teaching/jstl.svg" },
+  { name: "Session Mgmt", src: "/images/teaching/session.svg" },
+  { name: "MVC", src: "/images/teaching/mvc.png" },
+  { name: "Auth Filter", src: "/images/teaching/authentication-filter.svg" },
+  { name: "Collections", src: "/images/teaching/collections.svg" },
+  { name: "Functional Interfaces", src: "/images/teaching/functional-interfaces.svg" },
+  { name: "Streams API", src: "/images/teaching/streams-api.svg" },
+  { name: "Multithreading", src: "/images/teaching/multithreading.svg" },
+  { name: "Exception Handling", src: "/images/teaching/exception-handling.svg" },
+  { name: "JDBC", src: "/images/teaching/jdbc.svg" },
+] as { name: string; src?: string }[];
+
 const courses = [
   {
     name: "Advanced Java",
     description:
       "Server-side programming from servlet lifecycle to production MVC architectures.",
-    topics: ["Servlets", "JSP", "JSTL", "Session Mgmt", "MVC"],
-    Icon: Code2,
+    topics: javaTopics,
+    iconSrc: "/images/teaching/java-bgwhite.svg",
   },
   {
     name: "Cloud Computing & IoT",
     description:
-      "AWS cloud infrastructure and embedded systems — from EC2 provisioning to IoT sensor networks.",
-    topics: ["AWS Services", "EC2 & S3", "Lambda", "Embedded Systems", "IoT"],
-    Icon: Cloud,
+      "Virtualization, cloud service models, and IoT protocols — from VMware labs to MQTT sensor networks.",
+    topics: [
+      { name: "VMware", src: "/images/teaching/vmware.svg" },
+      { name: "Ubuntu", src: "/images/teaching/ubuntu.svg" },
+      { name: "MQTT", src: "/images/teaching/mqtt.svg" },
+      { name: "Arduino", src: "/images/teaching/arduino.svg" },
+      { name: "ESP-32", src: "/images/teaching/esp32.svg" },
+      { name: "Raspberry Pi", src: "/images/teaching/raspberry-pi.svg" },
+      { name: "IaaS / PaaS / SaaS", src: "/images/teaching/iaas-paas-saas.svg" },
+      { name: "Virtual Machines", src: "/images/teaching/virtual-machines.svg" },
+      { name: "Sensors & Actuators", src: "/images/teaching/sensors-actuators.svg" },
+      { name: "Cloud Types", src: "/images/teaching/cloud-types.svg" },
+    ] as { name: string; src?: string }[],
+    iconSrc: "/images/teaching/IoT.svg",
   },
 ];
 
@@ -61,43 +87,25 @@ const collegeBg = "/images/teaching/informatics-college-pokhara.webp";
 /** Watermark — Informatics College Pokhara logo */
 function CollegeBgMark() {
   return (
-    <img
+    <Image
       src={collegeBg}
       alt=""
       aria-hidden="true"
-      className="pointer-events-none absolute left-[62%] top-1/2 w-[85%] max-w-[280px] -translate-x-1/2 -translate-y-1/2 object-contain opacity-[0.12]"
+      width={280}
+      height={280}
+      className="pointer-events-none absolute left-1/2 top-1/2 w-[80%] max-w-[240px] -translate-x-1/2 -translate-y-1/2 object-contain opacity-[0.10]"
     />
   );
 }
 
 export function Teaching() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const verifyLineRef = useRef<HTMLDivElement>(null);
   const shimmerRef = useRef<HTMLSpanElement>(null);
 
-  /* Sage verification line draws on scroll — the signature interaction */
   useGSAP(
     () => {
       if (!sectionRef.current) return;
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-      // Sage line draws left-to-right
-      if (verifyLineRef.current) {
-        gsap.fromTo(
-          verifyLineRef.current,
-          { scaleX: 0 },
-          {
-            scaleX: 1,
-            duration: 1.2,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: verifyLineRef.current,
-              start: "top 85%",
-              toggleActions: "play none none reverse",
-            },
-          }
-        );
-      }
 
       // Shimmer sweep across "Verified" pill
       if (shimmerRef.current) {
@@ -211,24 +219,25 @@ export function Teaching() {
 
                 {/* AWS service icon grid — certification study sheet */}
                 <div className="mt-8 lg:mt-10">
-                  <span className="typ-label mb-4 block text-charcoal/25">
+                  <span className="typ-label mb-4 block text-charcoal/60">
                     Services Covered
                   </span>
-                  <div className="grid grid-cols-5 gap-x-3 gap-y-5 sm:grid-cols-7 lg:grid-cols-10">
+                  <div className="grid grid-cols-4 gap-x-3 gap-y-5 sm:grid-cols-7 lg:grid-cols-10">
                     {awsServices.map((svc) => (
                       <div
                         key={svc.name}
                         className="aws-svc-icon group/icon flex flex-col items-center gap-1.5"
                       >
-                        <img
+                        <Image
                           src={svc.src}
                           alt={svc.name}
                           width={40}
                           height={40}
                           loading="lazy"
+                          unoptimized
                           className="size-9 transition-transform duration-200 group-hover/icon:scale-110 sm:size-10"
                         />
-                        <span className="text-center font-[family-name:var(--font-mono)] text-[7px] leading-tight uppercase tracking-[0.06em] text-charcoal/40 sm:text-[8px]">
+                        <span className="text-center font-[family-name:var(--font-mono)] text-[9px] leading-tight uppercase tracking-[0.04em] text-charcoal/65">
                           {svc.name}
                         </span>
                       </div>
@@ -250,7 +259,7 @@ export function Teaching() {
                       key={stat.label}
                       value={stat.value}
                       label={stat.label}
-                      className="border-0 bg-transparent p-0 pl-4 shadow-none before:bg-sage/40 hover:translate-y-0 hover:border-0 hover:shadow-none"
+                      className="border-0 bg-transparent p-0 pl-4 shadow-none before:bg-sage/40 hover:translate-y-0 hover:border-0 hover:shadow-none [&_.typ-display]:text-[clamp(1.75rem,3vw,2.5rem)]"
                     />
                   ))}
                 </div>
@@ -271,8 +280,16 @@ export function Teaching() {
 
               {/* Course header */}
               <div className="mb-3 flex items-center gap-3">
-                <span className="flex size-8 items-center justify-center rounded-md bg-sage/10 text-sage">
-                  <course.Icon className="size-4" aria-hidden="true" />
+                <span className="flex size-9 shrink-0 items-center justify-center rounded-md sm:size-10">
+                  <Image
+                    src={course.iconSrc}
+                    alt=""
+                    width={40}
+                    height={40}
+                    unoptimized
+                    className="size-full object-contain"
+                    aria-hidden="true"
+                  />
                 </span>
                 <h4 className="font-[family-name:var(--font-heading)] text-base font-medium tracking-tight text-charcoal sm:text-lg">
                   {course.name}
@@ -280,32 +297,69 @@ export function Teaching() {
               </div>
 
               {/* Description */}
-              <p className="typ-caption mb-4 text-charcoal/60">
+              <p className="mb-4 font-[family-name:var(--font-body)] text-sm leading-relaxed text-charcoal/65">
                 {course.description}
               </p>
 
-              {/* Topic tags */}
-              <div className="flex flex-wrap gap-1.5">
-                {course.topics.map((topic) => (
-                  <Tag key={topic} variant="light">
-                    {topic}
-                  </Tag>
-                ))}
-              </div>
+              {/* Topic icons */}
+              {course.topics.some((t) => t.src) && (
+                <div className="grid grid-cols-3 gap-x-2 gap-y-5 sm:grid-cols-4 lg:grid-cols-6">
+                  {course.topics
+                    .filter((t) => t.src)
+                    .map((topic) => (
+                      <div
+                        key={topic.name}
+                        className="flex flex-col items-center gap-2"
+                      >
+                        <Image
+                          src={topic.src!}
+                          alt={topic.name}
+                          width={36}
+                          height={36}
+                          loading="lazy"
+                          unoptimized={topic.src!.endsWith(".svg")}
+                          className="size-9 object-contain sm:size-10"
+                        />
+                        <span className="w-full text-center font-[family-name:var(--font-mono)] text-[7px] leading-tight uppercase tracking-[0.02em] text-charcoal/65 sm:text-[8px]">
+                          {topic.name}
+                        </span>
+                      </div>
+                    ))}
+                </div>
+              )}
+
+              {/* Topic tags (no icon) */}
+              {course.topics.some((t) => !t.src) && (
+                <div className={`flex flex-wrap gap-1.5 ${course.topics.some((t) => t.src) ? "mt-4" : ""}`}>
+                  {course.topics
+                    .filter((t) => !t.src)
+                    .map((topic) => (
+                      <Tag key={topic.name} variant="light">
+                        {topic.name}
+                      </Tag>
+                    ))}
+                </div>
+              )}
             </div>
           ))}
         </div>
 
         {/* ─── GitHub Classroom ─── */}
         <FadeUp delay={0.25}>
-          <div className="mt-5 flex items-center gap-2.5 rounded-lg border border-charcoal/[0.04] bg-surface-light/50 px-5 py-3.5">
-            <GitBranch
-              className="size-4 shrink-0 text-sage"
+          <div className="mt-5 flex items-center gap-3 rounded-lg border border-charcoal/[0.06] bg-surface-light px-5 py-3.5">
+            <Image
+              src="/images/teaching/github-classroom.svg"
+              alt=""
+              width={20}
+              height={20}
+              loading="lazy"
+              unoptimized
+              className="size-5 shrink-0"
               aria-hidden="true"
             />
-            <p className="typ-caption text-charcoal/50">
+            <p className="font-[family-name:var(--font-body)] text-sm leading-relaxed text-charcoal/65">
               All assignments and collaboration managed through{" "}
-              <span className="font-medium text-charcoal/70">
+              <span className="font-medium text-charcoal/80">
                 GitHub Classroom
               </span>
             </p>

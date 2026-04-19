@@ -13,6 +13,9 @@ export const personal: PersonalInfo = {
   socials: {
     github: "https://github.com/sssh199x",
     linkedin: "https://linkedin.com/in/sandesh-hamal-thakuri",
+    instagram: "https://instagram.com/sandeshhamal",
+    facebook: "https://facebook.com/sandeshhamal",
+    whatsapp: "https://wa.me/9779800000000",
   },
 };
 

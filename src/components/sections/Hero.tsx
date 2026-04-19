@@ -136,6 +136,7 @@ export function Hero() {
                   alt="Sandesh Hamal Thakuri"
                   width={96}
                   height={96}
+                  priority
                   sizes="(min-width: 640px) 80px, 56px"
                   className="size-full object-cover object-top"
                 />
@@ -223,6 +224,7 @@ export function Hero() {
                   alt="Sandesh Hamal Thakuri — illustrated portrait waving hello"
                   width={1203}
                   height={1307}
+                  priority
                   className="relative animate-wave-tilt drop-shadow-[0_8px_24px_rgba(26,23,20,0.1)]"
                 />
               </div>

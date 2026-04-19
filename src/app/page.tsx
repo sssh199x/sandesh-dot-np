@@ -50,9 +50,10 @@ export default function Home() {
           <Teaching />
 
           <Contact />
-
-          <Footer />
         </div>
+
+        {/* Footer floats above contact — rounded card overlaps */}
+        <Footer />
       </main>
     </>
   );
