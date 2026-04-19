@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef } from "react";
-import { ArrowUpRight, ShoppingCart, BarChart3, Monitor, Users } from "lucide-react";
+import Image from "next/image";
+import { ArrowUpRight } from "lucide-react";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -9,40 +10,24 @@ import { Tag } from "@/components/ui/Tag";
 import { FadeUp } from "@/components/animations/FadeUp";
 import { projects } from "@/data/projects";
 
+/* 5-card asymmetric grid: 7/5, 5/7, 12 */
 const cardSizes = [
   "lg:col-span-7",
   "lg:col-span-5",
   "lg:col-span-5",
   "lg:col-span-7",
+  "lg:col-span-12",
 ];
 
-/* Unique visual identity per project — gradient + icon + pattern */
-const projectVisuals = [
-  {
-    gradient: "from-[#B87333]/20 via-[#D4944D]/10 to-transparent",
-    icon: <ShoppingCart className="size-10 sm:size-12" />,
-    pattern: "radial-gradient(circle at 80% 20%, rgba(184,115,51,0.12) 0%, transparent 50%)",
-    label: "E-Commerce Platform",
-  },
-  {
-    gradient: "from-[#7A8B6F]/20 via-[#7A8B6F]/10 to-transparent",
-    icon: <BarChart3 className="size-10 sm:size-12" />,
-    pattern: "radial-gradient(circle at 20% 80%, rgba(122,139,111,0.12) 0%, transparent 50%)",
-    label: "Analytics Dashboard",
-  },
-  {
-    gradient: "from-[#D4944D]/15 via-[#B87333]/10 to-transparent",
-    icon: <Monitor className="size-10 sm:size-12" />,
-    pattern: "radial-gradient(circle at 70% 70%, rgba(212,148,77,0.12) 0%, transparent 50%)",
-    label: "Retail Solution",
-  },
-  {
-    gradient: "from-[#B87333]/15 via-[#7A8B6F]/10 to-transparent",
-    icon: <Users className="size-10 sm:size-12" />,
-    pattern: "radial-gradient(circle at 30% 30%, rgba(184,115,51,0.12) 0%, transparent 50%)",
-    label: "Business Platform",
-  },
-];
+/* Extract domain from URL for browser chrome */
+function getDomain(url?: string) {
+  if (!url) return "";
+  try {
+    return new URL(url).hostname.replace("www.", "");
+  } catch {
+    return "";
+  }
+}
 
 export function Projects() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -99,64 +84,86 @@ export function Projects() {
 
       <div
         ref={containerRef}
-        className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:gap-8"
+        className="grid grid-cols-1 gap-5 sm:gap-6 lg:grid-cols-12 lg:gap-7"
       >
-        {projects.map((project, i) => (
-          <div
-            key={project.title}
-            className={`project-card ${cardSizes[i]} col-span-1`}
-          >
+        {projects.map((project, i) => {
+          const domain = getDomain(project.href);
+          const isWide = i === 4;
+
+          return (
             <div
-              className="group h-full rounded-lg border border-white/[0.06] bg-surface-dark p-6 lg:p-8 transition-[transform,box-shadow] duration-[250ms] ease-out hover:-translate-y-1.5 hover:[box-shadow:0_8px_40px_rgba(184,115,51,0.15)]"
+              key={project.title}
+              className={`project-card ${cardSizes[i]} col-span-1`}
             >
-              {/* Project visual */}
-              <div
-                className={`mb-5 aspect-[16/10] overflow-hidden rounded-md bg-gradient-to-br ${projectVisuals[i]?.gradient} relative`}
-                style={{ backgroundImage: projectVisuals[i]?.pattern }}
-              >
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
-                  <span className="text-copper/40 transition-colors duration-300 group-hover:text-copper/70">
-                    {projectVisuals[i]?.icon}
-                  </span>
-                  <span className="font-[family-name:var(--font-mono)] text-[0.625rem] tracking-widest text-cream/25 uppercase">
-                    {projectVisuals[i]?.label}
-                  </span>
-                </div>
-                {/* Decorative grid lines */}
-                <div className="absolute inset-0 opacity-[0.03]" style={{
-                  backgroundImage: "linear-gradient(rgba(250,247,242,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(250,247,242,0.3) 1px, transparent 1px)",
-                  backgroundSize: "40px 40px",
-                }} />
-              </div>
+              <div className="group h-full overflow-hidden rounded-xl border border-white/[0.06] bg-[#302C29] transition-[transform,box-shadow] duration-300 ease-out hover:-translate-y-1.5 hover:[box-shadow:0_12px_48px_rgba(184,115,51,0.12)]">
 
-              {/* Title + link */}
-              <div className="mb-2 flex items-center gap-3">
-                <h3 className="typ-h2 text-cream">{project.title}</h3>
-                {project.href && (
-                  <a
-                    href={project.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Visit ${project.title}`}
-                    className="flex size-11 items-center justify-center rounded-full bg-copper/[0.08] text-copper transition-all duration-200 hover:bg-copper/20"
-                  >
-                    <ArrowUpRight className="size-4" />
-                  </a>
+                {/* Browser chrome + screenshot */}
+                {project.image && (
+                  <div>
+                    {/* Browser chrome bar */}
+                    <div className="flex items-center gap-2 border-b border-white/[0.06] bg-white/[0.03] px-4 py-2.5">
+                      {/* macOS traffic lights */}
+                      <div className="flex gap-1.5">
+                        <span className="size-2.5 rounded-full bg-[#FF5F57]" />
+                        <span className="size-2.5 rounded-full bg-[#FFBD2E]" />
+                        <span className="size-2.5 rounded-full bg-[#28C840]" />
+                      </div>
+                      {/* URL bar */}
+                      <div className="ml-1 flex-1">
+                        <div className="mx-auto w-fit max-w-[220px] rounded-md bg-white/[0.05] px-3 py-0.5">
+                          <span className={`block truncate font-[family-name:var(--font-mono)] text-[0.625rem] tracking-wide ${domain ? "text-cream/35 transition-colors duration-300 group-hover:text-copper/60" : "text-cream/20"}`}>
+                            {domain || "localhost:3000"}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Screenshot */}
+                    <div className={`relative overflow-hidden ${isWide ? "aspect-[2/1]" : "aspect-video"}`}>
+                      <Image
+                        src={project.image}
+                        alt={`${project.title} screenshot`}
+                        fill
+                        sizes={isWide ? "(min-width: 1024px) 80vw, 100vw" : "(min-width: 1024px) 55vw, 100vw"}
+                        className="object-cover object-top lg:brightness-[0.85] lg:saturate-[0.9] lg:transition-[filter] lg:duration-500 lg:ease-out lg:group-hover:brightness-100 lg:group-hover:saturate-100"
+                        loading="lazy"
+                      />
+                    </div>
+                  </div>
                 )}
-              </div>
 
-              <p className="typ-body mb-5 text-cream/60">
-                {project.description}
-              </p>
+                {/* Content */}
+                <div className="px-5 pt-5 pb-5 sm:px-6 sm:pb-6 lg:px-7 lg:pb-7">
+                  {/* Title + link */}
+                  <div className="mb-3 flex items-center justify-between gap-3">
+                    <h3 className="typ-h2 text-cream">{project.title}</h3>
+                    {project.href && (
+                      <a
+                        href={project.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`Visit ${project.title}`}
+                        className="flex size-8 shrink-0 items-center justify-center rounded-full border border-copper/15 text-copper/50 transition-all duration-200 hover:border-copper/30 hover:bg-copper/10 hover:text-copper focus-visible:ring-2 focus-visible:ring-copper focus-visible:ring-offset-2 focus-visible:ring-offset-[#302C29] outline-none"
+                      >
+                        <ArrowUpRight className="size-4" />
+                      </a>
+                    )}
+                  </div>
 
-              <div className="flex flex-wrap gap-2">
-                {project.tech.map((t) => (
-                  <Tag key={t}>{t}</Tag>
-                ))}
+                  <p className="typ-body mb-5 leading-relaxed text-cream/75">
+                    {project.description}
+                  </p>
+
+                  <div className="flex flex-wrap gap-1.5">
+                    {project.tech.map((t) => (
+                      <Tag key={t}>{t}</Tag>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </SectionWrapper>
   );

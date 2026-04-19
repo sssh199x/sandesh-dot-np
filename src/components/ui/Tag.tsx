@@ -12,7 +12,7 @@ export function Tag({ children, variant = "dark", className }: TagProps) {
       className={cn(
         "typ-tag inline-block rounded-pill px-3 py-1",
         variant === "dark"
-          ? "bg-ghost text-copper"
+          ? "bg-ghost-strong text-copper-light"
           : "border border-copper/20 bg-copper/[0.06] text-copper-dark",
         className
       )}

@@ -44,6 +44,7 @@ export const projects: Project[] = [
       "AWS",
     ],
     image: "/images/projects/exosolve.webp",
+    href: "https://exosolve.io",
   },
   {
     title: "Rebuzz POS",
@@ -51,6 +52,7 @@ export const projects: Project[] = [
       "Retail management solution deployed to 30+ retailers. Led a 6-member team building Flutter frontend with real-time inventory tracking, multi-gateway payments, offline-first architecture, and interactive sales analytics dashboards.",
     tech: ["Flutter", "Node.js", "MongoDB", "fl_chart", "IoT", "SQLite"],
     image: "/images/projects/rebuzz.webp",
+    href: "https://rebuzzpos.com",
   },
   {
     title: "Krofile Platform",

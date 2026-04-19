@@ -33,6 +33,13 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# raw project screenshots (optimized versions in /public/images/projects/)
+/public/exosolve/
+/public/krofile/
+/public/rebuzz/
+/public/silverline/
+/public/thehouseofkaya/
+
 # vercel
 .vercel
 
