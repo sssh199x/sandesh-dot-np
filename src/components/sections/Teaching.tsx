@@ -56,6 +56,19 @@ const courses = [
   },
 ];
 
+const collegeBg = "/images/teaching/informatics-college-pokhara.webp";
+
+/** Watermark background — Informatics College Pokhara logo */
+function CollegeBgMark() {
+  return (
+    <div
+      className="pointer-events-none absolute inset-0 bg-[length:60%] bg-right-bottom bg-no-repeat opacity-[0.04] sm:bg-[length:50%]"
+      style={{ backgroundImage: `url(${collegeBg})` }}
+      aria-hidden="true"
+    />
+  );
+}
+
 export function Teaching() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const verifyLineRef = useRef<HTMLDivElement>(null);
@@ -158,20 +171,11 @@ export function Teaching() {
         {/* ─── Credential Card ─── */}
         <FadeUp delay={0.1}>
           <div className="relative overflow-hidden rounded-lg border border-charcoal/[0.06] bg-surface-light shadow-[0_2px_20px_rgba(26,23,20,0.06)]">
-            {/* Decorative marigold — repositioned top-right, subtle */}
-            <Image
-              src="/images/flower-orange-3-svgrepo-com.svg"
-              alt=""
-              width={280}
-              height={280}
-              loading="lazy"
-              className="pointer-events-none absolute -right-6 -top-6 size-40 rotate-12 opacity-[0.05] sm:size-48 lg:-right-4 lg:-top-4 lg:size-56"
-              aria-hidden="true"
-            />
+            <CollegeBgMark />
 
             <div className="relative grid grid-cols-1 lg:grid-cols-12">
               {/* Left: Badge + Description */}
-              <div className="flex flex-col p-5 sm:p-8 lg:col-span-8 lg:p-10">
+              <div className="p-5 sm:p-8 lg:col-span-8 lg:p-10">
                 {/* Badge row */}
                 <div className="mb-5 flex flex-wrap items-center gap-4">
                   <Image
@@ -232,17 +236,6 @@ export function Teaching() {
                   </div>
                 </div>
 
-                {/* Informatics College Pokhara banner — fills remaining space */}
-                <div className="mt-auto flex items-end pt-6 lg:pt-8">
-                  <Image
-                    src="/images/teaching/informatics-college-pokhara.webp"
-                    alt="Informatics College Pokhara"
-                    width={640}
-                    height={120}
-                    loading="lazy"
-                    className="h-auto w-full opacity-70"
-                  />
-                </div>
               </div>
 
               {/* Right: Stats — stretch to match left column */}
@@ -272,6 +265,7 @@ export function Teaching() {
               key={course.name}
               className="course-card group relative overflow-hidden rounded-lg border border-charcoal/[0.06] bg-surface-light p-5 pl-7 shadow-[0_2px_20px_rgba(26,23,20,0.06)] transition-[shadow,border-color,transform] duration-200 hover:border-sage/30 hover:shadow-warm-sm hover:-translate-y-0.5 sm:p-6 sm:pl-8"
             >
+              <CollegeBgMark />
               {/* Sage left accent bar — gradient fade */}
               <div className="absolute left-0 top-0 h-full w-[3px] bg-gradient-to-b from-sage/50 via-sage/25 to-transparent" />
 
