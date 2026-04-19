@@ -1,80 +1,248 @@
 "use client";
 
+import { useRef } from "react";
 import Image from "next/image";
-import { BadgeCheck } from "lucide-react";
+import { BadgeCheck, Code2, Cloud, GitBranch } from "lucide-react";
+import { gsap, useGSAP } from "@/lib/gsap";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { FadeUp } from "@/components/animations/FadeUp";
 import { StatCard } from "@/components/ui/StatCard";
+import { Tag } from "@/components/ui/Tag";
 
 const teachingStats = [
   { value: "200+", label: "Students Taught" },
-  { value: "7", label: "Sections" },
-  { value: "2", label: "Courses" },
+  { value: "7", label: "Sections Led" },
+  { value: "2", label: "Courses Designed" },
+];
+
+const courses = [
+  {
+    name: "Advanced Java",
+    description:
+      "Server-side programming from servlet lifecycle to production MVC architectures.",
+    topics: ["Servlets", "JSP", "JSTL", "Session Mgmt", "MVC"],
+    Icon: Code2,
+  },
+  {
+    name: "Cloud Computing & IoT",
+    description:
+      "AWS cloud infrastructure and embedded systems — from EC2 provisioning to IoT sensor networks.",
+    topics: ["AWS Services", "EC2 & S3", "Lambda", "Embedded Systems", "IoT"],
+    Icon: Cloud,
+  },
 ];
 
 export function Teaching() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const verifyLineRef = useRef<HTMLDivElement>(null);
+  const shimmerRef = useRef<HTMLSpanElement>(null);
+
+  /* Sage verification line draws on scroll — the signature interaction */
+  useGSAP(
+    () => {
+      if (!sectionRef.current) return;
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+      // Sage line draws left-to-right
+      if (verifyLineRef.current) {
+        gsap.fromTo(
+          verifyLineRef.current,
+          { scaleX: 0 },
+          {
+            scaleX: 1,
+            duration: 1.2,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: verifyLineRef.current,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      }
+
+      // Shimmer sweep across "Verified" pill
+      if (shimmerRef.current) {
+        gsap.fromTo(
+          shimmerRef.current,
+          { x: "-100%" },
+          {
+            x: "200%",
+            duration: 1,
+            ease: "power2.inOut",
+            scrollTrigger: {
+              trigger: shimmerRef.current,
+              start: "top 88%",
+              toggleActions: "play none none none",
+            },
+          }
+        );
+      }
+
+      // Course cards stagger in from below
+      const courseCards = sectionRef.current.querySelectorAll(".course-card");
+      if (courseCards.length) {
+        gsap.fromTo(
+          courseCards,
+          { opacity: 0, y: 40 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.7,
+            ease: "power3.out",
+            stagger: 0.15,
+            scrollTrigger: {
+              trigger: courseCards[0],
+              start: "top 90%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      }
+    },
+    { scope: sectionRef }
+  );
+
   return (
     <SectionWrapper id="teaching" background="#F5F0E8">
-      <FadeUp>
-        <SectionHeading heading="Teaching" label="Educator" />
-      </FadeUp>
+      <div ref={sectionRef}>
+        <FadeUp>
+          <SectionHeading heading="Teaching" label="Educator" />
+        </FadeUp>
 
-      <FadeUp delay={0.15}>
-        <div className="relative overflow-hidden rounded-lg border border-charcoal/[0.06] bg-surface-light p-5 shadow-[0_2px_20px_rgba(26,23,20,0.06)] sm:p-8 lg:p-12">
-          {/* Decorative marigold — Nepali botanical accent */}
-          <Image
-            src="/images/flower-orange-3-svgrepo-com.svg"
-            alt=""
-            width={280}
-            height={280}
-            loading="lazy"
-            className="pointer-events-none absolute -bottom-10 -right-10 size-48 opacity-[0.07] sm:size-56 lg:-bottom-8 lg:-right-8 lg:size-72"
-            aria-hidden="true"
-          />
-          {/* Badge + Heading */}
-          <div className="mb-6 flex flex-wrap items-center gap-4">
+        {/* ─── Credential Card ─── */}
+        <FadeUp delay={0.1}>
+          <div className="relative overflow-hidden rounded-lg border border-charcoal/[0.06] bg-surface-light shadow-[0_2px_20px_rgba(26,23,20,0.06)]">
+            {/* Decorative marigold — repositioned top-right, subtle */}
             <Image
-              src="/images/aws-academy-educator.webp"
-              alt="AWS Academy Educator Badge"
-              width={56}
-              height={56}
-              className="size-14 shrink-0"
+              src="/images/flower-orange-3-svgrepo-com.svg"
+              alt=""
+              width={280}
+              height={280}
+              loading="lazy"
+              className="pointer-events-none absolute -right-6 -top-6 size-40 rotate-12 opacity-[0.05] sm:size-48 lg:-right-4 lg:-top-4 lg:size-56"
+              aria-hidden="true"
             />
-            <div className="flex flex-wrap items-center gap-3">
-              <h3 className="typ-h2 text-charcoal">
-                AWS Academy Educator
-              </h3>
-              <span className="inline-flex items-center gap-1.5 rounded-pill bg-sage/15 px-3 py-1 font-[family-name:var(--font-mono)] text-xs font-medium tracking-wide text-sage">
-                <BadgeCheck className="size-3.5" />
-                Verified
-              </span>
+
+            <div className="relative grid grid-cols-1 lg:grid-cols-12">
+              {/* Left: Badge + Description */}
+              <div className="p-5 sm:p-8 lg:col-span-8 lg:p-10">
+                {/* Badge row */}
+                <div className="mb-5 flex flex-wrap items-center gap-4">
+                  <Image
+                    src="/images/aws-academy-educator.webp"
+                    alt="AWS Academy Educator Badge"
+                    width={56}
+                    height={56}
+                    className="size-14 shrink-0"
+                  />
+                  <div className="flex flex-wrap items-center gap-3">
+                    <h3 className="typ-h2 text-charcoal">
+                      AWS Academy Educator
+                    </h3>
+                    <span className="relative inline-flex items-center gap-1.5 overflow-hidden rounded-pill bg-sage/15 px-3 py-1 font-[family-name:var(--font-mono)] text-xs font-medium tracking-wide text-sage">
+                      <BadgeCheck className="size-3.5" />
+                      Verified
+                      {/* Shimmer overlay — animated via GSAP on scroll entry */}
+                      <span
+                        ref={shimmerRef}
+                        className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent"
+                        style={{ transform: "translateX(-100%)" }}
+                        aria-hidden="true"
+                      />
+                    </span>
+                  </div>
+                </div>
+
+                <p className="typ-body-lg max-w-[640px] text-charcoal/70">
+                  Computing Instructor at Informatics College Pokhara, affiliated
+                  with London Metropolitan University. Leading hands-on workshops
+                  for students pursuing computing degrees.
+                </p>
+
+                {/* Sage verification line — draws on scroll */}
+                <div
+                  ref={verifyLineRef}
+                  className="mt-6 h-[2px] w-full origin-left bg-sage/30"
+                  style={{ transform: "scaleX(0)" }}
+                  aria-hidden="true"
+                />
+              </div>
+
+              {/* Right: Stats — integrated, not appended */}
+              <div className="border-t border-charcoal/[0.06] p-5 sm:p-8 lg:col-span-4 lg:border-l lg:border-t-0 lg:p-10">
+                <span className="typ-label mb-5 block text-sage">
+                  By the Numbers
+                </span>
+                <div className="grid grid-cols-3 gap-4 lg:grid-cols-1 lg:gap-5">
+                  {teachingStats.map((stat) => (
+                    <StatCard
+                      key={stat.label}
+                      value={stat.value}
+                      label={stat.label}
+                      className="border-0 bg-transparent p-0 pl-4 shadow-none before:bg-sage/40 hover:translate-y-0 hover:border-0 hover:shadow-none"
+                    />
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
+        </FadeUp>
 
-          {/* Description */}
-          <p className="typ-body-lg mb-4 max-w-[720px] text-charcoal/70">
-            Computing Instructor at Informatics College Pokhara, affiliated with
-            London Metropolitan University. Leading hands-on workshops for
-            students pursuing computing degrees.
-          </p>
-          <p className="typ-body mb-8 max-w-[720px] text-charcoal/60">
-            Teaching Advanced Java (Servlets, JSP, JSTL, session management,
-            MVC patterns) and Cloud Computing &amp; IoT (AWS services, embedded
-            systems). Managing assignments and collaboration via GitHub
-            Classroom.
-          </p>
+        {/* ─── Course Cards ─── */}
+        <div className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
+          {courses.map((course) => (
+            <div
+              key={course.name}
+              className="course-card group relative overflow-hidden rounded-lg border border-charcoal/[0.06] bg-surface-light p-5 pl-7 shadow-[0_2px_20px_rgba(26,23,20,0.06)] transition-[shadow,border-color,transform] duration-200 hover:border-sage/30 hover:shadow-warm-sm hover:-translate-y-0.5 sm:p-6 sm:pl-8"
+            >
+              {/* Sage left accent bar — gradient fade */}
+              <div className="absolute left-0 top-0 h-full w-[3px] bg-gradient-to-b from-sage/50 via-sage/25 to-transparent" />
 
-          {/* Stats */}
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-            {teachingStats.map((stat, i) => (
-              <FadeUp key={stat.label} delay={0.2 + i * 0.1}>
-                <StatCard value={stat.value} label={stat.label} />
-              </FadeUp>
-            ))}
-          </div>
+              {/* Course header */}
+              <div className="mb-3 flex items-center gap-3">
+                <span className="flex size-8 items-center justify-center rounded-md bg-sage/10 text-sage">
+                  <course.Icon className="size-4" aria-hidden="true" />
+                </span>
+                <h4 className="font-[family-name:var(--font-heading)] text-base font-medium tracking-tight text-charcoal sm:text-lg">
+                  {course.name}
+                </h4>
+              </div>
+
+              {/* Description */}
+              <p className="typ-caption mb-4 text-charcoal/60">
+                {course.description}
+              </p>
+
+              {/* Topic tags */}
+              <div className="flex flex-wrap gap-1.5">
+                {course.topics.map((topic) => (
+                  <Tag key={topic} variant="light">
+                    {topic}
+                  </Tag>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
-      </FadeUp>
+
+        {/* ─── GitHub Classroom ─── */}
+        <FadeUp delay={0.25}>
+          <div className="mt-5 flex items-center gap-2.5 rounded-lg border border-charcoal/[0.04] bg-surface-light/50 px-5 py-3.5">
+            <GitBranch
+              className="size-4 shrink-0 text-sage"
+              aria-hidden="true"
+            />
+            <p className="typ-caption text-charcoal/50">
+              All assignments and collaboration managed through{" "}
+              <span className="font-medium text-charcoal/70">
+                GitHub Classroom
+              </span>
+            </p>
+          </div>
+        </FadeUp>
+      </div>
     </SectionWrapper>
   );
 }
