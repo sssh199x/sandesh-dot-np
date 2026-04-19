@@ -62,7 +62,7 @@ const collegeBg = "/images/teaching/informatics-college-pokhara.webp";
 function CollegeBgMark() {
   return (
     <div
-      className="pointer-events-none absolute inset-[1rem] bg-contain bg-right bg-no-repeat opacity-[0.08]"
+      className="pointer-events-none absolute inset-0 bg-[length:60%] bg-[position:right_-1rem_center] bg-no-repeat opacity-[0.08]"
       style={{ backgroundImage: `url(${collegeBg})` }}
       aria-hidden="true"
     />
