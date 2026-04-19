@@ -332,38 +332,6 @@ body::after {
 }
 
 /* ========================================
-   Project Slideshow — cinematic crossfade
-   Pure opacity dissolve, no scale transforms.
-   Each image is visible for ~4s, crossfades
-   over ~1s. Timing ensures exactly one image
-   is fully opaque at any given moment.
-   ======================================== */
-
-/* CSS crossfade algorithm (devtwins formula):
-   n images, a=4s display, b=1s fade, t=(a+b)×n
-   0%: opacity 1, (a/t)×100: opacity 1, (1/n)×100: opacity 0,
-   100-(b/t)×100: opacity 0, 100%: opacity 1 (loops back)
-   Each image delayed by (a+b)×index seconds. */
-
-/* 3-image cycle: t=(4+1)×3=15s, delays: 0s, 5s, 10s */
-@keyframes crossfade-3 {
-  0%      { opacity: 1; }
-  26.67%  { opacity: 1; }
-  33.33%  { opacity: 0; }
-  93.33%  { opacity: 0; }
-  100%    { opacity: 1; }
-}
-
-/* 4-image cycle: t=(4+1)×4=20s, delays: 0s, 5s, 10s, 15s */
-@keyframes crossfade-4 {
-  0%      { opacity: 1; }
-  20%     { opacity: 1; }
-  25%     { opacity: 0; }
-  95%     { opacity: 0; }
-  100%    { opacity: 1; }
-}
-
-/* ========================================
    Reduced Motion
    ======================================== */
 

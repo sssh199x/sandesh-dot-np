@@ -76,24 +76,52 @@ export function Projects() {
     { scope: containerRef }
   );
 
-  /* Pause slideshow animations on cards outside viewport to save GPU cycles */
+  /* JS-controlled crossfade: setInterval cycles opacity, CSS transition handles the fade.
+     Starts only when card is in viewport (IntersectionObserver), stops when it leaves. */
   useEffect(() => {
     if (!containerRef.current) return;
-    const cards = containerRef.current.querySelectorAll(".project-card");
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const slideshows = containerRef.current.querySelectorAll<HTMLDivElement>(".slideshow");
+    const timers = new Map<Element, number>();
+    const currents = new Map<Element, number>();
+
+    const cycle = (el: Element, images: NodeListOf<HTMLImageElement>, delay: number) => {
+      const id = window.setTimeout(() => {
+        const prev = currents.get(el) ?? 0;
+        const next = (prev + 1) % images.length;
+        images[prev].style.opacity = "0";
+        images[next].style.opacity = "1";
+        currents.set(el, next);
+        cycle(el, images, 5000); // 4s display + 1s fade
+      }, delay);
+      timers.set(el, id);
+    };
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          entry.target.querySelectorAll<HTMLImageElement>("img").forEach((img) => {
-            img.style.animationPlayState = entry.isIntersecting ? "running" : "paused";
-          });
+          const el = entry.target as HTMLElement;
+          const images = el.querySelectorAll<HTMLImageElement>("img");
+          if (images.length <= 1) return;
+
+          if (entry.isIntersecting && !timers.has(el)) {
+            const offset = parseFloat(el.dataset.offset || "0") * 1000;
+            cycle(el, images, 5000 + offset); // first cycle: 5s + card offset
+          } else if (!entry.isIntersecting && timers.has(el)) {
+            clearTimeout(timers.get(el)!);
+            timers.delete(el);
+          }
         });
       },
       { rootMargin: "50px" }
     );
 
-    cards.forEach((card) => observer.observe(card));
-    return () => observer.disconnect();
+    slideshows.forEach((s) => observer.observe(s));
+    return () => {
+      observer.disconnect();
+      timers.forEach((id) => clearTimeout(id));
+    };
   }, []);
 
   return (
@@ -106,7 +134,6 @@ export function Projects() {
         ref={containerRef}
         className="grid grid-cols-1 gap-5 sm:gap-6 lg:grid-cols-12 lg:gap-7"
       >
-        {/* Per-card phase offsets so slideshows don't sync across cards */}
         {projects.map((project, i) => {
           const domain = getDomain(project.href);
           const isWide = i === 4;
@@ -116,6 +143,7 @@ export function Projects() {
             : colSpan.includes("7")
               ? "(min-width: 1024px) 58vw, 100vw"
               : "(min-width: 1024px) 42vw, 100vw";
+          /* Per-card phase offset so slideshows don't sync across cards */
           const cardOffset = [0, 2.3, 4.1, 1.7, 3.5][i] ?? 0;
 
           return (
@@ -147,32 +175,23 @@ export function Projects() {
                     </div>
 
                     {/* Screenshot crossfade slideshow */}
-                    <div className={`relative overflow-hidden ${isWide ? "aspect-[2/1]" : "aspect-video"}`}>
-                      {project.images.map((src, imgIdx) => {
-                        const count = project.images.length;
-                        const isSingle = count <= 1;
-                        const duration = count * 5;
-                        const delay = imgIdx * 5 + cardOffset;
-                        const animName = count <= 3 ? "crossfade-3" : "crossfade-4";
-
-                        return (
-                          <Image
-                            key={src}
-                            src={src}
-                            alt={imgIdx === 0 ? `${project.title} screenshot` : ""}
-                            fill
-                            sizes={imgSizes}
-                            className="absolute inset-0 object-cover object-top lg:brightness-[0.85] lg:saturate-[0.9] lg:group-hover:brightness-100 lg:group-hover:saturate-100"
-                            loading="lazy"
-                            aria-hidden={imgIdx > 0 ? true : undefined}
-                            style={isSingle ? undefined : {
-                              animation: `${animName} ${duration}s ease-in-out ${delay}s infinite`,
-                              animationPlayState: "paused",
-                              opacity: imgIdx === 0 ? 1 : 0,
-                            }}
-                          />
-                        );
-                      })}
+                    <div
+                      className={`slideshow relative overflow-hidden ${isWide ? "aspect-[2/1]" : "aspect-video"}`}
+                      data-offset={cardOffset}
+                    >
+                      {project.images.map((src, imgIdx) => (
+                        <Image
+                          key={src}
+                          src={src}
+                          alt={imgIdx === 0 ? `${project.title} screenshot` : ""}
+                          fill
+                          sizes={imgSizes}
+                          className="absolute inset-0 object-cover object-top transition-opacity duration-1000 ease-in-out lg:brightness-[0.85] lg:saturate-[0.9] lg:group-hover:brightness-100 lg:group-hover:saturate-100"
+                          loading="lazy"
+                          aria-hidden={imgIdx > 0 ? true : undefined}
+                          style={{ opacity: imgIdx === 0 ? 1 : 0 }}
+                        />
+                      ))}
                     </div>
                   </div>
                 )}
