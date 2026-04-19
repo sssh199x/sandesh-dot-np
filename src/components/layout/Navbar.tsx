@@ -158,7 +158,6 @@ export function Navbar() {
               alt=""
               width={28}
               height={28}
-              loading="eager"
               sizes="28px"
               className="size-7 rounded-full object-cover object-top ring-1 ring-copper/20"
             />

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
@@ -76,6 +76,26 @@ export function Projects() {
     { scope: containerRef }
   );
 
+  /* Pause slideshow animations on cards outside viewport to save GPU cycles */
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const cards = containerRef.current.querySelectorAll(".project-card");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          entry.target.querySelectorAll<HTMLImageElement>("img").forEach((img) => {
+            img.style.animationPlayState = entry.isIntersecting ? "running" : "paused";
+          });
+        });
+      },
+      { rootMargin: "50px" }
+    );
+
+    cards.forEach((card) => observer.observe(card));
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <SectionWrapper id="projects" background="#2C2826">
       <FadeUp>
@@ -90,6 +110,12 @@ export function Projects() {
         {projects.map((project, i) => {
           const domain = getDomain(project.href);
           const isWide = i === 4;
+          const colSpan = cardSizes[i];
+          const imgSizes = isWide
+            ? "(min-width: 1024px) 80vw, 100vw"
+            : colSpan.includes("7")
+              ? "(min-width: 1024px) 58vw, 100vw"
+              : "(min-width: 1024px) 42vw, 100vw";
           const cardOffset = [0, 2.3, 4.1, 1.7, 3.5][i] ?? 0;
 
           return (
@@ -135,12 +161,13 @@ export function Projects() {
                             src={src}
                             alt={imgIdx === 0 ? `${project.title} screenshot` : ""}
                             fill
-                            sizes={isWide ? "(min-width: 1024px) 80vw, 100vw" : "(min-width: 1024px) 55vw, 100vw"}
+                            sizes={imgSizes}
                             className="absolute inset-0 object-cover object-top lg:brightness-[0.85] lg:saturate-[0.9] lg:group-hover:brightness-100 lg:group-hover:saturate-100"
                             loading="lazy"
                             aria-hidden={imgIdx > 0 ? true : undefined}
                             style={isSingle ? undefined : {
                               animation: `${animName} ${duration}s ease-in-out ${delay}s infinite`,
+                              animationPlayState: "paused",
                               opacity: imgIdx === 0 ? 1 : 0,
                             }}
                           />

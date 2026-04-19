@@ -183,8 +183,17 @@ function CopperSparkles() {
     }
 
     let time = 0;
-    const draw = () => {
-      time += 0.016;
+    let lastFrame = 0;
+    const startTime = performance.now();
+    const draw = (now: number) => {
+      // Stop loop when iris-close begins — particles aren't visible after this
+      if (now - startTime > IRIS_START) return;
+
+      // Throttle to ~30fps (every other frame)
+      if (now - lastFrame < 32) { raf = requestAnimationFrame(draw); return; }
+      lastFrame = now;
+
+      time += 0.033;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       for (const p of particles) {
@@ -193,12 +202,12 @@ function CopperSparkles() {
 
         // Fade in
         if (p.opacity < p.maxOpacity) {
-          p.opacity = Math.min(p.opacity + p.fadeSpeed, p.maxOpacity);
+          p.opacity = Math.min(p.opacity + p.fadeSpeed * 2, p.maxOpacity);
         }
 
-        // Move
-        p.x += p.vx;
-        p.y += p.vy;
+        // Move (doubled step to match 30fps)
+        p.x += p.vx * 2;
+        p.y += p.vy * 2;
 
         // Wrap around
         if (p.y < -10) { p.y = canvas.height + 10; p.x = Math.random() * canvas.width; }
