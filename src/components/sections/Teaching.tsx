@@ -10,6 +10,15 @@ import { FadeUp } from "@/components/animations/FadeUp";
 import { StatCard } from "@/components/ui/StatCard";
 import { Tag } from "@/components/ui/Tag";
 
+/* Decorative AWS service icons — fill empty space in credential card */
+const awsServices = [
+  { name: "EC2", src: "/images/teaching/aws-ec2.svg" },
+  { name: "S3", src: "/images/teaching/aws-s3.svg" },
+  { name: "Lambda", src: "/images/teaching/aws-lambda.svg" },
+  { name: "CloudFront", src: "/images/teaching/aws-cloudfront.svg" },
+  { name: "DynamoDB", src: "/images/teaching/aws-dynamodb.svg" },
+];
+
 const teachingStats = [
   { value: "200+", label: "Students Taught" },
   { value: "7", label: "Sections Led" },
@@ -160,6 +169,31 @@ export function Teaching() {
                   with London Metropolitan University. Leading hands-on workshops
                   for students pursuing computing degrees.
                 </p>
+
+                {/* AWS service icons — decorative, fills empty space */}
+                <div
+                  className="mt-8 flex items-center gap-5 sm:gap-7 lg:mt-12"
+                  aria-hidden="true"
+                >
+                  {awsServices.map((svc) => (
+                    <div
+                      key={svc.name}
+                      className="flex flex-col items-center gap-1.5"
+                    >
+                      <img
+                        src={svc.src}
+                        alt=""
+                        width={36}
+                        height={36}
+                        loading="lazy"
+                        className="size-8 opacity-[0.08] sm:size-9"
+                      />
+                      <span className="font-[family-name:var(--font-mono)] text-[9px] uppercase tracking-[0.1em] text-charcoal/[0.15]">
+                        {svc.name}
+                      </span>
+                    </div>
+                  ))}
+                </div>
 
                 {/* Sage verification line — draws on scroll */}
                 <div
