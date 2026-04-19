@@ -232,6 +232,18 @@ export function Teaching() {
                   </div>
                 </div>
 
+                {/* Informatics College Pokhara banner */}
+                <div className="mt-8 lg:mt-10">
+                  <Image
+                    src="/images/teaching/informatics-college-pokhara.webp"
+                    alt="Informatics College Pokhara"
+                    width={400}
+                    height={160}
+                    loading="lazy"
+                    className="h-auto w-full max-w-[320px] opacity-80 sm:max-w-[360px]"
+                  />
+                </div>
+
                 {/* Sage verification line — draws on scroll */}
                 <div
                   ref={verifyLineRef}
