@@ -19,6 +19,10 @@ export function SmoothScrollProvider({
   const [lenis, setLenis] = useState<Lenis | null>(null);
 
   useEffect(() => {
+    // Skip Lenis on touch devices — native scroll is smoother and saves rAF overhead
+    const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
+    if (isTouchDevice) return;
+
     const instance = new Lenis({
       lerp: 0.1,
       smoothWheel: true,

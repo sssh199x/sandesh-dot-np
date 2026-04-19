@@ -2,8 +2,9 @@
 
 import { useRef } from "react";
 import { motion, useMotionValue, useSpring, useReducedMotion } from "framer-motion";
-import { cn } from "@/lib/utils";
+import { cn, smoothScrollTo } from "@/lib/utils";
 import { useLenis } from "@/components/layout/SmoothScroll";
+import { useIsTouchDevice } from "@/hooks/useIsTouchDevice";
 
 interface ButtonProps {
   children: React.ReactNode;
@@ -31,17 +32,21 @@ export function Button({
   const lenis = useLenis();
   const isHash = href?.startsWith("#");
   const reducedMotion = useReducedMotion();
+
+  // On touch devices, skip magnetic hover + motion wrappers entirely
+  const isTouchDevice = useIsTouchDevice();
+
   const buttonRef = useRef<HTMLButtonElement>(null);
   const anchorRef = useRef<HTMLAnchorElement>(null);
 
-  // Magnetic hover — button gently follows cursor (disabled for reduced motion)
+  // Magnetic hover — button gently follows cursor (disabled for touch/reduced motion)
   const rawX = useMotionValue(0);
   const rawY = useMotionValue(0);
   const x = useSpring(rawX, SPRING_CONFIG);
   const y = useSpring(rawY, SPRING_CONFIG);
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (reducedMotion) return;
+    if (reducedMotion || isTouchDevice) return;
     const el = buttonRef.current ?? anchorRef.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
@@ -52,17 +57,19 @@ export function Button({
   };
 
   const handleMouseLeave = () => {
-    if (reducedMotion) return;
+    if (reducedMotion || isTouchDevice) return;
     rawX.set(0);
     rawY.set(0);
   };
 
   const baseStyles = cn(
     "group relative inline-flex items-center justify-center gap-2 overflow-hidden",
-    "rounded-pill px-7 py-3",
-    "font-[family-name:var(--font-mono)] text-[0.8125rem] font-medium tracking-[0.04em] uppercase",
+    "rounded-pill px-5 py-2.5 sm:px-7 sm:py-3 min-h-11",
+    "font-[family-name:var(--font-mono)] text-[0.75rem] sm:text-[0.8125rem] font-medium tracking-[0.04em] uppercase",
     "cursor-pointer",
     "focus-visible:ring-2 focus-visible:ring-copper focus-visible:outline-none",
+    isTouchDevice && "active:scale-[0.97]",
+    "transition-transform",
     variant === "solid" && [
       "bg-copper-btn text-cream",
       "hover:bg-copper-dark",
@@ -74,6 +81,39 @@ export function Button({
     className
   );
 
+  const handleHashClick = () => {
+    if (!isHash) return;
+    if (lenis) {
+      lenis.scrollTo(href!, { duration: 1.6, easing: scrollEasing, offset: 0 });
+    } else {
+      smoothScrollTo(href!);
+    }
+  };
+
+  // Touch devices: plain elements — no motion wrappers, no springs
+  if (isTouchDevice) {
+    if (isHash) {
+      return (
+        <button type="button" onClick={handleHashClick} className={baseStyles}>
+          <span className="relative z-10 flex items-center gap-2">{children}</span>
+        </button>
+      );
+    }
+    if (href) {
+      return (
+        <a href={href} className={baseStyles}>
+          <span className="relative z-10 flex items-center gap-2">{children}</span>
+        </a>
+      );
+    }
+    return (
+      <button type={type} onClick={onClick} className={baseStyles}>
+        <span className="relative z-10 flex items-center gap-2">{children}</span>
+      </button>
+    );
+  }
+
+  // Desktop: motion wrappers with magnetic hover
   const sharedMotionProps = {
     style: reducedMotion ? undefined : { x, y },
     whileTap: reducedMotion ? undefined : { scale: 0.97 },
@@ -82,17 +122,7 @@ export function Button({
     onMouseLeave: handleMouseLeave,
   };
 
-  // Hash links → Lenis smooth scroll instead of native jump
   if (isHash) {
-    const handleHashClick = () => {
-      if (lenis) {
-        lenis.scrollTo(href!, { duration: 1.6, easing: scrollEasing, offset: 0 });
-      } else {
-        const el = document.querySelector(href!);
-        if (el) el.scrollIntoView({ behavior: "smooth" });
-      }
-    };
-
     return (
       <motion.button
         ref={buttonRef}
@@ -106,7 +136,6 @@ export function Button({
     );
   }
 
-  // External / non-hash links → regular <a>
   if (href) {
     return (
       <motion.a

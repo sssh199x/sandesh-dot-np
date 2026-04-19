@@ -37,6 +37,30 @@ export function TextReveal({
       if (!textRef.current) return;
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
+      const isMobile = window.matchMedia("(max-width: 767px)").matches;
+
+      // Mobile: skip SplitText overhead — simple fade-up on the whole element
+      if (isMobile) {
+        gsap.fromTo(textRef.current,
+          { y: 30, opacity: 0 },
+          {
+            y: 0, opacity: 1,
+            duration: 0.6,
+            delay,
+            ease: "power3.out",
+            ...(scrollTriggered && {
+              scrollTrigger: {
+                trigger: textRef.current,
+                start: "top 88%",
+                toggleActions: "play none none none",
+              },
+            }),
+          }
+        );
+        return;
+      }
+
+      // Desktop: full SplitText char/word reveal
       const split = new SplitText(textRef.current, { type: splitType });
 
       const targets = splitType.includes("chars") ? split.chars : split.words;

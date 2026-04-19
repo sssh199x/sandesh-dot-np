@@ -25,36 +25,54 @@ export function Skills() {
       if (!gridRef.current) return;
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
+      const isMobile = window.matchMedia("(max-width: 1023px)").matches;
       const cards = gridRef.current.querySelectorAll(".skill-card");
-      cards.forEach((card, i) => {
-        gsap.from(card, {
-          opacity: 0,
-          y: 50,
-          duration: 0.6,
-          ease: "power3.out",
-          delay: i * 0.08,
-          scrollTrigger: {
-            trigger: card,
-            start: "top 90%",
-            toggleActions: "play none none reverse",
-          },
-        });
 
-        // Stagger skills inside each card
-        const skills = card.querySelectorAll(".skill-item");
-        gsap.from(skills, {
+      if (isMobile) {
+        // Mobile: single batch animation — 1 ScrollTrigger for all cards
+        gsap.from(cards, {
           opacity: 0,
-          x: -10,
-          duration: 0.3,
-          ease: "power2.out",
-          stagger: 0.03,
+          y: 40,
+          duration: 0.5,
+          ease: "power3.out",
+          stagger: 0.08,
           scrollTrigger: {
-            trigger: card,
-            start: "top 85%",
+            trigger: gridRef.current,
+            start: "top 88%",
             toggleActions: "play none none reverse",
           },
         });
-      });
+      } else {
+        // Desktop: per-card triggers with skill item stagger
+        cards.forEach((card, i) => {
+          gsap.from(card, {
+            opacity: 0,
+            y: 50,
+            duration: 0.6,
+            ease: "power3.out",
+            delay: i * 0.08,
+            scrollTrigger: {
+              trigger: card,
+              start: "top 90%",
+              toggleActions: "play none none reverse",
+            },
+          });
+
+          const skills = card.querySelectorAll(".skill-item");
+          gsap.from(skills, {
+            opacity: 0,
+            x: -10,
+            duration: 0.3,
+            ease: "power2.out",
+            stagger: 0.03,
+            scrollTrigger: {
+              trigger: card,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
+          });
+        });
+      }
     },
     { scope: gridRef }
   );

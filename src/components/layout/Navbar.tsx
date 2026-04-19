@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { cn } from "@/lib/utils";
+import { cn, smoothScrollTo } from "@/lib/utils";
 import { navItems } from "@/data/personal";
 import { useNavigationStore } from "@/store/navigation";
 import { useLenis } from "@/components/layout/SmoothScroll";
@@ -24,10 +24,20 @@ export function Navbar() {
   const isDark = darkSections.has(navbarSection);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    let rafId = 0;
+    const onScroll = () => {
+      if (rafId) return;
+      rafId = requestAnimationFrame(() => {
+        setScrolled(window.scrollY > 40);
+        rafId = 0;
+      });
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(rafId);
+    };
   }, []);
 
   // Lock/unlock Lenis when mobile menu opens/closes
@@ -64,8 +74,7 @@ export function Navbar() {
         easing: (t: number) => 1 - Math.pow(1 - t, 4),
       });
     } else {
-      const el = document.getElementById(id);
-      if (el) el.scrollIntoView({ behavior: "smooth" });
+      smoothScrollTo(`#${id}`);
     }
   };
 

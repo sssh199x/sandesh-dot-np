@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef } from "react";
-import { motion } from "framer-motion";
 import { ArrowUpRight, ShoppingCart, BarChart3, Monitor, Users } from "lucide-react";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
@@ -107,13 +106,8 @@ export function Projects() {
             key={project.title}
             className={`project-card ${cardSizes[i]} col-span-1`}
           >
-            <motion.div
-              whileHover={{
-                y: -6,
-                boxShadow: "0 8px 40px rgba(184, 115, 51, 0.15)",
-              }}
-              transition={{ duration: 0.25 }}
-              className="group h-full rounded-lg border border-white/[0.06] bg-surface-dark p-6 lg:p-8"
+            <div
+              className="group h-full rounded-lg border border-white/[0.06] bg-surface-dark p-6 lg:p-8 transition-[transform,box-shadow] duration-[250ms] ease-out hover:-translate-y-1.5 hover:[box-shadow:0_8px_40px_rgba(184,115,51,0.15)]"
             >
               {/* Project visual */}
               <div
@@ -160,7 +154,7 @@ export function Projects() {
                   <Tag key={t}>{t}</Tag>
                 ))}
               </div>
-            </motion.div>
+            </div>
           </div>
         ))}
       </div>

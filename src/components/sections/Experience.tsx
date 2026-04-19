@@ -19,6 +19,8 @@ export function Experience() {
       if (!containerRef.current) return;
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
+      const isMobile = window.matchMedia("(max-width: 1023px)").matches;
+
       // Animate all timeline lines (mobile + desktop)
       const lines = containerRef.current.querySelectorAll(".timeline-line");
       lines.forEach((line) => {
@@ -39,65 +41,90 @@ export function Experience() {
       });
 
       const entries = containerRef.current.querySelectorAll(".timeline-entry");
-      entries.forEach((entry) => {
-        // Fade up the entry — fromTo for Strict Mode safety
-        gsap.fromTo(
-          entry,
-          { opacity: 0, y: 40 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            ease: "power3.out",
+
+      if (isMobile) {
+        // Mobile: single ScrollTrigger per entry — animate card + children together
+        entries.forEach((entry) => {
+          const children = entry.querySelectorAll(".reveal-child");
+          const icon = entry.querySelector(".timeline-icon");
+
+          // Set initial states
+          gsap.set(entry, { opacity: 0, y: 30 });
+          gsap.set(children, { opacity: 0, y: 12 });
+          if (icon) gsap.set(icon, { scale: 0 });
+
+          // Single trigger — plays entry, then staggers children
+          const tl = gsap.timeline({
             scrollTrigger: {
               trigger: entry,
-              start: "top 85%",
+              start: "top 88%",
               toggleActions: "play none none reverse",
             },
-          }
-        );
+          });
 
-        // Stagger inner reveals — fromTo for Strict Mode safety
-        const children = entry.querySelectorAll(".reveal-child");
-        children.forEach((child, i) => {
+          tl.to(entry, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" });
+          if (icon) tl.to(icon, { scale: 1, duration: 0.3, ease: "back.out(1.7)" }, 0.1);
+          tl.to(children, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out", stagger: 0.06 }, 0.15);
+        });
+      } else {
+        // Desktop: richer per-element animations
+        entries.forEach((entry) => {
           gsap.fromTo(
-            child,
-            { opacity: 0, y: 15 },
+            entry,
+            { opacity: 0, y: 40 },
             {
               opacity: 1,
               y: 0,
-              duration: 0.5,
-              ease: "power2.out",
-              delay: i * 0.08,
+              duration: 0.8,
+              ease: "power3.out",
               scrollTrigger: {
                 trigger: entry,
-                start: "top 80%",
+                start: "top 85%",
                 toggleActions: "play none none reverse",
               },
             }
           );
-        });
 
-        // Icon pop — scale bounce when timeline reaches it
-        const icon = entry.querySelector(".timeline-icon");
-        if (icon) {
-          gsap.fromTo(
-            icon,
-            { scale: 0, rotate: -15 },
-            {
-              scale: 1,
-              rotate: 0,
-              duration: 0.6,
-              ease: "back.out(2.5)",
-              scrollTrigger: {
-                trigger: entry,
-                start: "top 82%",
-                toggleActions: "play none none reverse",
-              },
-            }
-          );
-        }
-      });
+          const children = entry.querySelectorAll(".reveal-child");
+          children.forEach((child, i) => {
+            gsap.fromTo(
+              child,
+              { opacity: 0, y: 15 },
+              {
+                opacity: 1,
+                y: 0,
+                duration: 0.5,
+                ease: "power2.out",
+                delay: i * 0.08,
+                scrollTrigger: {
+                  trigger: entry,
+                  start: "top 80%",
+                  toggleActions: "play none none reverse",
+                },
+              }
+            );
+          });
+
+          const icon = entry.querySelector(".timeline-icon");
+          if (icon) {
+            gsap.fromTo(
+              icon,
+              { scale: 0, rotate: -15 },
+              {
+                scale: 1,
+                rotate: 0,
+                duration: 0.6,
+                ease: "back.out(2.5)",
+                scrollTrigger: {
+                  trigger: entry,
+                  start: "top 82%",
+                  toggleActions: "play none none reverse",
+                },
+              }
+            );
+          }
+        });
+      }
     },
     { scope: containerRef }
   );

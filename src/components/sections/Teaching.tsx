@@ -28,7 +28,7 @@ export function Teaching() {
             alt=""
             width={280}
             height={280}
-            unoptimized
+            loading="lazy"
             className="pointer-events-none absolute -bottom-10 -right-10 size-48 opacity-[0.07] sm:size-56 lg:-bottom-8 lg:-right-8 lg:size-72"
             aria-hidden="true"
           />

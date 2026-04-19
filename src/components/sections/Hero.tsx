@@ -9,10 +9,14 @@ import { ParallaxLayer } from "@/components/animations/ParallaxLayer";
 import { Button } from "@/components/ui/Button";
 import { personal } from "@/data/personal";
 import { useNavigationStore } from "@/store/navigation";
+import { useIsTouchDevice } from "@/hooks/useIsTouchDevice";
 
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const introComplete = useNavigationStore((s) => s.introComplete);
+
+  // Skip PeekAvatar mount entirely on mobile — avoids 150 lines of unused animation code
+  const isDesktop = !useIsTouchDevice();
 
   // Scroll-driven fade + scale for cinematic recession
   const { scrollY } = useScroll();
@@ -29,8 +33,10 @@ export function Hero() {
     () => {
       if (!sectionRef.current) return;
 
-      // Immediately hide everything (before intro completes)
-      gsap.set(".hero-hide", { opacity: 0 });
+     // Immediately hide everything except the name (before intro completes).
+      // Keeping hero-name visible preserves LCP — Lighthouse counts the SSR
+      // paint (~0.9s) instead of the GSAP repaint (~3.8s).
+      gsap.set(".hero-hide:not(.hero-name)", { opacity: 0 });
 
       if (!introComplete) return;
 
@@ -106,7 +112,7 @@ export function Hero() {
     <section
       id="hero"
       ref={sectionRef}
-      className="relative min-h-dvh overflow-hidden bg-dusk-hero"
+      className="relative min-h-svh overflow-hidden bg-dusk-hero"
     >
       {/* Warm radial gradient background */}
       <ParallaxLayer speed={-15} className="absolute inset-0">
@@ -116,14 +122,14 @@ export function Hero() {
       {/* Main content — fades and recedes as user scrolls */}
       <motion.div
         style={{ opacity: heroOpacity, scale: heroScale, y: heroY }}
-        className="relative mx-auto flex min-h-dvh max-w-[1280px] items-center px-[var(--spacing-container-px)] pt-20 pb-12"
+        className="relative mx-auto flex min-h-svh max-w-[1280px] items-center px-[var(--spacing-container-px)] pt-14 sm:pt-20 pb-[max(2.5rem,calc(env(safe-area-inset-bottom)+1.5rem))] sm:pb-12"
       >
         <div className="grid w-full grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-8">
           {/* Left column — Text content */}
           <div className="lg:col-span-7">
             {/* Mobile/Tablet avatar — circular, above label */}
-            <div className="hero-hide hero-avatar mb-6 lg:hidden">
-              <div className="relative size-20 overflow-hidden rounded-full ring-2 ring-copper/20 ring-offset-2 ring-offset-dusk-hero sm:size-24">
+            <div className="hero-hide hero-avatar mb-2.5 sm:mb-6 lg:hidden">
+              <div className="relative size-14 sm:size-20 overflow-hidden rounded-full ring-2 ring-copper/20 ring-offset-1 sm:ring-offset-2 ring-offset-dusk-hero">
                 <div className="absolute inset-0 -z-10 scale-110 bg-[radial-gradient(ellipse_at_center,rgba(184,115,51,0.14),transparent_70%)] blur-xl animate-glow-breathe" />
                 <Image
                   src="/images/avatar.webp"
@@ -131,20 +137,20 @@ export function Hero() {
                   width={96}
                   height={96}
                   loading="eager"
-                  sizes="(min-width: 640px) 96px, 80px"
+                  sizes="(min-width: 640px) 80px, 56px"
                   className="size-full object-cover object-top"
                 />
               </div>
             </div>
 
             {/* Label */}
-            <span className="hero-hide hero-label typ-label mb-6 block text-copper-btn">
+            <span className="hero-hide hero-label typ-label mb-2 sm:mb-6 block text-copper-btn">
               Full Stack Engineer
             </span>
 
             {/* Name */}
             <h1
-              className="hero-hide hero-name typ-display text-charcoal mb-6 overflow-hidden"
+              className="hero-hide hero-name typ-display text-charcoal mb-2.5 sm:mb-6 overflow-hidden"
               style={{ perspective: "500px" }}
             >
               {personal.name}
@@ -159,7 +165,7 @@ export function Hero() {
 
             {/* Buttons */}
             <div className="hero-hide hero-buttons">
-              <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
+              <div className="mt-4 sm:mt-8 flex flex-row flex-wrap gap-3 sm:gap-4">
                 <Button variant="solid" href="#projects">
                   View Projects
                   <ArrowDown className="size-3.5" />
@@ -173,14 +179,14 @@ export function Hero() {
 
             {/* Trust badges */}
             <div className="hero-hide hero-trust">
-              <div className="mt-10 flex flex-wrap items-center gap-2.5 sm:gap-3">
-                <span className="hero-trust-pill inline-flex items-center gap-2 rounded-full border border-copper/15 bg-[rgba(184,115,51,0.05)] px-3.5 py-1.5 transition-colors duration-200 hover:bg-[rgba(184,115,51,0.1)]">
+              <div className="mt-3 sm:mt-10 flex flex-wrap items-center gap-2.5 sm:gap-3">
+                <span className="hero-trust-pill inline-flex items-center gap-2 rounded-full border border-copper/15 bg-[rgba(184,115,51,0.05)] px-2.5 py-1 sm:px-3.5 sm:py-1.5 transition-colors duration-200 hover:bg-[rgba(184,115,51,0.1)]">
                   <Globe className="size-3.5 text-copper" />
                   <span className="font-[family-name:var(--font-mono)] text-[0.6875rem] tracking-wide text-slate">
                     5+ Years Remote
                   </span>
                 </span>
-                <span className="hero-trust-pill inline-flex items-center gap-2 rounded-full border border-copper/15 bg-[rgba(184,115,51,0.05)] px-3.5 py-1.5 transition-colors duration-200 hover:bg-[rgba(184,115,51,0.1)]">
+                <span className="hero-trust-pill inline-flex items-center gap-2 rounded-full border border-copper/15 bg-[rgba(184,115,51,0.05)] px-2.5 py-1 sm:px-3.5 sm:py-1.5 transition-colors duration-200 hover:bg-[rgba(184,115,51,0.1)]">
                   <Image
                     src="/images/aws-academy-educator.webp"
                     alt=""
@@ -192,11 +198,18 @@ export function Hero() {
                     AWS Academy Educator
                   </span>
                 </span>
-                <span className="hero-trust-pill hidden items-center gap-2 rounded-full border border-copper/15 bg-[rgba(184,115,51,0.05)] px-3.5 py-1.5 transition-colors duration-200 hover:bg-[rgba(184,115,51,0.1)] sm:inline-flex">
+                <span className="hero-trust-pill inline-flex items-center gap-2 rounded-full border border-copper/15 bg-[rgba(184,115,51,0.05)] px-2.5 py-1 sm:px-3.5 sm:py-1.5 transition-colors duration-200 hover:bg-[rgba(184,115,51,0.1)]">
                   <Layers className="size-3.5 text-copper" />
                   <span className="font-[family-name:var(--font-mono)] text-[0.6875rem] tracking-wide text-slate">
                     50+ Projects
                   </span>
+                </span>
+              </div>
+
+              {/* Mobile location — inline instead of absolute to avoid Safari toolbar clipping */}
+              <div className="hero-hide hero-location mt-2 sm:hidden">
+                <span className="font-[family-name:var(--font-mono)] text-[0.625rem] tracking-wider text-slate">
+                  {personal.location} &middot; {personal.availability}
                 </span>
               </div>
             </div>
@@ -220,9 +233,9 @@ export function Hero() {
         </div>
       </motion.div>
 
-      {/* Bottom bar — also fades with scroll */}
-      <motion.div style={{ opacity: heroOpacity }} className="absolute bottom-0 left-0 w-full px-[var(--spacing-container-px)] pb-6 sm:pb-8">
-        <div className="mx-auto flex max-w-[1280px] items-end justify-center sm:justify-between">
+      {/* Bottom bar — desktop only, absolute positioned. Hidden on mobile to avoid Safari toolbar clipping. */}
+      <motion.div style={{ opacity: heroOpacity }} className="absolute bottom-0 left-0 hidden w-full px-[var(--spacing-container-px)] pb-8 sm:block">
+        <div className="mx-auto flex max-w-[1280px] items-end justify-between">
           {/* Location */}
           <div className="hero-hide hero-location">
             <span className="font-[family-name:var(--font-mono)] text-[0.625rem] tracking-wider text-slate sm:text-xs">
@@ -232,7 +245,7 @@ export function Hero() {
 
           {/* Scroll indicator — hidden on mobile */}
           <div className="hero-hide hero-scroll hidden flex-col items-center gap-2 sm:flex">
-            <span className="font-[family-name:var(--font-mono)] text-[0.625rem] tracking-widest text-slate/60 uppercase">
+            <span className="font-[family-name:var(--font-mono)] text-[0.625rem] tracking-widest text-slate uppercase">
               Scroll
             </span>
             <svg
@@ -266,8 +279,8 @@ export function Hero() {
         </div>
       </motion.div>
 
-      {/* Peek avatar — slides up when user hasn't scrolled */}
-      <PeekAvatar introComplete={introComplete} />
+      {/* Peek avatar — slides up when user hasn't scrolled (desktop only) */}
+      {isDesktop && <PeekAvatar introComplete={introComplete} />}
     </section>
   );
 }
@@ -288,7 +301,6 @@ function PeekAvatar({ introComplete }: { introComplete: boolean }) {
   // Show/hide timer logic
   useEffect(() => {
     if (!introComplete) return;
-    if (window.matchMedia("(max-width: 767px)").matches) return;
 
     const startTimer = () => {
       if (timerRef.current) clearTimeout(timerRef.current);
