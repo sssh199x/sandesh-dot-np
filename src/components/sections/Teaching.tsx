@@ -171,7 +171,6 @@ export function Teaching() {
         {/* ─── Credential Card ─── */}
         <FadeUp delay={0.1}>
           <div className="relative overflow-hidden rounded-lg border border-charcoal/[0.06] bg-surface-light shadow-[0_2px_20px_rgba(26,23,20,0.06)]">
-            <CollegeBgMark />
 
             <div className="relative grid grid-cols-1 lg:grid-cols-12">
               {/* Left: Badge + Description */}
@@ -239,7 +238,8 @@ export function Teaching() {
               </div>
 
               {/* Right: Stats — stretch to match left column */}
-              <div className="flex flex-col border-t border-charcoal/[0.06] p-5 sm:p-8 lg:col-span-4 lg:border-l lg:border-t-0 lg:p-10">
+              <div className="relative flex flex-col overflow-hidden border-t border-charcoal/[0.06] p-5 sm:p-8 lg:col-span-4 lg:border-l lg:border-t-0 lg:p-10">
+                <CollegeBgMark />
                 <span className="typ-label mb-5 block text-sage">
                   By the Numbers
                 </span>
@@ -265,7 +265,6 @@ export function Teaching() {
               key={course.name}
               className="course-card group relative overflow-hidden rounded-lg border border-charcoal/[0.06] bg-surface-light p-5 pl-7 shadow-[0_2px_20px_rgba(26,23,20,0.06)] transition-[shadow,border-color,transform] duration-200 hover:border-sage/30 hover:shadow-warm-sm hover:-translate-y-0.5 sm:p-6 sm:pl-8"
             >
-              <CollegeBgMark />
               {/* Sage left accent bar — gradient fade */}
               <div className="absolute left-0 top-0 h-full w-[3px] bg-gradient-to-b from-sage/50 via-sage/25 to-transparent" />
 
