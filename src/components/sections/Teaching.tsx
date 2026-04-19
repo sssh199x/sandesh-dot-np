@@ -10,7 +10,7 @@ import { FadeUp } from "@/components/animations/FadeUp";
 import { StatCard } from "@/components/ui/StatCard";
 import { Tag } from "@/components/ui/Tag";
 
-/* AWS service icons — decorative grid in credential card */
+/* AWS service icons — all 19 services in credential card */
 const awsServices = [
   { name: "EC2", src: "/images/teaching/ec2.svg" },
   { name: "S3", src: "/images/teaching/s3.svg" },
@@ -24,6 +24,13 @@ const awsServices = [
   { name: "VPC", src: "/images/teaching/vpc.svg" },
   { name: "SQS", src: "/images/teaching/sqs.svg" },
   { name: "Route 53", src: "/images/teaching/route53.svg" },
+  { name: "ECS", src: "/images/teaching/ecs.svg" },
+  { name: "EKS", src: "/images/teaching/eks.svg" },
+  { name: "SNS", src: "/images/teaching/sns.svg" },
+  { name: "CodePipeline", src: "/images/teaching/codepipeline.svg" },
+  { name: "Auto Scaling", src: "/images/teaching/ec2-auto-scaling.svg" },
+  { name: "Beanstalk", src: "/images/teaching/elastic-beanstalk.svg" },
+  { name: "ELB", src: "/images/teaching/elb.svg" },
 ];
 
 const teachingStats = [
@@ -198,31 +205,31 @@ export function Teaching() {
                   for students pursuing computing degrees.
                 </p>
 
-                {/* AWS service icon grid — fills empty space */}
-                <div
-                  className="mt-8 flex flex-wrap items-center gap-2.5 sm:gap-3 lg:mt-10"
-                  aria-hidden="true"
-                >
-                  {awsServices.map((svc) => (
-                    <div
-                      key={svc.name}
-                      className="aws-svc-icon group/icon relative"
-                      title={svc.name}
-                    >
-                      <img
-                        src={svc.src}
-                        alt=""
-                        width={40}
-                        height={40}
-                        loading="lazy"
-                        className="size-9 opacity-[0.14] transition-opacity duration-300 hover:opacity-[0.35] sm:size-10"
-                      />
-                      {/* Label on hover */}
-                      <span className="pointer-events-none absolute -bottom-5 left-1/2 -translate-x-1/2 whitespace-nowrap font-[family-name:var(--font-mono)] text-[8px] uppercase tracking-[0.08em] text-charcoal/30 opacity-0 transition-opacity duration-200 group-hover/icon:opacity-100">
-                        {svc.name}
-                      </span>
-                    </div>
-                  ))}
+                {/* AWS service icon grid — certification study sheet */}
+                <div className="mt-8 lg:mt-10">
+                  <span className="typ-label mb-4 block text-charcoal/25">
+                    Services Covered
+                  </span>
+                  <div className="grid grid-cols-5 gap-x-3 gap-y-5 sm:grid-cols-7 lg:grid-cols-10">
+                    {awsServices.map((svc) => (
+                      <div
+                        key={svc.name}
+                        className="aws-svc-icon group/icon flex flex-col items-center gap-1.5"
+                      >
+                        <img
+                          src={svc.src}
+                          alt={svc.name}
+                          width={40}
+                          height={40}
+                          loading="lazy"
+                          className="size-9 transition-transform duration-200 group-hover/icon:scale-110 sm:size-10"
+                        />
+                        <span className="text-center font-[family-name:var(--font-mono)] text-[7px] leading-tight uppercase tracking-[0.06em] text-charcoal/40 sm:text-[8px]">
+                          {svc.name}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
                 {/* Sage verification line — draws on scroll */}
