@@ -17,7 +17,7 @@ export const SectionWrapper = forwardRef<HTMLElement, SectionWrapperProps>(
       <section
         id={id}
         ref={ref}
-        style={background ? { backgroundColor: background } : undefined}
+        style={{ position: "relative", ...(background ? { backgroundColor: background } : undefined) }}
         className={cn(
           "relative w-full",
           "px-[var(--spacing-container-px)]",

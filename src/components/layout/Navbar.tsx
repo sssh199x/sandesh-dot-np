@@ -162,6 +162,7 @@ export function Navbar() {
               width={28}
               height={28}
               sizes="28px"
+              priority
               className="size-7 rounded-full object-cover object-top ring-1 ring-copper/20"
             />
             <span className="font-[family-name:var(--font-heading)] text-[0.9375rem] font-semibold tracking-wide text-copper">

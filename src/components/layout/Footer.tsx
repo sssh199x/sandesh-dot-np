@@ -1,5 +1,8 @@
 "use client";
 
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import Image from "next/image";
 import { Mail } from "lucide-react";
 import { personal, navItems } from "@/data/personal";
 import { playHoverSound } from "@/lib/sound";
@@ -59,10 +62,53 @@ const socials = [
 ];
 
 export function Footer() {
+  const footerRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: footerRef,
+    offset: ["start end", "end start"],
+  });
+
+  // Bike parallax — stronger drift for visible effect
+  const bikeY = useTransform(scrollYProgress, [0, 1], [100, -60]);
+  // Fade in as footer scrolls into view
+  const bikeOpacity = useTransform(scrollYProgress, [0, 0.25, 0.8, 1], [0, 0.55, 0.55, 0.2]);
+  // Backlight glow intensifies as you scroll in
+  const glowOpacity = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
+
   return (
-    <footer className="relative z-20 -mt-28 px-4 pb-0 sm:-mt-36 sm:px-6 lg:px-8">
+    <footer ref={footerRef} className="relative z-20 -mt-28 px-4 pb-0 sm:-mt-36 sm:px-6 lg:px-8">
       {/* Card — warm surface emerging from night */}
-      <div className="mx-auto w-full overflow-hidden rounded-t-3xl bg-[#221F1B] shadow-[0_-4px_30px_rgba(0,0,0,0.4)]">
+      <div className="relative mx-auto w-full overflow-hidden rounded-t-3xl bg-[#221F1B] shadow-[0_-4px_30px_rgba(0,0,0,0.4)]">
+        {/* Ghost bike — left edge of footer card (desktop only) */}
+        <div className="pointer-events-none absolute inset-0 hidden overflow-hidden lg:block" aria-hidden="true">
+          {/* Warm backlight behind bike — fades in */}
+          <motion.div
+            className="absolute bottom-[30%] left-[8%] h-[300px] w-[280px] rounded-full blur-[100px]"
+            style={{
+              background: "radial-gradient(ellipse, rgba(184,115,51,0.25) 0%, rgba(184,115,51,0.08) 50%, transparent 70%)",
+              opacity: glowOpacity,
+            }}
+          />
+          <motion.div
+            className="absolute bottom-0 left-0 h-full w-[48%] will-change-transform"
+            style={{ y: bikeY, opacity: bikeOpacity, mixBlendMode: "lighten" }}
+          >
+            <Image
+              src="/images/me-bike.webp"
+              alt=""
+              width={838}
+              height={1280}
+              loading="lazy"
+              unoptimized
+              className="h-full w-full object-contain object-left-bottom"
+              style={{
+                filter: "sepia(0.3) saturate(0.9) brightness(0.7)",
+                maskImage: "linear-gradient(to top, transparent 0%, black 10%, black 90%, transparent 100%)",
+                WebkitMaskImage: "linear-gradient(to top, transparent 0%, black 10%, black 90%, transparent 100%)",
+              }}
+            />
+          </motion.div>
+        </div>
         {/* Copper glow on top edge */}
         <div
           className="h-px w-full"

@@ -81,6 +81,30 @@ function IntroOverlayInner({ onComplete, setIntroComplete }: { onComplete: () =>
       }}
       aria-hidden="true"
     >
+      {/* Cinematic bike portrait — emerges from darkness, pinned right */}
+      <div
+        className="sht-bike-bg"
+        style={{
+          position: "absolute",
+          top: "3%",
+          right: "0",
+          bottom: "0",
+          width: "60%",
+          backgroundImage: "url(/images/me-bike-org.webp)",
+          backgroundSize: "contain",
+          backgroundPosition: "right center",
+          opacity: 0,
+          pointerEvents: "none",
+          transformOrigin: "right center",
+          transform: "scale(1.04)",
+          filter: "sepia(0.2) saturate(1.2) brightness(0.9)",
+          maskImage: "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.3) 20%, rgba(0,0,0,0.7) 40%, black 60%), linear-gradient(to top, transparent 0%, black 20%), linear-gradient(to bottom, transparent 0%, black 15%)",
+          WebkitMaskImage: "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.3) 20%, rgba(0,0,0,0.7) 40%, black 60%), linear-gradient(to top, transparent 0%, black 20%), linear-gradient(to bottom, transparent 0%, black 15%)",
+          maskComposite: "intersect",
+          WebkitMaskComposite: "source-in",
+          animation: "sht-bg-reveal 2800ms cubic-bezier(0.16, 1, 0.3, 1) 1800ms forwards, sht-bg-exit 600ms ease-in 4600ms forwards",
+        }}
+      />
       {/* Animated film grain — stepped position shift for real film-stock feel */}
       <div
         style={{
@@ -245,6 +269,16 @@ function CopperSparkles() {
   return (
     <>
       <style>{`
+        /* Bike photo emerges from darkness with slow Ken Burns zoom */
+        @keyframes sht-bg-reveal {
+          0%   { opacity: 0; transform: scale(1.04); }
+          100% { opacity: 0.28; transform: scale(1.0); }
+        }
+        /* Photo fades out before iris close */
+        @keyframes sht-bg-exit {
+          0%   { opacity: 0.28; }
+          100% { opacity: 0; }
+        }
         @keyframes sht-grain-shift {
           0%   { transform: translate(0, 0); }
           25%  { transform: translate(-60px, -40px); }

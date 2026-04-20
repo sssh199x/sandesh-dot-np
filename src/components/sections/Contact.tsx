@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState, useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import Image from "next/image";
 import { Mail, Send } from "lucide-react";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { TextReveal } from "@/components/animations/TextReveal";
@@ -40,9 +41,43 @@ export function Contact() {
     }
   };
 
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+
+  // Ghost figure parallax — stronger drift for visible effect
+  const ghostY = useTransform(scrollYProgress, [0, 1], [120, -80]);
+  // Fade in as section enters, stay visible through middle
+  const ghostOpacity = useTransform(scrollYProgress, [0, 0.2, 0.75, 1], [0, 0.32, 0.32, 0.1]);
+
   return (
-    <SectionWrapper id="contact" background="#1A1714" className="pb-40 sm:pb-48">
-      <div className="mx-auto max-w-[680px] text-center">
+    <SectionWrapper ref={sectionRef} id="contact" background="#1A1714" className="pb-40 sm:pb-48">
+      {/* Ghost figure — atmospheric background with parallax (desktop only) */}
+      <div className="pointer-events-none absolute inset-0 hidden overflow-hidden lg:block" aria-hidden="true">
+        <motion.div
+          className="absolute -right-[5%] bottom-0 h-[85%] w-auto will-change-transform"
+          style={{ y: ghostY, opacity: ghostOpacity }}
+        >
+          <Image
+            src="/images/me-full.webp"
+            alt=""
+            width={748}
+            height={821}
+            unoptimized
+            className="h-full w-auto max-w-none object-contain object-bottom"
+            style={{
+              maskImage: "linear-gradient(to left, black 20%, transparent 60%), linear-gradient(to top, transparent 5%, black 25%)",
+              WebkitMaskImage: "linear-gradient(to left, black 20%, transparent 60%), linear-gradient(to top, transparent 5%, black 25%)",
+              maskComposite: "intersect",
+              WebkitMaskComposite: "source-in",
+            }}
+          />
+        </motion.div>
+      </div>
+
+      <div className="relative mx-auto max-w-[680px] text-center">
         {/* Heading */}
         <FadeUp>
           <span className="typ-label mb-6 block text-copper">Get in Touch</span>
