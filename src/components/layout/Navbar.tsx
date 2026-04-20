@@ -9,7 +9,7 @@ import { useLenis } from "@/components/layout/SmoothScroll";
 import { useHydrated } from "@/hooks/useHydrated";
 import Image from "next/image";
 import { SoundToggle } from "@/components/ui/SoundToggle";
-import { playSound, playHoverSound } from "@/lib/sound";
+import { playHoverSound } from "@/lib/sound";
 
 const darkSections = new Set(["projects", "skills", "contact"]);
 
@@ -134,7 +134,7 @@ export function Navbar() {
               initial={reducedMotion ? false : { opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={reducedMotion ? { duration: 0.01 } : { delay: 0.1 + navItems.length * 0.05 }}
-              onClick={() => { playSound("click"); scrollTo("contact"); }}
+              onClick={() => scrollTo("contact")}
               className="mt-4 rounded-pill bg-copper-btn px-8 py-3.5 font-[family-name:var(--font-mono)] text-base font-medium tracking-wide text-cream cursor-pointer"
             >
               Get in Touch
@@ -201,7 +201,7 @@ export function Navbar() {
             ))}
             <SoundToggle isDark={isDark} />
             <button
-              onClick={() => { playSound("click"); scrollTo("contact"); }}
+              onClick={() => scrollTo("contact")}
               onMouseEnter={() => playHoverSound()}
               className="rounded-pill bg-copper-btn px-7 py-3 font-[family-name:var(--font-mono)] text-sm font-medium tracking-wide text-cream transition-colors duration-200 hover:bg-copper-dark cursor-pointer focus-visible:ring-2 focus-visible:ring-copper focus-visible:outline-none"
             >
@@ -211,7 +211,7 @@ export function Navbar() {
 
           {/* Mobile Hamburger */}
           <button
-            onClick={() => { playSound("toggle"); toggleMenu(); }}
+            onClick={toggleMenu}
             className="relative z-10 flex size-11 flex-col items-center justify-center gap-1.5 lg:hidden cursor-pointer focus-visible:ring-2 focus-visible:ring-copper focus-visible:outline-none rounded-sm"
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
           >

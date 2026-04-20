@@ -5,7 +5,7 @@ import { motion, useMotionValue, useSpring, useReducedMotion } from "framer-moti
 import { cn, smoothScrollTo } from "@/lib/utils";
 import { useLenis } from "@/components/layout/SmoothScroll";
 import { useIsTouchDevice } from "@/hooks/useIsTouchDevice";
-import { playSound, playHoverSound } from "@/lib/sound";
+import { playHoverSound } from "@/lib/sound";
 
 interface ButtonProps {
   children: React.ReactNode;
@@ -48,10 +48,6 @@ export function Button({
 
   const handleMouseEnter = () => {
     playHoverSound();
-  };
-
-  const handleClick = () => {
-    playSound("click");
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -103,20 +99,20 @@ export function Button({
   if (isTouchDevice) {
     if (isHash) {
       return (
-        <button type="button" onClick={() => { handleClick(); handleHashClick(); }} className={baseStyles}>
+        <button type="button" onClick={handleHashClick} className={baseStyles}>
           <span className="relative z-10 flex items-center gap-2">{children}</span>
         </button>
       );
     }
     if (href) {
       return (
-        <a href={href} onClick={handleClick} className={baseStyles}>
+        <a href={href} onClick={undefined} className={baseStyles}>
           <span className="relative z-10 flex items-center gap-2">{children}</span>
         </a>
       );
     }
     return (
-      <button type={type} onClick={() => { handleClick(); onClick?.(); }} className={baseStyles}>
+      <button type={type} onClick={onClick} className={baseStyles}>
         <span className="relative z-10 flex items-center gap-2">{children}</span>
       </button>
     );
@@ -137,7 +133,7 @@ export function Button({
       <motion.button
         ref={buttonRef}
         type="button"
-        onClick={() => { handleClick(); handleHashClick(); }}
+        onClick={handleHashClick}
         className={baseStyles}
         {...sharedMotionProps}
       >
@@ -151,8 +147,7 @@ export function Button({
       <motion.a
         ref={anchorRef}
         href={href}
-        onClick={handleClick}
-        className={baseStyles}
+               className={baseStyles}
         {...sharedMotionProps}
       >
         <span className="relative z-10 flex items-center gap-2">{children}</span>
@@ -164,7 +159,7 @@ export function Button({
     <motion.button
       ref={buttonRef}
       type={type}
-      onClick={() => { handleClick(); onClick?.(); }}
+      onClick={onClick}
       className={baseStyles}
       {...sharedMotionProps}
     >

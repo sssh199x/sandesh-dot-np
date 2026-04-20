@@ -69,8 +69,8 @@ export function isSoundEnabled(): boolean {
  *  Installs a one-time pointerdown/keydown listener to unlock AudioContext.
  *  Browsers only allow AudioContext.resume() from user-activation events
  *  (click, pointerdown, keydown) — hover/mousemove do NOT count.
- *  We use pointerdown because it fires BEFORE click, so by the time a
- *  button's onClick calls playSound(), the context is already running. */
+ *  We use pointerdown because it fires BEFORE click, so the context
+ *  is already running by the time any handler runs. */
 export function initSound() {
   if (!isSoundAvailable()) return;
   if (!isSoundEnabled()) return;
@@ -108,21 +108,6 @@ export function toggleSound(): boolean {
 
   localStorage.setItem(STORAGE_KEY, String(next));
   return next;
-}
-
-/** Play a named sprite. Called from click/interaction handlers. */
-export function playSound(name: string) {
-  if (!isSoundAvailable()) return;
-  if (!isSoundEnabled() && name !== "toggle") return;
-  if (!SPRITES[name]) return;
-  if (!howl || howl.state() !== "loaded") return;
-
-  // Click events are user-activation — safe to resume here too
-  if (!contextUnlocked) {
-    contextUnlocked = true;
-    Howler.ctx?.resume();
-  }
-  howl.play(name);
 }
 
 /** Play the next Runaway piano note. Notes overlap (sustain pedal). */
