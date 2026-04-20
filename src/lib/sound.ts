@@ -52,11 +52,13 @@ function isTouchDevice(): boolean {
   return window.matchMedia("(pointer: coarse)").matches;
 }
 
-/** True when the sound system is available (desktop + no reduced motion). */
+/** True at lg+ viewport on a non-touch device with no reduced motion.
+ *  Matches the SoundToggle visibility (inside Navbar's `hidden lg:flex`). */
 export function isSoundAvailable(): boolean {
   if (typeof window === "undefined") return false;
   if (isTouchDevice()) return false;
   if (prefersReducedMotion()) return false;
+  if (!window.matchMedia("(min-width: 1024px)").matches) return false;
   return true;
 }
 
