@@ -331,6 +331,16 @@ body::after {
   to   { opacity: 0; }
 }
 
+@keyframes sound-bar {
+  0%, 100% { transform: scaleY(0.4); }
+  50%      { transform: scaleY(1); }
+}
+
+.animate-sound-bar {
+  transform-origin: bottom;
+  animation: sound-bar 0.8s ease-in-out infinite;
+}
+
 /* ========================================
    Reduced Motion
    ======================================== */

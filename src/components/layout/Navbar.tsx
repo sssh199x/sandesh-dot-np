@@ -8,6 +8,8 @@ import { useNavigationStore } from "@/store/navigation";
 import { useLenis } from "@/components/layout/SmoothScroll";
 import { useHydrated } from "@/hooks/useHydrated";
 import Image from "next/image";
+import { SoundToggle } from "@/components/ui/SoundToggle";
+import { playSound, playHoverSound } from "@/lib/sound";
 
 const darkSections = new Set(["projects", "skills", "contact"]);
 
@@ -132,7 +134,7 @@ export function Navbar() {
               initial={reducedMotion ? false : { opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={reducedMotion ? { duration: 0.01 } : { delay: 0.1 + navItems.length * 0.05 }}
-              onClick={() => scrollTo("contact")}
+              onClick={() => { playSound("click"); scrollTo("contact"); }}
               className="mt-4 rounded-pill bg-copper-btn px-8 py-3.5 font-[family-name:var(--font-mono)] text-base font-medium tracking-wide text-cream cursor-pointer"
             >
               Get in Touch
@@ -151,6 +153,7 @@ export function Navbar() {
           {/* Logo — avatar + monogram */}
           <button
             onClick={() => scrollTo("hero")}
+            onMouseEnter={() => playHoverSound()}
             className="flex items-center gap-2.5 cursor-pointer focus-visible:ring-2 focus-visible:ring-copper focus-visible:outline-none rounded-sm"
           >
             <Image
@@ -172,6 +175,7 @@ export function Navbar() {
               <button
                 key={item.href}
                 onClick={() => scrollTo(item.href)}
+                onMouseEnter={() => playHoverSound()}
                 className={cn(
                   "relative cursor-pointer font-[family-name:var(--font-mono)] text-sm tracking-wide transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-copper focus-visible:outline-none rounded-sm",
                   activeSection === item.href
@@ -195,8 +199,10 @@ export function Navbar() {
                 )}
               </button>
             ))}
+            <SoundToggle isDark={isDark} />
             <button
-              onClick={() => scrollTo("contact")}
+              onClick={() => { playSound("click"); scrollTo("contact"); }}
+              onMouseEnter={() => playHoverSound()}
               className="rounded-pill bg-copper-btn px-7 py-3 font-[family-name:var(--font-mono)] text-sm font-medium tracking-wide text-cream transition-colors duration-200 hover:bg-copper-dark cursor-pointer focus-visible:ring-2 focus-visible:ring-copper focus-visible:outline-none"
             >
               Get in Touch
@@ -205,7 +211,7 @@ export function Navbar() {
 
           {/* Mobile Hamburger */}
           <button
-            onClick={toggleMenu}
+            onClick={() => { playSound("toggle"); toggleMenu(); }}
             className="relative z-10 flex size-11 flex-col items-center justify-center gap-1.5 lg:hidden cursor-pointer focus-visible:ring-2 focus-visible:ring-copper focus-visible:outline-none rounded-sm"
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
           >

@@ -2,6 +2,7 @@
 
 import { Mail } from "lucide-react";
 import { personal, navItems } from "@/data/personal";
+import { playHoverSound } from "@/lib/sound";
 
 /* Inline social SVG icons — zero extra deps */
 const socials = [
@@ -99,6 +100,7 @@ export function Footer() {
                   <li key={item.href}>
                     <a
                       href={`#${item.href}`}
+                      onMouseEnter={() => playHoverSound()}
                       className="font-[family-name:var(--font-body)] text-sm text-cream/60 transition-colors duration-200 hover:text-copper"
                     >
                       {item.label}
@@ -125,6 +127,7 @@ export function Footer() {
                             : "noopener noreferrer"
                         }
                         aria-label={link.name}
+                        onMouseEnter={() => playHoverSound()}
                         className="flex size-10 items-center justify-center rounded-full border border-copper/20 text-cream/60 transition-all duration-200 hover:border-copper/40 hover:text-copper focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper"
                       >
                         {link.icon}

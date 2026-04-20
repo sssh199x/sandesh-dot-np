@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useRef, useEffect } from "react";
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
@@ -9,6 +9,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Tag } from "@/components/ui/Tag";
 import { FadeUp } from "@/components/animations/FadeUp";
 import { projects } from "@/data/projects";
+import { playHoverSound } from "@/lib/sound";
 
 /* 5-card asymmetric grid: 7/5, 5/7, 12 */
 const cardSizes = [
@@ -151,7 +152,7 @@ export function Projects() {
               key={project.title}
               className={`project-card ${cardSizes[i]} col-span-1`}
             >
-              <div className="group h-full overflow-hidden rounded-xl border border-white/[0.06] bg-[#302C29] transition-[transform,box-shadow] duration-300 ease-out hover:-translate-y-1.5 hover:[box-shadow:0_12px_48px_rgba(184,115,51,0.12)]">
+              <div onMouseEnter={() => playHoverSound()} className="group h-full overflow-hidden rounded-xl border border-white/[0.06] bg-[#302C29] transition-[transform,box-shadow] duration-300 ease-out hover:-translate-y-1.5 hover:[box-shadow:0_12px_48px_rgba(184,115,51,0.12)]">
 
                 {/* Browser chrome + screenshot slideshow */}
                 {project.images.length > 0 && (
