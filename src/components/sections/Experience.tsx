@@ -184,13 +184,13 @@ export function Experience() {
                       {exp.company}
                     </h3>
 
-                    <p className="reveal-child mt-1 typ-tag font-medium text-copper">
+                    <p className="reveal-child mt-1 typ-tag font-medium text-copper-btn">
                       {exp.role}
                     </p>
 
                     <div className="reveal-child my-3 h-px w-8 bg-copper/25" />
 
-                    <p className="reveal-child typ-body text-charcoal/60 leading-[1.75]">
+                    <p className="reveal-child typ-body text-charcoal/70 leading-[1.75]">
                       {exp.description}
                     </p>
 

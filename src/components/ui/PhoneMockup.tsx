@@ -30,11 +30,11 @@ interface ProjectSlide {
 }
 
 const projectSlides: ProjectSlide[] = [
-  { src: "/images/projects/silverline/silverline.webp", title: "Silverline Education", ratio: 6.501 },
-  { src: "/images/projects/kaya/kaya.webp", title: "Kaya E-Commerce", ratio: 6.326 },
-  { src: "/images/projects/exosolve/exosolve.webp", title: "Exosolve Analytics", ratio: 6.501 },
-  { src: "/images/projects/rebuzz/rebuzz.webp", title: "Rebuzz POS", ratio: 4.606 },
-  { src: "/images/projects/krofile/krofile.webp", title: "Krofile Platform", ratio: 5.483 },
+  { src: "/images/projects/silverline/silverline-mobile.webp", title: "Silverline Education", ratio: 21.004 },
+  { src: "/images/projects/kaya/kaya-mobile.webp", title: "Kaya E-Commerce", ratio: 21.004 },
+  { src: "/images/projects/exosolve/exosolve-mobile.webp", title: "Exosolve Analytics", ratio: 21.004 },
+  { src: "/images/projects/krofile/krofile-mobile.webp", title: "Krofile Platform", ratio: 21.004 },
+  { src: "/images/projects/rebuzz/rebuzz-mobile.webp", title: "Rebuzz POS", ratio: 19.050 },
 ];
 
 /* All coordinates in SVG viewBox space (500×1027).
@@ -54,7 +54,7 @@ const HOLD_TOP    = 1.5;
 const HOLD_BOT    = 1.2;
 const HOLD_STATIC = 3.5;
 const SCROLL_SPEED = 350;  // slightly slower than MacBook — phone feels more intimate
-const MAX_SCROLL   = 10;
+const MAX_SCROLL   = 14;   // higher cap than Mac — mobile pages are 3× taller
 
 export function PhoneMockup({ animate = true }: { animate?: boolean }) {
   const uid = useId();
@@ -64,16 +64,35 @@ export function PhoneMockup({ animate = true }: { animate?: boolean }) {
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
   const cycleIndexRef = useRef(0);
   const useARef = useRef(true);
+  const firstCallRef = useRef(true);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isClient, setIsClient] = useState(false);
+  const isClientRef = useRef(false);
 
-  useEffect(() => { setIsClient(true); }, []);
+  useEffect(() => { isClientRef.current = true; }, []);
+
+  /* ── Pause/resume timeline when off-screen to save GPU ── */
+  useEffect(() => {
+    const svg = svgRef.current;
+    if (!svg) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          timelineRef.current?.resume();
+        } else {
+          timelineRef.current?.pause();
+        }
+      },
+      { threshold: 0 }
+    );
+    observer.observe(svg);
+    return () => observer.disconnect();
+  }, []);
 
   const playSlide = useRef<(index: number) => void>(null);
 
   useGSAP(
     () => {
-      if (!isClient || !animate) return;
+      if (!isClientRef.current || !animate) return;
       if (!imgARef.current || !imgBRef.current) return;
 
       const imgA = imgARef.current;
@@ -105,11 +124,17 @@ export function PhoneMockup({ animate = true }: { animate?: boolean }) {
         const incoming = useARef.current ? imgA : imgB;
         const outgoing = useARef.current ? imgB : imgA;
 
-        gsap.set(incoming, {
-          attr: { href: slide.src, height: imgHeight },
-          y: 0,
-          opacity: 0,
-        });
+        // First call: slide 0 is already visible on imgA — skip crossfade to avoid flash
+        const isFirst = firstCallRef.current;
+        if (isFirst) {
+          firstCallRef.current = false;
+        } else {
+          gsap.set(incoming, {
+            attr: { href: slide.src, height: imgHeight },
+            y: 0,
+            opacity: 0,
+          });
+        }
 
         const tl = gsap.timeline({
           onComplete: () => {
@@ -121,19 +146,22 @@ export function PhoneMockup({ animate = true }: { animate?: boolean }) {
           },
         });
 
-        tl.to(incoming, { opacity: 1, duration: CROSSFADE, ease: "power2.inOut" }, 0);
-        tl.to(outgoing, { opacity: 0, duration: CROSSFADE, ease: "power2.inOut" }, 0);
+        if (!isFirst) {
+          tl.to(incoming, { opacity: 1, duration: CROSSFADE, ease: "power2.inOut" }, 0);
+          tl.to(outgoing, { opacity: 0, duration: CROSSFADE, ease: "power2.inOut" }, 0);
+        }
+        const fadeOffset = isFirst ? 0 : CROSSFADE;
 
         if (canScroll) {
           tl.to(incoming, {
             y: -scrollDistance,
             duration: scrollDuration,
             ease: "power1.inOut",
-          }, CROSSFADE + HOLD_TOP);
+          }, fadeOffset + HOLD_TOP);
 
-          tl.to({}, { duration: HOLD_BOT }, CROSSFADE + HOLD_TOP + scrollDuration);
+          tl.to({}, { duration: HOLD_BOT }, fadeOffset + HOLD_TOP + scrollDuration);
         } else {
-          tl.to({}, { duration: HOLD_STATIC }, CROSSFADE);
+          tl.to({}, { duration: HOLD_STATIC }, fadeOffset);
         }
 
         timelineRef.current = tl;
@@ -149,7 +177,7 @@ export function PhoneMockup({ animate = true }: { animate?: boolean }) {
         }
       };
     },
-    { scope: svgRef, dependencies: [isClient, animate] }
+    { scope: svgRef, dependencies: [animate] }
   );
 
   const jumpToSlide = (index: number) => {
@@ -271,10 +299,10 @@ export function PhoneMockup({ animate = true }: { animate?: boolean }) {
               key={slide.title}
               onClick={() => jumpToSlide(i)}
               aria-label={`Show ${slide.title}`}
-              className={`block size-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+              className={`relative block p-3 cursor-pointer before:block before:size-1.5 before:rounded-full before:transition-all before:duration-300 ${
                 i === activeIndex
-                  ? "scale-125 bg-copper"
-                  : "bg-copper/25 hover:bg-copper/40"
+                  ? "before:scale-125 before:bg-copper"
+                  : "before:bg-copper/25 hover:before:bg-copper/40"
               }`}
             />
           ))}

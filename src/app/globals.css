@@ -22,7 +22,7 @@
   --color-sage: #7A8B6F;
   --color-cream: #FAF7F2;
   --color-charcoal: #1A1714;
-  --color-slate: #6B6560;
+  --color-slate: #635E59;
   --color-ghost: rgba(184, 115, 51, 0.08);
   --color-ghost-strong: rgba(184, 115, 51, 0.15);
 
@@ -109,6 +109,61 @@
      The hero-name (h1) stays visible — it's the LCP element. */
   .hero-hide:not(.hero-name) {
     opacity: 0;
+  }
+}
+
+/* ========================================
+   Hero entrance — pure CSS, no GSAP.
+   Triggered by [data-hero-ready] attribute.
+   Runs on compositor thread — zero JS per frame,
+   no revert cycles, no inline style conflicts.
+   ======================================== */
+@keyframes hero-fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+/* LCP-safe: translateY only, no opacity change — keeps h1 painted for Lighthouse */
+@keyframes hero-slide-up {
+  from { transform: translateY(10px); }
+  to   { transform: translateY(0); }
+}
+@keyframes hero-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* When data-hero-ready appears, animate each element with staggered delays.
+   animation-fill-mode: both = applies "from" during delay, keeps "to" after. */
+[data-hero-ready] .hero-label {
+  animation: hero-fade-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+}
+[data-hero-ready] .hero-name {
+  animation: hero-slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+}
+[data-hero-ready] .hero-tagline {
+  animation: hero-fade-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+}
+[data-hero-ready] .hero-buttons {
+  animation: hero-fade-up 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
+}
+[data-hero-ready] .hero-trust {
+  animation: hero-fade-up 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.65s both;
+}
+[data-hero-ready] .hero-mockup {
+  animation: hero-fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+}
+[data-hero-ready] .hero-location {
+  animation: hero-fade-in 0.4s ease-out 0.8s both;
+}
+[data-hero-ready] .hero-scroll {
+  animation: hero-fade-in 0.4s ease-out 1.0s both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-hero-ready] .hero-hide {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
   }
 }
 

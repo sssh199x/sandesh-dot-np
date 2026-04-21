@@ -1,11 +1,9 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import { motion, useScroll, useTransform, useMotionValueEvent, useReducedMotion, AnimatePresence } from "framer-motion";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { ArrowDown, Download, Globe, Layers } from "lucide-react";
-import { gsap, SplitText, useGSAP } from "@/lib/gsap";
-import { ParallaxLayer } from "@/components/animations/ParallaxLayer";
 import { Button } from "@/components/ui/Button";
 import { DeviceMockup } from "@/components/ui/DeviceMockup";
 import { PhoneMockup } from "@/components/ui/PhoneMockup";
@@ -16,128 +14,46 @@ import { useIsTouchDevice } from "@/hooks/useIsTouchDevice";
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const introComplete = useNavigationStore((s) => s.introComplete);
-
-  // Skip PeekAvatar mount entirely on mobile — avoids 150 lines of unused animation code
+  const introPlayed = useNavigationStore((s) => s.introPlayed);
   const isDesktop = !useIsTouchDevice();
 
-  // Reduced motion check for ambient animations
-  const prefersReducedMotion = useReducedMotion();
+  // Delay mockup auto-scroll timeline until after iris-close clears (~1s).
+  const [mockupReady, setMockupReady] = useState(false);
+  useEffect(() => {
+    if (!introComplete) return;
+    const delay = introPlayed ? 1000 : 0;
+    const t = setTimeout(() => setMockupReady(true), delay);
+    return () => clearTimeout(t);
+  }, [introComplete, introPlayed]);
 
-  // Scroll-driven fade + scale for cinematic recession
+  // Scroll-driven fade — opacity only
   const { scrollY } = useScroll();
   const heroOpacity = useTransform(scrollY, [0, 600], [1, 0]);
-  const heroScale = useTransform(scrollY, [0, 600], [1, 0.95]);
-  const heroY = useTransform(scrollY, [0, 600], [0, 60]);
-
-  // Pause scroll indicator animation when hero is invisible
-  const [heroVisible, setHeroVisible] = useState(true);
-  useMotionValueEvent(heroOpacity, "change", (v) => setHeroVisible(v > 0.1));
-
-  // Single GSAP timeline — frame-perfect choreography
-  useGSAP(
-    () => {
-      if (!sectionRef.current) return;
-
-     // Immediately hide everything except the name (before intro completes).
-      // Keeping hero-name visible preserves LCP — Lighthouse counts the SSR
-      // paint (~0.9s) instead of the GSAP repaint (~3.8s).
-      gsap.set(".hero-hide:not(.hero-name)", { opacity: 0 });
-
-      if (!introComplete) return;
-
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
-          window.matchMedia("(max-width: 767px)").matches) {
-        gsap.set(".hero-hide", { opacity: 1, y: 0, scale: 1, filter: "none" });
-        return;
-      }
-
-      const nameEl = sectionRef.current.querySelector(".hero-name");
-      // Restore name container opacity — SplitText chars handle their own opacity
-      if (nameEl) gsap.set(nameEl, { opacity: 1 });
-      const split = nameEl ? new SplitText(nameEl, { type: "chars,words" }) : null;
-      // Hide the individual chars (they start visible after split)
-      if (split) gsap.set(split.chars, { opacity: 0 });
-
-      const tl = gsap.timeline();
-
-      // 1. Label
-      tl.fromTo(".hero-label",
-        { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" },
-        0.15);
-
-      // 2. Name — char-by-char reveal
-      if (split) {
-        tl.fromTo(split.chars,
-          { y: 80, opacity: 0, rotateX: -90 },
-          { y: 0, opacity: 1, rotateX: 0, stagger: 0.04, duration: 0.9, ease: "back.out(1.4)" },
-          0.3);
-      }
-
-      // 3. Tagline then avatar (100ms apart)
-      tl.fromTo(".hero-tagline",
-        { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" },
-        0.8);
-      tl.fromTo(".hero-mockup",
-        { opacity: 0, y: 60, scale: 0.92 },
-        { opacity: 1, y: 0, scale: 1, duration: 1.0, ease: "power3.out" },
-        0.9);
-
-      // 4. Buttons
-      tl.fromTo(".hero-buttons",
-        { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" },
-        1.0);
-
-      // 5. Trust badges — reveal parent, then stagger pills
-      tl.set(".hero-trust", { opacity: 1 }, 1.15);
-      tl.fromTo(".hero-trust-pill",
-        { y: 12, opacity: 0, scale: 0.95 },
-        { y: 0, opacity: 1, scale: 1, duration: 0.4, ease: "power3.out", stagger: 0.1 },
-        1.15);
-
-      // 6. Bottom bar
-      tl.fromTo(".hero-location",
-        { opacity: 0 },
-        { opacity: 1, duration: 0.4, ease: "power3.out" },
-        1.3);
-      tl.fromTo(".hero-scroll",
-        { opacity: 0 },
-        { opacity: 1, duration: 0.4, ease: "power3.out" },
-        1.5);
-
-      return () => {
-        if (split) split.revert();
-      };
-    },
-    { scope: sectionRef, dependencies: [introComplete] }
-  );
+  // Parallax: devices trail the text on scroll — heavier, grounded feel
+  const deviceParallaxY = useTransform(scrollY, [0, 800], [0, 60]);
 
   return (
     <section
       id="hero"
       ref={sectionRef}
       className="relative min-h-svh overflow-hidden bg-dusk-hero"
+      // CSS animations trigger when this attribute appears — no GSAP, no revert cycles
+      data-hero-ready={introComplete || undefined}
     >
-      {/* Warm radial gradient background */}
-      <ParallaxLayer speed={-15} className="absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_30%_40%,rgba(184,115,51,0.06),transparent)]" />
-      </ParallaxLayer>
+      {/* Warm radial gradient — static */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_30%_40%,rgba(184,115,51,0.06),transparent)]" />
 
-      {/* Main content — fades and recedes as user scrolls */}
+      {/* Main content — opacity-only fade on scroll */}
       <motion.div
-        style={{ opacity: heroOpacity, scale: heroScale, y: heroY }}
+        style={{ opacity: heroOpacity }}
         className="relative mx-auto flex min-h-svh max-w-[1280px] items-center px-[var(--spacing-container-px)] pt-14 sm:pt-20 pb-[max(2.5rem,calc(env(safe-area-inset-bottom)+1.5rem))] sm:pb-12"
       >
         <div className="grid w-full grid-cols-1 items-center gap-8 sm:grid-cols-12 sm:gap-6 lg:gap-8">
           {/* Left column — Text content */}
           <div className="sm:col-span-7">
-            {/* Mobile avatar — circular, above label. NO hero-hide: paints from SSR for fast LCP */}
-            {/* Hidden on sm+ where device mockups (iPhone/MacBook) take over */}
+            {/* Mobile avatar */}
             <div className="mb-2.5 sm:hidden">
               <div className="relative size-14 sm:size-20 overflow-hidden rounded-full ring-2 ring-copper/20 ring-offset-1 sm:ring-offset-2 ring-offset-dusk-hero">
-                <div className="absolute inset-0 -z-10 scale-110 bg-[radial-gradient(ellipse_at_center,rgba(184,115,51,0.14),transparent_70%)] blur-xl" />
                 <Image
                   src="/images/me-avatar-sm.webp"
                   alt="Sandesh Hamal Thakuri"
@@ -155,11 +71,8 @@ export function Hero() {
               Full Stack Engineer
             </span>
 
-            {/* Name */}
-            <h1
-              className="hero-hide hero-name typ-display text-charcoal mb-2.5 sm:mb-6 overflow-hidden"
-              style={{ perspective: "500px" }}
-            >
+            {/* Name — LCP element, never animated, never hidden */}
+            <h1 className="hero-hide hero-name typ-display text-charcoal mb-2.5 sm:mb-6">
               {personal.name}
             </h1>
 
@@ -213,7 +126,7 @@ export function Hero() {
                 </span>
               </div>
 
-              {/* Mobile location — inline instead of absolute to avoid Safari toolbar clipping */}
+              {/* Mobile location */}
               <div className="hero-hide hero-location mt-2 sm:hidden">
                 <span className="font-[family-name:var(--font-mono)] text-[0.625rem] tracking-wider text-slate">
                   {personal.location} &middot;{" "}
@@ -225,56 +138,40 @@ export function Hero() {
             </div>
           </div>
 
-          {/* Right column — Device mockups */}
-          {/* Desktop (lg+): MacBook on stone */}
+          {/* Right column — Device mockups (parallax: trails text on scroll) */}
           {isDesktop && (
-            <div className="hidden lg:col-span-5 lg:flex lg:items-center lg:justify-center">
-              <ParallaxLayer speed={-8}>
-                <div className="hero-hide hero-mockup relative w-[460px] xl:w-[520px]">
-                  <motion.div
-                    className="absolute -inset-[10%] -z-10 rounded-3xl blur-[60px]"
-                    style={{ background: "radial-gradient(ellipse 70% 50% at 50% 40%, rgba(184,115,51,0.12) 0%, rgba(184,115,51,0.04) 50%, transparent 80%)" }}
-                    animate={introComplete && !prefersReducedMotion ? {
-                      opacity: [0.10, 0.20, 0.10],
-                      scale: [1.0, 1.04, 1.0],
-                    } : undefined}
-                    transition={{
-                      duration: 6,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
-                  />
-                  <DeviceMockup animate={introComplete} />
-                </div>
-              </ParallaxLayer>
-            </div>
+            <motion.div
+              style={{ y: deviceParallaxY }}
+              className="hidden lg:col-span-5 lg:flex lg:items-center lg:justify-center"
+            >
+              <div className="hero-hide hero-mockup relative w-[460px] xl:w-[520px]">
+                <div
+                  className="absolute -inset-[10%] -z-10 rounded-3xl blur-[60px] opacity-15"
+                  style={{ background: "radial-gradient(ellipse 70% 50% at 50% 40%, rgba(184,115,51,0.5) 0%, rgba(184,115,51,0.15) 50%, transparent 80%)" }}
+                />
+                <DeviceMockup animate={mockupReady} />
+              </div>
+            </motion.div>
           )}
           {/* Tablet (sm → lg): iPhone 17 */}
-          <div className="hidden sm:col-span-5 sm:flex sm:items-center sm:justify-center lg:hidden">
+          <motion.div
+            style={{ y: deviceParallaxY }}
+            className="hidden sm:col-span-5 sm:flex sm:items-center sm:justify-center lg:hidden"
+          >
             <div className="hero-hide hero-mockup relative w-[200px] md:w-[240px]">
-              <motion.div
-                className="absolute -inset-[15%] -z-10 rounded-[2rem] blur-[40px]"
-                style={{ background: "radial-gradient(ellipse 60% 40% at 50% 35%, rgba(184,115,51,0.10) 0%, transparent 80%)" }}
-                animate={introComplete && !prefersReducedMotion ? {
-                  opacity: [0.08, 0.16, 0.08],
-                  scale: [1.0, 1.03, 1.0],
-                } : undefined}
-                transition={{
-                  duration: 6,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
+              <div
+                className="absolute -inset-[15%] -z-10 rounded-[2rem] blur-[40px] opacity-10"
+                style={{ background: "radial-gradient(ellipse 60% 40% at 50% 35%, rgba(184,115,51,0.4) 0%, transparent 80%)" }}
               />
-              <PhoneMockup animate={introComplete} />
+              <PhoneMockup animate={mockupReady} />
             </div>
-          </div>
+          </motion.div>
         </div>
       </motion.div>
 
-      {/* Bottom bar — desktop only, absolute positioned. Hidden on mobile to avoid Safari toolbar clipping. */}
+      {/* Bottom bar — desktop only */}
       <motion.div style={{ opacity: heroOpacity }} className="absolute bottom-0 left-0 hidden w-full px-[var(--spacing-container-px)] pb-8 sm:block">
         <div className="mx-auto flex max-w-[1280px] items-end justify-between">
-          {/* Location + phone */}
           <div className="hero-hide hero-location">
             <span className="font-[family-name:var(--font-mono)] text-[0.625rem] tracking-wider text-slate sm:text-xs">
               {personal.location} &middot; {personal.availability} &middot;{" "}
@@ -284,7 +181,7 @@ export function Hero() {
             </span>
           </div>
 
-          {/* Scroll indicator — hidden on mobile */}
+          {/* Scroll indicator — CSS animation */}
           <div className="hero-hide hero-scroll hidden flex-col items-center gap-2 sm:flex">
             <span className="font-[family-name:var(--font-mono)] text-[0.625rem] tracking-widest text-slate uppercase">
               Scroll
@@ -298,29 +195,14 @@ export function Hero() {
               role="img"
               aria-label="Scroll down"
             >
-              <rect
-                x="1"
-                y="1"
-                width="18"
-                height="32"
-                rx="9"
-                stroke="currentColor"
-                strokeWidth="1.5"
-              />
-              <motion.circle
-                cx="10"
-                cy="10"
-                r="3"
-                fill="currentColor"
-                animate={heroVisible ? { y: [0, 12, 0] } : { y: 0 }}
-                transition={heroVisible ? { duration: 1.8, repeat: Infinity, ease: "easeInOut" } : { duration: 0 }}
-              />
+              <rect x="1" y="1" width="18" height="32" rx="9" stroke="currentColor" strokeWidth="1.5" />
+              <circle cx="10" cy="10" r="3" fill="currentColor" className="animate-scroll-dot" />
             </svg>
           </div>
         </div>
       </motion.div>
 
-      {/* Peek avatar — slides up when user hasn't scrolled (desktop only) */}
+      {/* Peek avatar — desktop only */}
       {isDesktop && <PeekAvatar introComplete={introComplete} />}
     </section>
   );
@@ -329,30 +211,25 @@ export function Hero() {
 /* ═══════════════════════════════════════════
    Peek Avatar — pops up from bottom edge
    after 4s of no scrolling, hides on scroll.
-   Speech bubble staggers in after entrance.
    ═══════════════════════════════════════════ */
 function PeekAvatar({ introComplete }: { introComplete: boolean }) {
   const [visible, setVisible] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout>>(null);
   const visibleRef = useRef(false);
 
-  // Keep ref in sync to avoid closure stale reads
   useEffect(() => { visibleRef.current = visible; }, [visible]);
 
-  // Show/hide timer logic
   useEffect(() => {
     if (!introComplete) return;
 
     const startTimer = () => {
       if (timerRef.current) clearTimeout(timerRef.current);
-      // Only update state if currently visible (avoid unnecessary re-renders)
       if (visibleRef.current) setVisible(false);
       timerRef.current = setTimeout(() => {
         if (window.scrollY < 200) setVisible(true);
       }, 4000);
     };
 
-    // Debounced scroll handler — fires at most once per 200ms
     let scrollTimeout: ReturnType<typeof setTimeout> | null = null;
     const onScroll = () => {
       if (scrollTimeout) return;
@@ -379,12 +256,7 @@ function PeekAvatar({ introComplete }: { introComplete: boolean }) {
           animate={{
             y: 0,
             opacity: 1,
-            transition: {
-              type: "spring",
-              stiffness: 260,
-              damping: 18,
-              mass: 0.8,
-            },
+            transition: { type: "spring", stiffness: 260, damping: 18, mass: 0.8 },
           }}
           exit={{
             y: 120,
@@ -393,17 +265,8 @@ function PeekAvatar({ introComplete }: { introComplete: boolean }) {
           }}
           className="pointer-events-none absolute bottom-0 left-1/2 z-10 -translate-x-1/2"
         >
-          {/*
-            Peek cycle — 6s, asymmetric timing for character:
-            0–47%  (2.85s): Visible, holding — time to read speech bubble
-            47–53% (0.35s): Duck down FAST (easeIn — snap! scared)
-            53–87% (2.0s):  Hidden — anticipation builds
-            87–100%(0.8s):  Peek up SLOW (easeOut — cautious, curious)
-          */}
           <motion.div
-            animate={{
-              y: [0, 0, 120, 120, 0],
-            }}
+            animate={{ y: [0, 0, 120, 120, 0] }}
             transition={{
               duration: 6,
               times: [0, 0.47, 0.53, 0.87, 1],
@@ -413,7 +276,6 @@ function PeekAvatar({ introComplete }: { introComplete: boolean }) {
             }}
             className="relative"
           >
-            {/* Overflow-hidden crops the wooden ledge; image positioned so fingers grip the container edge */}
             <div className="w-[240px] h-[120px] overflow-hidden">
               <Image
                 src="/images/me-peek.webp"

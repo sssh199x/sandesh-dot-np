@@ -157,7 +157,7 @@ export function Navbar() {
             className="flex items-center gap-2.5 cursor-pointer focus-visible:ring-2 focus-visible:ring-copper focus-visible:outline-none rounded-sm"
           >
             <Image
-              src="/images/avatar.webp"
+              src="/images/me-avatar-sm.webp"
               alt=""
               width={28}
               height={28}
