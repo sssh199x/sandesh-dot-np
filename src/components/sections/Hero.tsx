@@ -8,6 +8,7 @@ import { gsap, SplitText, useGSAP } from "@/lib/gsap";
 import { ParallaxLayer } from "@/components/animations/ParallaxLayer";
 import { Button } from "@/components/ui/Button";
 import { DeviceMockup } from "@/components/ui/DeviceMockup";
+import { PhoneMockup } from "@/components/ui/PhoneMockup";
 import { personal } from "@/data/personal";
 import { useNavigationStore } from "@/store/navigation";
 import { useIsTouchDevice } from "@/hooks/useIsTouchDevice";
@@ -129,11 +130,12 @@ export function Hero() {
         style={{ opacity: heroOpacity, scale: heroScale, y: heroY }}
         className="relative mx-auto flex min-h-svh max-w-[1280px] items-center px-[var(--spacing-container-px)] pt-14 sm:pt-20 pb-[max(2.5rem,calc(env(safe-area-inset-bottom)+1.5rem))] sm:pb-12"
       >
-        <div className="grid w-full grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-8">
+        <div className="grid w-full grid-cols-1 items-center gap-8 sm:grid-cols-12 sm:gap-6 lg:gap-8">
           {/* Left column — Text content */}
-          <div className="lg:col-span-7">
-            {/* Mobile/Tablet avatar — circular, above label. NO hero-hide: paints from SSR for fast LCP */}
-            <div className="mb-2.5 sm:mb-6 lg:hidden">
+          <div className="sm:col-span-7">
+            {/* Mobile avatar — circular, above label. NO hero-hide: paints from SSR for fast LCP */}
+            {/* Hidden on sm+ where device mockups (iPhone/MacBook) take over */}
+            <div className="mb-2.5 sm:hidden">
               <div className="relative size-14 sm:size-20 overflow-hidden rounded-full ring-2 ring-copper/20 ring-offset-1 sm:ring-offset-2 ring-offset-dusk-hero">
                 <div className="absolute inset-0 -z-10 scale-110 bg-[radial-gradient(ellipse_at_center,rgba(184,115,51,0.14),transparent_70%)] blur-xl" />
                 <Image
@@ -223,12 +225,12 @@ export function Hero() {
             </div>
           </div>
 
-          {/* Right column — Device mockup (desktop only, conditional render to avoid mobile image downloads) */}
+          {/* Right column — Device mockups */}
+          {/* Desktop (lg+): MacBook on stone */}
           {isDesktop && (
             <div className="hidden lg:col-span-5 lg:flex lg:items-center lg:justify-center">
               <ParallaxLayer speed={-8}>
                 <div className="hero-hide hero-mockup relative w-[460px] xl:w-[520px]">
-                  {/* Warm ambient glow behind device */}
                   <motion.div
                     className="absolute -inset-[10%] -z-10 rounded-3xl blur-[60px]"
                     style={{ background: "radial-gradient(ellipse 70% 50% at 50% 40%, rgba(184,115,51,0.12) 0%, rgba(184,115,51,0.04) 50%, transparent 80%)" }}
@@ -247,6 +249,25 @@ export function Hero() {
               </ParallaxLayer>
             </div>
           )}
+          {/* Tablet (sm → lg): iPhone 17 */}
+          <div className="hidden sm:col-span-5 sm:flex sm:items-center sm:justify-center lg:hidden">
+            <div className="hero-hide hero-mockup relative w-[200px] md:w-[240px]">
+              <motion.div
+                className="absolute -inset-[15%] -z-10 rounded-[2rem] blur-[40px]"
+                style={{ background: "radial-gradient(ellipse 60% 40% at 50% 35%, rgba(184,115,51,0.10) 0%, transparent 80%)" }}
+                animate={introComplete && !prefersReducedMotion ? {
+                  opacity: [0.08, 0.16, 0.08],
+                  scale: [1.0, 1.03, 1.0],
+                } : undefined}
+                transition={{
+                  duration: 6,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
+              <PhoneMockup animate={introComplete} />
+            </div>
+          </div>
         </div>
       </motion.div>
 
