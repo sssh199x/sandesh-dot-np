@@ -1,24 +1,28 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { isSoundAvailable, isSoundEnabled, initSound, toggleSound } from "@/lib/sound";
 import { cn } from "@/lib/utils";
 
+function subscribe() { return () => {}; }
+function getSoundAvailable() { return isSoundAvailable(); }
+function getSoundEnabled() { return isSoundEnabled(); }
+function getServerFalse() { return false; }
+
 export function SoundToggle({ isDark }: { isDark: boolean }) {
+  const available = useSyncExternalStore(subscribe, getSoundAvailable, getServerFalse);
+  const initialEnabled = useSyncExternalStore(subscribe, getSoundEnabled, getServerFalse);
   const [enabled, setEnabled] = useState(false);
-  const [visible, setVisible] = useState(true);
+  const [initialized, setInitialized] = useState(false);
 
-  useEffect(() => {
-    // Hide toggle on touch devices and reduced motion — no hover = no concept
-    if (!isSoundAvailable()) {
-      setVisible(false);
-      return;
-    }
-    setEnabled(isSoundEnabled());
-    initSound(); // pre-create Howl if sound was enabled in a previous session
-  }, []);
+  // Sync initial state once on client
+  if (available && !initialized) {
+    setEnabled(initialEnabled);
+    initSound();
+    setInitialized(true);
+  }
 
-  if (!visible) return null;
+  if (!available) return null;
 
   const handleClick = () => {
     const next = toggleSound();

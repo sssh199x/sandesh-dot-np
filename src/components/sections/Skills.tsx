@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useCallback, useState, useEffect } from "react";
+import { useRef, useCallback } from "react";
 import {
   Monitor,
   Server,
@@ -14,7 +14,9 @@ import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { FadeUp } from "@/components/animations/FadeUp";
 import { Tag } from "@/components/ui/Tag";
+import Image from "next/image";
 import { skillCategories } from "@/data/skills";
+import { useIsTouchDevice } from "@/hooks/useIsTouchDevice";
 
 const categoryIcons: Record<string, React.ReactNode> = {
   Frontend: <Monitor className="size-[18px]" aria-hidden="true" />,
@@ -109,12 +111,8 @@ const cardLayout = [
 
 export function Skills() {
   const gridRef = useRef<HTMLDivElement>(null);
-  const [isTouch, setIsTouch] = useState(false);
+  const isTouch = useIsTouchDevice();
   const rafRef = useRef(0);
-
-  useEffect(() => {
-    setIsTouch(window.matchMedia("(pointer: coarse)").matches);
-  }, []);
 
   /* Throttle mousemove to rAF for smooth 60fps spotlight */
   const handleMouseMove = useCallback(
@@ -284,12 +282,12 @@ export function Skills() {
                       className="skill-item inline-flex items-center gap-1.5 transition-[background-color] duration-200 hover:bg-copper/20"
                     >
                       {skillIcons[skill.name] && (
-                        <img
+                        <Image
                           src={skillIcons[skill.name]}
                           alt=""
                           width={14}
                           height={14}
-                          loading="lazy"
+                          unoptimized
                           aria-hidden="true"
                           className="size-3.5 shrink-0"
                         />

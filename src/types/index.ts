@@ -58,6 +58,7 @@ export interface PersonalInfo {
   bioHighlight: string;
   bioContinued: string;
   email: string;
+  phone: string;
   location: string;
   availability: string;
   socials: {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import { motion, useScroll, useTransform, useMotionValueEvent, AnimatePresence } from "framer-motion";
+import { motion, useScroll, useTransform, useMotionValueEvent, useReducedMotion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { ArrowDown, Download, Globe, Layers } from "lucide-react";
 import { gsap, SplitText, useGSAP } from "@/lib/gsap";
@@ -17,6 +17,9 @@ export function Hero() {
 
   // Skip PeekAvatar mount entirely on mobile — avoids 150 lines of unused animation code
   const isDesktop = !useIsTouchDevice();
+
+  // Reduced motion check for ambient animations
+  const prefersReducedMotion = useReducedMotion();
 
   // Scroll-driven fade + scale for cinematic recession
   const { scrollY } = useScroll();
@@ -40,7 +43,8 @@ export function Hero() {
 
       if (!introComplete) return;
 
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+          window.matchMedia("(max-width: 767px)").matches) {
         gsap.set(".hero-hide", { opacity: 1, y: 0, scale: 1, filter: "none" });
         return;
       }
@@ -74,8 +78,8 @@ export function Hero() {
         { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" },
         0.8);
       tl.fromTo(".hero-avatar",
-        { opacity: 0, scale: 1.08, filter: "blur(8px)" },
-        { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.9, ease: "power3.out" },
+        { opacity: 0, scale: 1.06, clipPath: "circle(0% at 50% 50%)" },
+        { opacity: 1, scale: 1, clipPath: "circle(75% at 50% 50%)", duration: 1.2, ease: "power3.out" },
         0.9);
 
       // 4. Buttons
@@ -127,15 +131,15 @@ export function Hero() {
         <div className="grid w-full grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-8">
           {/* Left column — Text content */}
           <div className="lg:col-span-7">
-            {/* Mobile/Tablet avatar — circular, above label */}
-            <div className="hero-hide hero-avatar mb-2.5 sm:mb-6 lg:hidden">
+            {/* Mobile/Tablet avatar — circular, above label. NO hero-hide: paints from SSR for fast LCP */}
+            <div className="mb-2.5 sm:mb-6 lg:hidden">
               <div className="relative size-14 sm:size-20 overflow-hidden rounded-full ring-2 ring-copper/20 ring-offset-1 sm:ring-offset-2 ring-offset-dusk-hero">
-                <div className="absolute inset-0 -z-10 scale-110 bg-[radial-gradient(ellipse_at_center,rgba(184,115,51,0.14),transparent_70%)] blur-xl animate-glow-breathe" />
+                <div className="absolute inset-0 -z-10 scale-110 bg-[radial-gradient(ellipse_at_center,rgba(184,115,51,0.14),transparent_70%)] blur-xl" />
                 <Image
-                  src="/images/avatar.webp"
+                  src="/images/me-avatar-sm.webp"
                   alt="Sandesh Hamal Thakuri"
-                  width={96}
-                  height={96}
+                  width={160}
+                  height={160}
                   priority
                   sizes="(min-width: 640px) 80px, 56px"
                   className="size-full object-cover object-top"
@@ -209,24 +213,63 @@ export function Hero() {
               {/* Mobile location — inline instead of absolute to avoid Safari toolbar clipping */}
               <div className="hero-hide hero-location mt-2 sm:hidden">
                 <span className="font-[family-name:var(--font-mono)] text-[0.625rem] tracking-wider text-slate">
-                  {personal.location} &middot; {personal.availability}
+                  {personal.location} &middot;{" "}
+                  <a href={`tel:${personal.phone.replace(/\s/g, "")}`} className="text-[#8B5A2B]">
+                    {personal.phone}
+                  </a>
                 </span>
               </div>
             </div>
           </div>
 
-          {/* Right column — Avatar */}
+          {/* Right column — Portrait */}
           <div className="hidden lg:col-span-5 lg:flex lg:justify-end">
             <ParallaxLayer speed={-8}>
-              <div className="hero-hide hero-avatar relative w-[340px] xl:w-[380px]">
-                <Image
-                  src="/images/avatar.webp"
-                  alt="Sandesh Hamal Thakuri — illustrated portrait waving hello"
-                  width={1203}
-                  height={1307}
-                  priority
-                  className="relative animate-wave-tilt drop-shadow-[0_8px_24px_rgba(26,23,20,0.1)]"
+              {/* GSAP controls clip-path on this outer wrapper */}
+              <div className="hero-hide hero-avatar relative w-[320px] xl:w-[360px]">
+                {/* Warm copper glow behind portrait — syncs with float */}
+                <motion.div
+                  className="absolute -inset-[15%] -z-10 rounded-full blur-[60px]"
+                  style={{ background: "radial-gradient(ellipse 70% 60% at 50% 45%, rgba(184,115,51,0.16) 0%, rgba(184,115,51,0.06) 50%, transparent 80%)" }}
+                  animate={introComplete && !prefersReducedMotion ? {
+                    opacity: [0.14, 0.26, 0.14],
+                    scale: [1.0, 1.06, 1.0],
+                  } : undefined}
+                  transition={{
+                    duration: 6,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
                 />
+                {/* Framer Motion handles ambient float — separate from GSAP entrance */}
+                <motion.div
+                  animate={introComplete && !prefersReducedMotion ? {
+                    y: [0, -8, 0],
+                    rotate: [0, 0.8, 0, -0.8, 0],
+                  } : undefined}
+                  transition={{
+                    duration: 6,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                >
+                  <Image
+                    src="/images/me-generated.webp"
+                    alt="Sandesh Hamal Thakuri — portrait"
+                    width={1024}
+                    height={1536}
+                    priority
+                    sizes="(min-width: 1280px) 360px, 320px"
+                    className="relative"
+                    style={{
+                      filter: "contrast(1.04) saturate(0.92) brightness(1.03) sepia(0.08) drop-shadow(0 8px 24px rgba(184,115,51,0.08)) drop-shadow(0 20px 50px rgba(26,23,20,0.18))",
+                      maskImage: "linear-gradient(to bottom, black 78%, transparent 100%), linear-gradient(to right, transparent 0%, black 12%, black 100%)",
+                      WebkitMaskImage: "linear-gradient(to bottom, black 78%, transparent 100%), linear-gradient(to right, transparent 0%, black 12%, black 100%)",
+                      maskComposite: "intersect",
+                      WebkitMaskComposite: "source-in",
+                    }}
+                  />
+                </motion.div>
               </div>
             </ParallaxLayer>
           </div>
@@ -236,10 +279,13 @@ export function Hero() {
       {/* Bottom bar — desktop only, absolute positioned. Hidden on mobile to avoid Safari toolbar clipping. */}
       <motion.div style={{ opacity: heroOpacity }} className="absolute bottom-0 left-0 hidden w-full px-[var(--spacing-container-px)] pb-8 sm:block">
         <div className="mx-auto flex max-w-[1280px] items-end justify-between">
-          {/* Location */}
+          {/* Location + phone */}
           <div className="hero-hide hero-location">
             <span className="font-[family-name:var(--font-mono)] text-[0.625rem] tracking-wider text-slate sm:text-xs">
-              {personal.location} &middot; {personal.availability}
+              {personal.location} &middot; {personal.availability} &middot;{" "}
+              <a href={`tel:${personal.phone.replace(/\s/g, "")}`} className="text-[#8B5A2B] transition-colors hover:text-copper">
+                {personal.phone}
+              </a>
             </span>
           </div>
 
@@ -372,67 +418,22 @@ function PeekAvatar({ introComplete }: { introComplete: boolean }) {
             }}
             className="relative"
           >
-            <Image
-              src="/images/peek-avatar.svg"
-              alt=""
-              width={160}
-              height={73}
-              className="object-contain object-bottom drop-shadow-[0_-4px_12px_rgba(26,23,20,0.12)]"
-              aria-hidden="true"
-            />
-
-            {/* Eye sparkle glints — tiny stars that appear after avatar settles */}
-            <svg
-              viewBox="0 240 1536 700"
-              className="absolute inset-0 size-full"
-              aria-hidden="true"
-            >
-              {/* Left eye glint */}
-              <motion.g
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: [0, 1, 0.6, 1], scale: [0, 1.2, 0.8, 1] }}
-                transition={{ delay: 0.5, duration: 0.6, ease: "easeOut" }}
-              >
-                <motion.g
-                  animate={{ opacity: [1, 0.4, 1], scale: [1, 0.7, 1] }}
-                  transition={{ delay: 1.5, duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
-                >
-                  <path
-                    d="M610,840 L616,852 L610,864 L604,852 Z"
-                    fill="white"
-                    opacity="0.9"
-                  />
-                  <path
-                    d="M610,852 L622,846 L610,852 L598,846 Z"
-                    fill="white"
-                    opacity="0.7"
-                  />
-                </motion.g>
-              </motion.g>
-
-              {/* Right eye glint */}
-              <motion.g
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: [0, 1, 0.6, 1], scale: [0, 1.2, 0.8, 1] }}
-                transition={{ delay: 0.8, duration: 0.6, ease: "easeOut" }}
-              >
-                <motion.g
-                  animate={{ opacity: [1, 0.4, 1], scale: [1, 0.7, 1] }}
-                  transition={{ delay: 2.0, duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
-                >
-                  <path
-                    d="M940,807 L946,819 L940,831 L934,819 Z"
-                    fill="white"
-                    opacity="0.9"
-                  />
-                  <path
-                    d="M940,819 L952,813 L940,819 L928,813 Z"
-                    fill="white"
-                    opacity="0.7"
-                  />
-                </motion.g>
-              </motion.g>
-            </svg>
+            {/* Overflow-hidden crops the wooden ledge; image positioned so fingers grip the container edge */}
+            <div className="w-[240px] h-[120px] overflow-hidden">
+              <Image
+                src="/images/me-peek.webp"
+                alt=""
+                width={1536}
+                height={1024}
+                sizes="240px"
+                className="w-full h-auto object-cover drop-shadow-[0_-4px_16px_rgba(26,23,20,0.15)]"
+                style={{
+                  filter: "contrast(1.02) saturate(0.78) brightness(1.06) sepia(0.06)",
+                  marginTop: "-8px",
+                }}
+                aria-hidden="true"
+              />
+            </div>
           </motion.div>
         </motion.div>
       )}

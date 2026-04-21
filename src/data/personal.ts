@@ -8,6 +8,7 @@ export const personal: PersonalInfo = {
   bioHighlight: "I bring ideas to life with clean code and thoughtful design.",
   bioContinued: "From architecting 138+ component e-commerce platforms to designing interactive D3.js data visualization dashboards — I ship real products that serve real users. When I'm not building features, I teach 200+ students at Informatics College Pokhara as an AWS Verified Academy Educator.",
   email: "sandeshhamal5890@gmail.com",
+  phone: "+977 9815141345",
   location: "Pokhara, Nepal",
   availability: "Open to Remote Roles",
   socials: {
@@ -15,7 +16,7 @@ export const personal: PersonalInfo = {
     linkedin: "https://linkedin.com/in/sandesh-hamal-thakuri",
     instagram: "https://instagram.com/sandeshhamal",
     facebook: "https://facebook.com/sandeshhamal",
-    whatsapp: "https://wa.me/9779800000000",
+    whatsapp: "https://wa.me/9779815141345",
   },
 };
 
