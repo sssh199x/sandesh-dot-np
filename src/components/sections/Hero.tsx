@@ -7,6 +7,7 @@ import { ArrowDown, Download, Globe, Layers } from "lucide-react";
 import { gsap, SplitText, useGSAP } from "@/lib/gsap";
 import { ParallaxLayer } from "@/components/animations/ParallaxLayer";
 import { Button } from "@/components/ui/Button";
+import { DeviceMockup } from "@/components/ui/DeviceMockup";
 import { personal } from "@/data/personal";
 import { useNavigationStore } from "@/store/navigation";
 import { useIsTouchDevice } from "@/hooks/useIsTouchDevice";
@@ -77,9 +78,9 @@ export function Hero() {
         { y: 20, opacity: 0 },
         { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" },
         0.8);
-      tl.fromTo(".hero-avatar",
-        { opacity: 0, scale: 1.06, clipPath: "circle(0% at 50% 50%)" },
-        { opacity: 1, scale: 1, clipPath: "circle(75% at 50% 50%)", duration: 1.2, ease: "power3.out" },
+      tl.fromTo(".hero-mockup",
+        { opacity: 0, y: 60, scale: 0.92 },
+        { opacity: 1, y: 0, scale: 1, duration: 1.0, ease: "power3.out" },
         0.9);
 
       // 4. Buttons
@@ -222,57 +223,30 @@ export function Hero() {
             </div>
           </div>
 
-          {/* Right column — Portrait */}
-          <div className="hidden lg:col-span-5 lg:flex lg:justify-end">
-            <ParallaxLayer speed={-8}>
-              {/* GSAP controls clip-path on this outer wrapper */}
-              <div className="hero-hide hero-avatar relative w-[320px] xl:w-[360px]">
-                {/* Warm copper glow behind portrait — syncs with float */}
-                <motion.div
-                  className="absolute -inset-[15%] -z-10 rounded-full blur-[60px]"
-                  style={{ background: "radial-gradient(ellipse 70% 60% at 50% 45%, rgba(184,115,51,0.16) 0%, rgba(184,115,51,0.06) 50%, transparent 80%)" }}
-                  animate={introComplete && !prefersReducedMotion ? {
-                    opacity: [0.14, 0.26, 0.14],
-                    scale: [1.0, 1.06, 1.0],
-                  } : undefined}
-                  transition={{
-                    duration: 6,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                />
-                {/* Framer Motion handles ambient float — separate from GSAP entrance */}
-                <motion.div
-                  animate={introComplete && !prefersReducedMotion ? {
-                    y: [0, -8, 0],
-                    rotate: [0, 0.8, 0, -0.8, 0],
-                  } : undefined}
-                  transition={{
-                    duration: 6,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                >
-                  <Image
-                    src="/images/me-generated.webp"
-                    alt="Sandesh Hamal Thakuri — portrait"
-                    width={1024}
-                    height={1536}
-                    priority
-                    sizes="(min-width: 1280px) 360px, 320px"
-                    className="relative"
-                    style={{
-                      filter: "contrast(1.04) saturate(0.92) brightness(1.03) sepia(0.08) drop-shadow(0 8px 24px rgba(184,115,51,0.08)) drop-shadow(0 20px 50px rgba(26,23,20,0.18))",
-                      maskImage: "linear-gradient(to bottom, black 78%, transparent 100%), linear-gradient(to right, transparent 0%, black 12%, black 100%)",
-                      WebkitMaskImage: "linear-gradient(to bottom, black 78%, transparent 100%), linear-gradient(to right, transparent 0%, black 12%, black 100%)",
-                      maskComposite: "intersect",
-                      WebkitMaskComposite: "source-in",
+          {/* Right column — Device mockup (desktop only, conditional render to avoid mobile image downloads) */}
+          {isDesktop && (
+            <div className="hidden lg:col-span-5 lg:flex lg:items-center lg:justify-center">
+              <ParallaxLayer speed={-8}>
+                <div className="hero-hide hero-mockup relative w-[460px] xl:w-[520px]">
+                  {/* Warm ambient glow behind device */}
+                  <motion.div
+                    className="absolute -inset-[10%] -z-10 rounded-3xl blur-[60px]"
+                    style={{ background: "radial-gradient(ellipse 70% 50% at 50% 40%, rgba(184,115,51,0.12) 0%, rgba(184,115,51,0.04) 50%, transparent 80%)" }}
+                    animate={introComplete && !prefersReducedMotion ? {
+                      opacity: [0.10, 0.20, 0.10],
+                      scale: [1.0, 1.04, 1.0],
+                    } : undefined}
+                    transition={{
+                      duration: 6,
+                      repeat: Infinity,
+                      ease: "easeInOut",
                     }}
                   />
-                </motion.div>
-              </div>
-            </ParallaxLayer>
-          </div>
+                  <DeviceMockup animate={introComplete} />
+                </div>
+              </ParallaxLayer>
+            </div>
+          )}
         </div>
       </motion.div>
 

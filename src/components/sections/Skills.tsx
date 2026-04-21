@@ -228,7 +228,7 @@ export function Skills() {
         {skillCategories.map((cat, i) => (
           <div
             key={cat.category}
-            className={`skill-card group relative overflow-hidden rounded-lg border border-white/[0.06] bg-[rgba(255,255,255,0.03)] transition-[border-color] duration-300 hover:border-copper/20 sm:col-span-1 ${cardLayout[i]}${i % 2 === 1 ? " sm:mt-2 lg:mt-3" : ""}`}
+            className={`skill-card group relative overflow-hidden rounded-lg border border-white/[0.06] bg-[rgba(255,255,255,0.03)] transition-[border-color] duration-300 hover:border-copper/20 focus-within:border-copper/20 sm:col-span-1 ${cardLayout[i]}${i % 2 === 1 ? " sm:mt-2 lg:mt-3" : ""}`}
             {...(!isTouch && {
               onMouseMove: handleMouseMove,
               onMouseEnter: handleMouseEnter,

@@ -121,7 +121,7 @@ export function About() {
                     className="absolute inset-x-6 top-0 bottom-0 blur-3xl"
                     style={{ background: "radial-gradient(ellipse 80% 60% at 50% 45%, rgba(184,115,51,0.14) 0%, transparent 70%)" }}
                   />
-                  <ParallaxLayer speed={-14}>
+                  <ParallaxLayer speed={-10}>
                     <Image
                       src="/images/me-about.webp"
                       alt="Sandesh Hamal Thakuri — casual portrait"
