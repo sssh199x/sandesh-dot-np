@@ -38,11 +38,12 @@ const projectSlides: ProjectSlide[] = [
 ];
 
 /* All coordinates in SVG viewBox space (500×1027).
-   Measured from PSD alpha channel analysis — pixel-perfect match.
-   SCREEN = glass area (inside black inner bezel), not outer bezel edge. */
+   Measured from PSD alpha channel flood-fill analysis.
+   Frame uses hard-edged alpha (0 or 255) — no anti-aliased bleed zone.
+   SCREEN = exact transparent screen interior boundary. */
 const VB = { w: 500, h: 1027 };
-const SCREEN = { x: 23, y: 22, w: 453, h: 983 };
-const CORNER_R = 14;
+const SCREEN = { x: 20, y: 15, w: 459, h: 997 };
+const CORNER_R = 55;
 
 /* Dynamic Island overlay — extracted from PSD with camera/sensor detail */
 const DI = { x: 184, y: 30, w: 130, h: 39 };
