@@ -94,7 +94,7 @@ export function Footer() {
             style={{ y: bikeY, opacity: bikeOpacity, mixBlendMode: "lighten" }}
           >
             <Image
-              src="/images/me-bike.webp"
+              src="/images/me/me-bike.webp"
               alt=""
               width={838}
               height={1280}

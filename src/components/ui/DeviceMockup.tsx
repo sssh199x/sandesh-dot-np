@@ -231,7 +231,7 @@ export function DeviceMockup({ animate = true }: { animate?: boolean }) {
       const onEnter = () => {
         // Lazy-load warm stone on first hover — saves 53K on initial load
         if (!warmLoaded) {
-          warm.setAttribute("href", "/images/macbook-stone-warm.webp");
+          warm.setAttribute("href", "/images/devices/macbook-stone-warm.webp");
           warmLoaded = true;
         }
         gsap.to(warm, { opacity: 1, duration: 0.6, ease: "power2.out" });
@@ -299,7 +299,7 @@ export function DeviceMockup({ animate = true }: { animate?: boolean }) {
 
         {/* Layer 2: Stone (natural) */}
         <image
-          href="/images/macbook-stone.webp"
+          href="/images/devices/macbook-stone.webp"
           x={STONE.x}
           y={STONE.y}
           width={STONE.w}
@@ -350,7 +350,7 @@ export function DeviceMockup({ animate = true }: { animate?: boolean }) {
 
         {/* Layer 5: MacBook frame */}
         <image
-          href="/images/macbook-frame.webp"
+          href="/images/devices/macbook-frame.webp"
           x={FRAME.x}
           y={FRAME.y}
           width={FRAME.w}

@@ -55,7 +55,7 @@ export function Hero() {
             <div className="mb-2.5 sm:hidden">
               <div className="relative size-14 sm:size-20 overflow-hidden rounded-full ring-2 ring-copper/20 ring-offset-1 sm:ring-offset-2 ring-offset-dusk-hero">
                 <Image
-                  src="/images/me-avatar-sm.webp"
+                  src="/images/me/me-avatar-sm.webp"
                   alt="Sandesh Hamal Thakuri"
                   width={160}
                   height={160}
@@ -108,7 +108,7 @@ export function Hero() {
                 </span>
                 <span className="hero-trust-pill inline-flex items-center gap-2 rounded-full border border-copper/15 bg-[rgba(184,115,51,0.05)] px-2.5 py-1 sm:px-3.5 sm:py-1.5 transition-colors duration-200 hover:bg-[rgba(184,115,51,0.1)]">
                   <Image
-                    src="/images/aws-academy-educator.webp"
+                    src="/images/icons/aws-academy-educator.webp"
                     alt=""
                     width={16}
                     height={16}
@@ -278,7 +278,7 @@ function PeekAvatar({ introComplete }: { introComplete: boolean }) {
           >
             <div className="w-[240px] h-[120px] overflow-hidden">
               <Image
-                src="/images/me-peek.webp"
+                src="/images/me/me-peek.webp"
                 alt=""
                 width={1536}
                 height={1024}

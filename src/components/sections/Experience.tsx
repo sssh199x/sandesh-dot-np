@@ -9,7 +9,7 @@ import { Tag } from "@/components/ui/Tag";
 import { FadeUp } from "@/components/animations/FadeUp";
 import { experiences } from "@/data/experience";
 
-const TIMELINE_ICON = "/images/signpost-3d.png";
+const TIMELINE_ICON = "/images/icons/signpost-3d.png";
 
 export function Experience() {
   const containerRef = useRef<HTMLDivElement>(null);

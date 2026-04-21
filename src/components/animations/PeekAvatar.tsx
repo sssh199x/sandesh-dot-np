@@ -81,7 +81,7 @@ export function PeekAvatar({ introComplete }: { introComplete: boolean }) {
             className="relative"
           >
             <Image
-              src="/images/peek-avatar.svg"
+              src="/images/me/peek-avatar.svg"
               alt=""
               width={160}
               height={73}

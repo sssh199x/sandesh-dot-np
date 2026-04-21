@@ -71,7 +71,7 @@ export function About() {
             <div className="mb-6 flex items-center gap-4 lg:hidden">
               <div className="relative size-20 shrink-0 overflow-hidden rounded-full ring-2 ring-copper/20 ring-offset-2 ring-offset-[#F5F0E8]">
                 <Image
-                  src="/images/me-about.webp"
+                  src="/images/me/me-about.webp"
                   alt="Sandesh Hamal Thakuri"
                   width={160}
                   height={160}
@@ -123,7 +123,7 @@ export function About() {
                   />
                   <ParallaxLayer speed={-10}>
                     <Image
-                      src="/images/me-about.webp"
+                      src="/images/me/me-about.webp"
                       alt="Sandesh Hamal Thakuri — casual portrait"
                       width={748}
                       height={821}

@@ -61,7 +61,7 @@ export function Contact() {
           style={{ y: ghostY, opacity: ghostOpacity }}
         >
           <Image
-            src="/images/me-full.webp"
+            src="/images/me/me-full.webp"
             alt=""
             width={748}
             height={821}

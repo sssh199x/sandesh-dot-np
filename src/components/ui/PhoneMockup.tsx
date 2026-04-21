@@ -274,7 +274,7 @@ export function PhoneMockup({ animate = true }: { animate?: boolean }) {
 
         {/* Layer 3: Dynamic Island — real camera/sensor hardware from PSD */}
         <image
-          href="/images/iphone-di.webp"
+          href="/images/devices/iphone-di.webp"
           x={DI.x}
           y={DI.y}
           width={DI.w}
@@ -283,7 +283,7 @@ export function PhoneMockup({ animate = true }: { animate?: boolean }) {
 
         {/* Layer 4: iPhone frame overlay */}
         <image
-          href="/images/iphone-frame.webp"
+          href="/images/devices/iphone-frame.webp"
           x={0}
           y={0}
           width={VB.w}

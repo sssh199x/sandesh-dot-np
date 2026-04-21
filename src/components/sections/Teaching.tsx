@@ -187,7 +187,7 @@ export function Teaching() {
                 {/* Badge row */}
                 <div className="mb-5 flex flex-wrap items-center gap-4">
                   <Image
-                    src="/images/aws-academy-educator.webp"
+                    src="/images/icons/aws-academy-educator.webp"
                     alt="AWS Academy Educator Badge"
                     width={56}
                     height={56}

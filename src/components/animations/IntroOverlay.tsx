@@ -90,7 +90,7 @@ function IntroOverlayInner({ onComplete, setIntroComplete }: { onComplete: () =>
           right: "0",
           bottom: "0",
           width: "60%",
-          backgroundImage: "url(/images/me-bike-org.webp)",
+          backgroundImage: "url(/images/me/me-bike-org.webp)",
           backgroundSize: "contain",
           backgroundPosition: "right center",
           opacity: 0,
