@@ -3,7 +3,7 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { ArrowDown, Download, Globe, Layers } from "lucide-react";
+import { ArrowDown, Download } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { DeviceMockup } from "@/components/ui/DeviceMockup";
 import { PhoneMockup } from "@/components/ui/PhoneMockup";
@@ -51,32 +51,35 @@ export function Hero() {
         <div className="grid w-full grid-cols-1 items-center gap-8 sm:grid-cols-12 sm:gap-6 lg:gap-8">
           {/* Left column — Text content */}
           <div className="sm:col-span-7">
-            {/* Mobile avatar */}
-            <div className="mb-2.5 sm:hidden">
-              <div className="relative size-14 sm:size-20 overflow-hidden rounded-full ring-2 ring-copper/20 ring-offset-1 sm:ring-offset-2 ring-offset-dusk-hero">
+            {/* Avatar — visible on all breakpoints, integrated with identity */}
+            <div className="hero-hide hero-label mb-4 sm:mb-6 flex items-center gap-3.5">
+              <div className="relative size-12 sm:size-14 overflow-hidden rounded-full ring-2 ring-copper/25 ring-offset-2 ring-offset-dusk-hero">
                 <Image
                   src="/images/me/me-avatar-sm.webp"
                   alt="Sandesh Hamal Thakuri"
                   width={160}
                   height={160}
                   loading="eager"
-                  sizes="(min-width: 640px) 80px, 56px"
+                  sizes="56px"
                   className="size-full object-cover object-top"
                 />
               </div>
+              <div className="flex flex-col gap-0.5">
+                <span className="font-[family-name:var(--font-mono)] text-[0.6875rem] sm:text-xs tracking-wide text-copper-btn">
+                  Full Stack Developer
+                </span>
+                <span className="font-[family-name:var(--font-mono)] text-[0.6rem] tracking-wider text-slate/60 uppercase">
+                  {personal.location}
+                </span>
+              </div>
             </div>
-
-            {/* Label */}
-            <span className="hero-hide hero-label typ-label mb-2 sm:mb-6 block text-copper-btn">
-              Full Stack Engineer
-            </span>
 
             {/* Name — LCP element, never animated, never hidden */}
             <h1 className="hero-hide hero-name typ-display text-charcoal mb-2.5 sm:mb-6">
               {personal.name}
             </h1>
 
-            {/* Tagline */}
+            {/* Tagline — conversational, not corporate */}
             <div className="hero-hide hero-tagline">
               <p className="typ-body-lg max-w-[540px] text-slate">
                 {personal.tagline}
@@ -97,39 +100,11 @@ export function Hero() {
               </div>
             </div>
 
-            {/* Trust badges */}
+            {/* Mobile location + contact */}
             <div className="hero-hide hero-trust">
-              <div className="mt-3 sm:mt-10 flex flex-wrap items-center gap-2.5 sm:gap-3">
-                <span className="hero-trust-pill inline-flex items-center gap-2 rounded-full border border-copper/15 bg-[rgba(184,115,51,0.05)] px-2.5 py-1 sm:px-3.5 sm:py-1.5 transition-colors duration-200 hover:bg-[rgba(184,115,51,0.1)]">
-                  <Globe className="size-3.5 text-copper" />
-                  <span className="font-[family-name:var(--font-mono)] text-[0.6875rem] tracking-wide text-slate">
-                    5+ Years Remote
-                  </span>
-                </span>
-                <span className="hero-trust-pill inline-flex items-center gap-2 rounded-full border border-copper/15 bg-[rgba(184,115,51,0.05)] px-2.5 py-1 sm:px-3.5 sm:py-1.5 transition-colors duration-200 hover:bg-[rgba(184,115,51,0.1)]">
-                  <Image
-                    src="/images/icons/aws-academy-educator.webp"
-                    alt=""
-                    width={16}
-                    height={16}
-                    className="size-4 shrink-0"
-                  />
-                  <span className="font-[family-name:var(--font-mono)] text-[0.6875rem] tracking-wide text-slate">
-                    AWS Academy Educator
-                  </span>
-                </span>
-                <span className="hero-trust-pill inline-flex items-center gap-2 rounded-full border border-copper/15 bg-[rgba(184,115,51,0.05)] px-2.5 py-1 sm:px-3.5 sm:py-1.5 transition-colors duration-200 hover:bg-[rgba(184,115,51,0.1)]">
-                  <Layers className="size-3.5 text-copper" />
-                  <span className="font-[family-name:var(--font-mono)] text-[0.6875rem] tracking-wide text-slate">
-                    50+ Projects
-                  </span>
-                </span>
-              </div>
-
-              {/* Mobile location */}
-              <div className="hero-hide hero-location mt-2 sm:hidden">
+              <div className="hero-hide hero-location mt-3 sm:hidden">
                 <span className="font-[family-name:var(--font-mono)] text-[0.625rem] tracking-wider text-slate">
-                  {personal.location} &middot;{" "}
+                  {personal.availability} &middot;{" "}
                   <a href={`tel:${personal.phone.replace(/\s/g, "")}`} className="text-[#8B5A2B]">
                     {personal.phone}
                   </a>

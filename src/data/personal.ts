@@ -3,7 +3,7 @@ import type { PersonalInfo, NavItem, StatItem } from "@/types";
 export const personal: PersonalInfo = {
   name: "Sandesh Hamal Thakuri",
   tagline:
-    "I build and ship production web apps for US teams — from data-rich dashboards to scalable e-commerce platforms.",
+    "From Java to Next.js to AWS to IoT — I ship production apps for remote teams, then teach 200+ students the craft.",
   bio: "I'm a Full Stack Developer with over 5 years of experience working remotely with US-based teams. I specialize in building scalable, production-grade applications using React, Next.js, Node.js, Java/Spring Boot, and AWS.",
   bioHighlight: "I bring ideas to life with clean code and thoughtful design.",
   bioContinued: "From architecting 138+ component e-commerce platforms to designing interactive D3.js data visualization dashboards — I ship real products that serve real users. When I'm not building features, I teach 200+ students at Informatics College Pokhara as an AWS Verified Academy Educator.",
