@@ -68,7 +68,7 @@ export function Hero() {
                 <span className="font-mono text-[0.6875rem] sm:text-xs tracking-wide text-copper-btn">
                   Full Stack Developer
                 </span>
-                <span className="font-mono text-[0.6rem] tracking-wider text-slate/60 uppercase">
+                <span className="font-mono text-[0.6rem] tracking-wider text-slate uppercase">
                   {personal.location}
                 </span>
               </div>
