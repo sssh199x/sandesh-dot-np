@@ -17,12 +17,20 @@ export default function Error({
       <p className="mt-4 max-w-md font-[family-name:var(--font-body)] text-base text-cream/50 leading-relaxed">
         An unexpected error occurred. Please try again.
       </p>
-      <button
-        onClick={reset}
-        className="mt-8 rounded-pill bg-copper-btn px-7 py-3 font-[family-name:var(--font-mono)] text-sm font-medium tracking-wide text-cream transition-colors duration-200 hover:bg-copper-dark cursor-pointer"
-      >
-        Try Again
-      </button>
+      <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:gap-4">
+        <a
+          href="/"
+          className="rounded-pill bg-copper-btn px-7 py-3 font-[family-name:var(--font-mono)] text-sm font-medium tracking-wide text-cream transition-colors duration-200 hover:bg-copper-dark"
+        >
+          Back to Home
+        </a>
+        <button
+          onClick={reset}
+          className="rounded-pill border border-cream/15 px-7 py-3 font-[family-name:var(--font-mono)] text-sm font-medium tracking-wide text-cream/60 transition-colors duration-200 hover:border-cream/30 hover:text-cream cursor-pointer"
+        >
+          Try Again
+        </button>
+      </div>
     </div>
   );
 }
