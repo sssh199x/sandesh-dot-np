@@ -397,6 +397,18 @@ body::after {
   animation: sound-bar 0.8s ease-in-out infinite;
 }
 
+/* Badge pendulum — gentle, subtle sway like a real lanyard */
+@keyframes badge-swing {
+  0%, 100% { transform: rotate(0deg); }
+  25%      { transform: rotate(1.5deg); }
+  75%      { transform: rotate(-1.5deg); }
+}
+
+.animate-badge-swing {
+  transform-origin: top center;
+  animation: badge-swing 5s ease-in-out infinite;
+}
+
 /* ========================================
    Reduced Motion
    ======================================== */
