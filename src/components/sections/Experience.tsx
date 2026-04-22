@@ -234,7 +234,7 @@ export function Experience() {
                     {/* COL 1 — Year + metadata */}
                     <div className="text-right pt-1">
                       <span
-                        className="reveal-child block font-[family-name:var(--font-heading)] text-[3.25rem] font-semibold leading-none tracking-tight text-copper/[0.18]"
+                        className="reveal-child block font-heading text-[3.25rem] font-semibold leading-none tracking-tight text-copper/[0.18]"
                         aria-hidden="true"
                       >
                         {yearFull}

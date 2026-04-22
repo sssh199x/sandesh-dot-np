@@ -382,7 +382,7 @@ export function DeviceMockup({ animate = true }: { animate?: boolean }) {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -6 }}
             transition={{ duration: 0.3 }}
-            className="font-[family-name:var(--font-mono)] text-[0.5625rem] uppercase tracking-[0.08em] text-slate"
+            className="font-mono text-[0.5625rem] uppercase tracking-[0.08em] text-slate"
           >
             {current.title}
           </motion.span>

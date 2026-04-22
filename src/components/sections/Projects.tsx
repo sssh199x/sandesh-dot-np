@@ -167,11 +167,11 @@ export function Projects() {
                   <div>
                     {/* Minimal project bar — domain + index */}
                     <div className="flex items-center justify-between border-t-[1.5px] border-t-copper/20 border-b border-b-white/[0.06] bg-white/[0.02] px-4 py-2">
-                      <span className="font-[family-name:var(--font-mono)] text-[0.5625rem] tracking-widest text-cream/25 uppercase">
+                      <span className="font-mono text-[0.5625rem] tracking-widest text-cream/25 uppercase">
                         {String(i + 1).padStart(2, "0")}
                       </span>
                       {domain && (
-                        <span className="font-[family-name:var(--font-mono)] text-[0.5625rem] tracking-wide text-cream/30 transition-colors duration-300 group-hover:text-copper/60">
+                        <span className="font-mono text-[0.5625rem] tracking-wide text-cream/30 transition-colors duration-300 group-hover:text-copper/60">
                           {domain}
                         </span>
                       )}

@@ -45,7 +45,7 @@ function RotatingIdentity() {
               damping: 24,
               mass: 0.8,
             }}
-            className="block font-[family-name:var(--font-heading)] text-[1.375rem] font-semibold leading-[1.875rem] tracking-tight text-copper"
+            className="block font-heading text-[1.375rem] font-semibold leading-[1.875rem] tracking-tight text-copper"
           >
             {identities[index]}
           </motion.span>
@@ -76,7 +76,7 @@ export function About() {
           {/* Mobile portrait — inline with first paragraph */}
           <FadeUp delay={0.1}>
             <div className="mb-6 flex items-center gap-4 lg:hidden">
-              <div className="relative size-20 shrink-0 overflow-hidden rounded-full ring-2 ring-copper/20 ring-offset-2 ring-offset-[#F5F0E8]">
+              <div className="relative size-20 shrink-0 overflow-hidden rounded-full ring-2 ring-copper/20 ring-offset-2 ring-offset-dusk-about">
                 <Image
                   src="/images/me/me-about.webp"
                   alt="Sandesh Hamal Thakuri"

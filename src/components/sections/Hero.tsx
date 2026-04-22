@@ -65,10 +65,10 @@ export function Hero() {
                 />
               </div>
               <div className="flex flex-col gap-0.5">
-                <span className="font-[family-name:var(--font-mono)] text-[0.6875rem] sm:text-xs tracking-wide text-copper-btn">
+                <span className="font-mono text-[0.6875rem] sm:text-xs tracking-wide text-copper-btn">
                   Full Stack Developer
                 </span>
-                <span className="font-[family-name:var(--font-mono)] text-[0.6rem] tracking-wider text-slate/60 uppercase">
+                <span className="font-mono text-[0.6rem] tracking-wider text-slate/60 uppercase">
                   {personal.location}
                 </span>
               </div>
@@ -103,9 +103,9 @@ export function Hero() {
             {/* Mobile location + contact */}
             <div className="hero-hide hero-trust">
               <div className="hero-hide hero-location mt-3 sm:hidden">
-                <span className="font-[family-name:var(--font-mono)] text-[0.625rem] tracking-wider text-slate">
+                <span className="font-mono text-[0.625rem] tracking-wider text-slate">
                   {personal.availability} &middot;{" "}
-                  <a href={`tel:${personal.phone.replace(/\s/g, "")}`} className="text-[#8B5A2B]">
+                  <a href={`tel:${personal.phone.replace(/\s/g, "")}`} className="text-copper-btn">
                     {personal.phone}
                   </a>
                 </span>
@@ -148,9 +148,9 @@ export function Hero() {
       <motion.div style={{ opacity: heroOpacity }} className="absolute bottom-0 left-0 hidden w-full px-[var(--spacing-container-px)] pb-8 sm:block">
         <div className="mx-auto flex max-w-[1280px] items-end justify-between">
           <div className="hero-hide hero-location">
-            <span className="font-[family-name:var(--font-mono)] text-[0.625rem] tracking-wider text-slate sm:text-xs">
+            <span className="font-mono text-[0.625rem] tracking-wider text-slate sm:text-xs">
               {personal.location} &middot; {personal.availability} &middot;{" "}
-              <a href={`tel:${personal.phone.replace(/\s/g, "")}`} className="text-[#8B5A2B] transition-colors hover:text-copper">
+              <a href={`tel:${personal.phone.replace(/\s/g, "")}`} className="text-copper-btn transition-colors hover:text-copper">
                 {personal.phone}
               </a>
             </span>
@@ -158,7 +158,7 @@ export function Hero() {
 
           {/* Scroll indicator — CSS animation */}
           <div className="hero-hide hero-scroll hidden flex-col items-center gap-2 sm:flex">
-            <span className="font-[family-name:var(--font-mono)] text-[0.625rem] tracking-widest text-slate uppercase">
+            <span className="font-mono text-[0.625rem] tracking-widest text-slate uppercase">
               Scroll
             </span>
             <svg

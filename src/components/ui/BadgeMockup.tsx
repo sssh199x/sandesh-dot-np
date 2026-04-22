@@ -48,7 +48,7 @@ export function BadgeMockup() {
         {/* ── Info block — 50%, generous spacing ── */}
         <div className="flex flex-1 flex-col items-center justify-center px-[8%] pb-[3%]" style={{ paddingTop: "4%" }}>
           {/* Name — full charcoal, no faded surname */}
-          <h3 className="text-center font-[family-name:var(--font-heading)] text-[clamp(0.75rem,2.1vw,1.0625rem)] font-semibold leading-[1.2] tracking-[-0.02em] text-charcoal">
+          <h3 className="text-center font-heading text-[clamp(0.75rem,2.1vw,1.0625rem)] font-semibold leading-[1.2] tracking-[-0.02em] text-charcoal">
             {personal.name.split(" ").slice(0, 2).join(" ")}
             <br />
             <span className="text-[0.85em] font-medium text-charcoal">
@@ -57,7 +57,7 @@ export function BadgeMockup() {
           </h3>
 
           {/* Role */}
-          <span className="mt-[4%] font-[family-name:var(--font-mono)] text-[clamp(0.5rem,0.85vw,0.5625rem)] uppercase tracking-[0.1em] text-copper">
+          <span className="mt-[4%] font-mono text-[clamp(0.5rem,0.85vw,0.5625rem)] uppercase tracking-[0.1em] text-copper">
             Full Stack Developer
           </span>
 
@@ -75,10 +75,10 @@ export function BadgeMockup() {
                 key={stat.label}
                 className={`text-center ${i === 1 ? "border-x border-copper/10" : ""}`}
               >
-                <span className="block font-[family-name:var(--font-heading)] text-[clamp(0.625rem,1.6vw,0.875rem)] font-semibold tracking-tight text-copper">
+                <span className="block font-heading text-[clamp(0.625rem,1.6vw,0.875rem)] font-semibold tracking-tight text-copper">
                   {stat.value}
                 </span>
-                <span className="block font-[family-name:var(--font-mono)] text-[clamp(0.4375rem,0.6vw,0.5rem)] uppercase tracking-[0.03em] leading-tight text-charcoal/50">
+                <span className="block font-mono text-[clamp(0.4375rem,0.6vw,0.5rem)] uppercase tracking-[0.03em] leading-tight text-charcoal/50">
                   {stat.label}
                 </span>
               </div>
@@ -91,7 +91,7 @@ export function BadgeMockup() {
             <svg className="size-[6px] shrink-0 text-copper/50" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
               <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
             </svg>
-            <span className="font-[family-name:var(--font-mono)] text-[clamp(0.4375rem,0.7vw,0.5rem)] uppercase tracking-[0.06em] text-charcoal/45">
+            <span className="font-mono text-[clamp(0.4375rem,0.7vw,0.5rem)] uppercase tracking-[0.06em] text-charcoal/45">
               {personal.location}
             </span>
           </div>

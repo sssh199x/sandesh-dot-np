@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useMotionValue, useSpring, useReducedMotion } from "framer-motion";
-import { cn, smoothScrollTo } from "@/lib/utils";
+import { cn, smoothScrollTo, scrollEasing } from "@/lib/utils";
 import { useLenis } from "@/components/layout/SmoothScroll";
 import { useIsTouchDevice } from "@/hooks/useIsTouchDevice";
 import { playHoverSound } from "@/lib/sound";
@@ -15,9 +15,6 @@ interface ButtonProps {
   className?: string;
   type?: "button" | "submit";
 }
-
-/** Expo ease-out for buttery long-distance scrolls */
-const scrollEasing = (t: number) => 1 - Math.pow(1 - t, 4);
 
 const MAGNETIC_FACTOR = 0.25;
 const SPRING_CONFIG = { stiffness: 180, damping: 14, mass: 0.5 };
@@ -70,7 +67,7 @@ export function Button({
   const baseStyles = cn(
     "group relative inline-flex items-center justify-center gap-2 overflow-hidden",
     "rounded-pill px-5 py-2.5 sm:px-7 sm:py-3 min-h-11",
-    "font-[family-name:var(--font-mono)] text-[0.75rem] sm:text-[0.8125rem] font-medium tracking-[0.04em] uppercase",
+    "font-mono text-[0.75rem] sm:text-[0.8125rem] font-medium tracking-[0.04em] uppercase",
     "cursor-pointer",
     "focus-visible:ring-2 focus-visible:ring-copper focus-visible:outline-none",
     isTouchDevice && "active:scale-[0.97]",

@@ -151,7 +151,7 @@ export function Contact() {
                 <motion.p
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-2 font-[family-name:var(--font-mono)] text-sm text-sage"
+                  className="mt-2 font-mono text-sm text-sage"
                 >
                   Thanks! I&apos;ll be in touch soon.
                 </motion.p>
@@ -160,7 +160,7 @@ export function Contact() {
                 <motion.p
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-2 font-[family-name:var(--font-mono)] text-sm text-red-400"
+                  className="mt-2 font-mono text-sm text-red-400"
                 >
                   {errorMsg}
                 </motion.p>
@@ -191,11 +191,11 @@ function InputField({
   required?: boolean;
 }) {
   const shared =
-    "w-full rounded-md border border-cream/[0.08] bg-cream/[0.03] px-4 py-3.5 font-[family-name:var(--font-body)] text-base text-cream placeholder:text-cream/25 outline-none transition-all duration-200 focus:border-copper/50 focus:bg-cream/[0.05] focus-visible:ring-2 focus-visible:ring-copper sm:py-3 sm:text-sm";
+    "w-full rounded-md border border-cream/[0.08] bg-cream/[0.03] px-4 py-3.5 font-body text-base text-cream placeholder:text-cream/25 outline-none transition-all duration-200 focus:border-copper/50 focus:bg-cream/[0.05] focus-visible:ring-2 focus-visible:ring-copper sm:py-3 sm:text-sm";
 
   return (
     <label className="block">
-      <span className="mb-2 block font-[family-name:var(--font-mono)] text-xs tracking-wider text-cream/50 uppercase">
+      <span className="mb-2 block font-mono text-xs tracking-wider text-cream/50 uppercase">
         {label}
       </span>
       {multiline ? (

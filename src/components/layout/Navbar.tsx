@@ -135,7 +135,7 @@ export function Navbar() {
               animate={{ opacity: 1, y: 0 }}
               transition={reducedMotion ? { duration: 0.01 } : { delay: 0.1 + navItems.length * 0.05 }}
               onClick={() => scrollTo("contact")}
-              className="mt-4 rounded-pill bg-copper-btn px-8 py-3.5 font-[family-name:var(--font-mono)] text-base font-medium tracking-wide text-cream cursor-pointer"
+              className="mt-4 rounded-pill bg-copper-btn px-8 py-3.5 font-mono text-base font-medium tracking-wide text-cream cursor-pointer"
             >
               Get in Touch
             </motion.button>
@@ -165,7 +165,7 @@ export function Navbar() {
               loading="eager"
               className="size-7 rounded-full object-cover object-top ring-1 ring-copper/20"
             />
-            <span className="font-[family-name:var(--font-heading)] text-[0.9375rem] font-semibold tracking-wide text-copper">
+            <span className="font-heading text-[0.9375rem] font-semibold tracking-wide text-copper">
               SHT
             </span>
           </button>
@@ -178,7 +178,7 @@ export function Navbar() {
                 onClick={() => scrollTo(item.href)}
                 onMouseEnter={() => playHoverSound()}
                 className={cn(
-                  "relative cursor-pointer font-[family-name:var(--font-mono)] text-sm tracking-wide transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-copper focus-visible:outline-none rounded-sm",
+                  "relative cursor-pointer font-mono text-sm tracking-wide transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-copper focus-visible:outline-none rounded-sm",
                   activeSection === item.href
                     ? "text-copper"
                     : isDark
@@ -204,7 +204,7 @@ export function Navbar() {
             <button
               onClick={() => scrollTo("contact")}
               onMouseEnter={() => playHoverSound()}
-              className="rounded-pill bg-copper-btn px-7 py-3 font-[family-name:var(--font-mono)] text-sm font-medium tracking-wide text-cream transition-colors duration-200 hover:bg-copper-dark cursor-pointer focus-visible:ring-2 focus-visible:ring-copper focus-visible:outline-none"
+              className="rounded-pill bg-copper-btn px-7 py-3 font-mono text-sm font-medium tracking-wide text-cream transition-colors duration-200 hover:bg-copper-dark cursor-pointer focus-visible:ring-2 focus-visible:ring-copper focus-visible:outline-none"
             >
               Get in Touch
             </button>

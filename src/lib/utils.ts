@@ -5,6 +5,10 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+/** Quartic ease-out — buttery deceleration for long-distance scrolls.
+ *  Shared by Button hash-link scrolls and Footer nav links. */
+export const scrollEasing = (t: number) => 1 - Math.pow(1 - t, 4);
+
 /**
  * Lightweight programmatic smooth scroll — fires on demand, zero idle cost.
  * Used as fallback when Lenis is disabled (mobile/touch devices).

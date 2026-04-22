@@ -6,6 +6,7 @@ import Image from "next/image";
 import { personal, navItems } from "@/data/personal";
 import { playHoverSound } from "@/lib/sound";
 import { useLenis } from "@/components/layout/SmoothScroll";
+import { scrollEasing } from "@/lib/utils";
 
 /* Social links — icon + visible handle for each */
 const socials = [
@@ -60,8 +61,6 @@ const socials = [
     ),
   },
 ];
-
-const scrollEasing = (t: number) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t));
 
 export function Footer() {
   const footerRef = useRef<HTMLElement>(null);
@@ -126,10 +125,10 @@ export function Footer() {
           <div className="grid grid-cols-1 gap-10 sm:grid-cols-12 sm:gap-8">
             {/* Brand */}
             <div className="sm:col-span-5">
-              <span className="font-[family-name:var(--font-heading)] text-2xl font-semibold tracking-tight text-copper">
+              <span className="font-heading text-2xl font-semibold tracking-tight text-copper">
                 sandesh.
               </span>
-              <p className="mt-4 max-w-xs font-[family-name:var(--font-body)] text-sm leading-relaxed text-cream/60">
+              <p className="mt-4 max-w-xs font-body text-sm leading-relaxed text-cream/60">
                 Shipping production apps for remote teams, teaching AWS to 200+ students. Based in Pokhara, Nepal.
               </p>
               {/* Direct contact — email + phone */}
@@ -145,7 +144,7 @@ export function Footer() {
                       <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
                     </svg>
                   </span>
-                  <span className="font-[family-name:var(--font-mono)] text-[0.6875rem] tracking-wide text-copper-light/70 transition-colors duration-200 group-hover/contact:text-copper-light">
+                  <span className="font-mono text-[0.6875rem] tracking-wide text-copper-light/70 transition-colors duration-200 group-hover/contact:text-copper-light">
                     {personal.email}
                   </span>
                 </a>
@@ -159,7 +158,7 @@ export function Footer() {
                       <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                     </svg>
                   </span>
-                  <span className="font-[family-name:var(--font-mono)] text-[0.6875rem] tracking-wide text-copper-light/70 transition-colors duration-200 group-hover/contact:text-copper-light">
+                  <span className="font-mono text-[0.6875rem] tracking-wide text-copper-light/70 transition-colors duration-200 group-hover/contact:text-copper-light">
                     {personal.phone}
                   </span>
                 </a>
@@ -182,7 +181,7 @@ export function Footer() {
                         }
                       }}
                       onMouseEnter={() => playHoverSound()}
-                      className="font-[family-name:var(--font-body)] text-sm text-cream/60 transition-colors duration-200 hover:text-copper"
+                      className="font-body text-sm text-cream/60 transition-colors duration-200 hover:text-copper"
                     >
                       {item.label}
                     </button>
@@ -209,7 +208,7 @@ export function Footer() {
                           <span className="flex size-7 shrink-0 items-center justify-center rounded-md border border-copper/15 bg-copper/[0.06] text-cream/50 transition-all duration-200 group-hover/social:border-copper/30 group-hover/social:text-copper">
                             {link.icon}
                           </span>
-                          <span className="font-[family-name:var(--font-body)] text-sm text-cream/60 transition-colors duration-200 group-hover/social:text-copper">
+                          <span className="font-body text-sm text-cream/60 transition-colors duration-200 group-hover/social:text-copper">
                             {link.handle}
                           </span>
                         </a>
@@ -224,7 +223,7 @@ export function Footer() {
           <div className="mt-14 border-t border-copper/[0.08] pt-10 sm:mt-16">
             <p
               aria-hidden="true"
-              className="select-none text-center font-[family-name:var(--font-heading)] text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl lg:text-6xl"
+              className="select-none text-center font-heading text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl lg:text-6xl"
               style={{
                 background:
                   "linear-gradient(to bottom, rgba(184,115,51,0.3), rgba(184,115,51,0.1) 65%, transparent)",
@@ -239,11 +238,11 @@ export function Footer() {
 
           {/* Bottom bar */}
           <div className="mt-8 flex flex-col items-center gap-3 border-t border-copper/[0.06] pt-6 sm:flex-row sm:justify-between">
-            <span className="font-[family-name:var(--font-mono)] text-[0.625rem] tracking-wider text-cream/50 sm:text-xs">
+            <span className="font-mono text-[0.625rem] tracking-wider text-cream/50 sm:text-xs">
               &copy; {new Date().getFullYear()} Sandesh Hamal Thakuri &middot;
               Pokhara, Nepal
             </span>
-            <span className="font-[family-name:var(--font-mono)] text-[0.5625rem] tracking-wider text-cream/60 sm:text-[0.625rem]">
+            <span className="font-mono text-[0.5625rem] tracking-wider text-cream/60 sm:text-[0.625rem]">
               Built with Next.js, Tailwind &amp; Framer Motion
             </span>
           </div>

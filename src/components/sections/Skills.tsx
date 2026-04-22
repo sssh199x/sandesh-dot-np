@@ -185,7 +185,7 @@ export function Skills() {
             <div className="relative z-10 p-5 sm:p-6">
               {/* Header — number + category */}
               <div className="mb-3 flex items-center gap-3">
-                <span className="font-[family-name:var(--font-mono)] text-[0.6875rem] tracking-widest text-copper/50">
+                <span className="font-mono text-[0.6875rem] tracking-widest text-copper/50">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <h3 className="typ-h2 text-cream">{cat.category}</h3>

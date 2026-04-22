@@ -119,7 +119,7 @@ export function Teaching() {
             scrollTrigger: {
               trigger: shimmerRef.current,
               start: "top 88%",
-              toggleActions: "play none none reset",
+              toggleActions: "play none play reset",
             },
           }
         );
@@ -197,7 +197,7 @@ export function Teaching() {
                     <h3 className="typ-h2 text-charcoal">
                       AWS Academy Educator
                     </h3>
-                    <span className="relative inline-flex items-center gap-1.5 overflow-hidden rounded-pill bg-sage/15 px-3 py-1 font-[family-name:var(--font-mono)] text-xs font-medium tracking-wide text-sage">
+                    <span className="relative inline-flex items-center gap-1.5 overflow-hidden rounded-pill bg-sage/15 px-3 py-1 font-mono text-xs font-medium tracking-wide text-sage">
                       <BadgeCheck className="size-3.5" />
                       Verified
                       {/* Shimmer overlay — animated via GSAP on scroll entry */}
@@ -237,7 +237,7 @@ export function Teaching() {
                           unoptimized
                           className="size-9 transition-transform duration-200 group-hover/icon:scale-110 sm:size-10"
                         />
-                        <span className="text-center font-[family-name:var(--font-mono)] text-[9px] leading-tight uppercase tracking-[0.04em] text-charcoal/65">
+                        <span className="text-center font-mono text-[9px] leading-tight uppercase tracking-[0.04em] text-charcoal/65">
                           {svc.name}
                         </span>
                       </div>
@@ -291,13 +291,13 @@ export function Teaching() {
                     aria-hidden="true"
                   />
                 </span>
-                <h4 className="font-[family-name:var(--font-heading)] text-base font-medium tracking-tight text-charcoal sm:text-lg">
+                <h4 className="font-heading text-base font-medium tracking-tight text-charcoal sm:text-lg">
                   {course.name}
                 </h4>
               </div>
 
               {/* Description */}
-              <p className="mb-4 font-[family-name:var(--font-body)] text-sm leading-relaxed text-charcoal/65">
+              <p className="mb-4 font-body text-sm leading-relaxed text-charcoal/65">
                 {course.description}
               </p>
 
@@ -320,7 +320,7 @@ export function Teaching() {
                           unoptimized={topic.src!.endsWith(".svg")}
                           className="size-9 object-contain sm:size-10"
                         />
-                        <span className="w-full text-center font-[family-name:var(--font-mono)] text-[7px] leading-tight uppercase tracking-[0.02em] text-charcoal/65 sm:text-[8px]">
+                        <span className="w-full text-center font-mono text-[7px] leading-tight uppercase tracking-[0.02em] text-charcoal/65 sm:text-[8px]">
                           {topic.name}
                         </span>
                       </div>
@@ -358,7 +358,7 @@ export function Teaching() {
               className="size-5 shrink-0"
               aria-hidden="true"
             />
-            <p className="font-[family-name:var(--font-body)] text-sm leading-relaxed text-charcoal/65">
+            <p className="font-body text-sm leading-relaxed text-charcoal/65">
               All assignments and collaboration managed through{" "}
               <span className="font-medium text-charcoal/80">
                 GitHub Classroom
