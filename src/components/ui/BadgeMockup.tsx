@@ -58,7 +58,7 @@ export function BadgeMockup() {
 
           {/* Role */}
           <span className="mt-[4%] font-[family-name:var(--font-mono)] text-[clamp(0.5rem,0.85vw,0.5625rem)] uppercase tracking-[0.1em] text-copper">
-            Full Stack Engineer
+            Full Stack Developer
           </span>
 
           {/* Divider */}
@@ -69,7 +69,7 @@ export function BadgeMockup() {
             {[
               { value: "5+", label: "Years" },
               { value: "50+", label: "Projects" },
-              { value: "AWS", label: "Certified" },
+              { value: "AWS", label: "Educator" },
             ].map((stat, i) => (
               <div
                 key={stat.label}

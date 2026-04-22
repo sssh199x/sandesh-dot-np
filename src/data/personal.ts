@@ -4,9 +4,9 @@ export const personal: PersonalInfo = {
   name: "Sandesh Hamal Thakuri",
   tagline:
     "From Java to Next.js to AWS to IoT — I ship production apps for remote teams, then teach 200+ students the craft.",
-  bio: "I'm a Full Stack Developer with over 5 years of experience working remotely with US-based teams. I specialize in building scalable, production-grade applications using React, Next.js, Node.js, Java/Spring Boot, and AWS.",
-  bioHighlight: "I bring ideas to life with clean code and thoughtful design.",
-  bioContinued: "From architecting 138+ component e-commerce platforms to designing interactive D3.js data visualization dashboards — I ship real products that serve real users. When I'm not building features, I teach 200+ students at Informatics College Pokhara as an AWS Verified Academy Educator.",
+  bio: "I started with Java Servlets, fell in love with the web, and never looked back. Five years of shipping production apps for US-based remote teams later — I've touched everything from React and Spring Boot to AWS infrastructure and IoT devices.",
+  bioHighlight: "I build things that work, for people who need them to.",
+  bioContinued: "That means a 138-component e-commerce platform one month, interactive D3.js analytics dashboards the next, and a Flutter POS system deployed to 30+ retailers after that. Between projects, I teach 200+ students at Informatics College Pokhara as an AWS Academy Educator — because the best way to understand something is to explain it.",
   email: "sandeshhamal5890@gmail.com",
   phone: "+977 9815141345",
   location: "Pokhara, Nepal",
