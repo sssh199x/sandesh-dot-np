@@ -90,7 +90,7 @@ export function CodeBlock({
     <div
       className={cn(
         "animate-bob rounded-lg overflow-hidden",
-        "bg-[#2C2826] border border-white/[0.06]",
+        "bg-dusk-projects border border-white/[0.06]",
         "shadow-[0_8px_40px_rgba(26,23,20,0.25)]",
         className
       )}

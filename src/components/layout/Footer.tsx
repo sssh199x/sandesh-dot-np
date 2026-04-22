@@ -81,7 +81,7 @@ export function Footer() {
   return (
     <footer ref={footerRef} className="relative z-20 -mt-28 px-4 pb-4 sm:-mt-36 sm:px-6 sm:pb-6 lg:px-8 lg:pb-8">
       {/* Card — warm surface emerging from night */}
-      <div className="relative mx-auto w-full overflow-hidden rounded-3xl bg-[#221F1B] shadow-[0_-4px_30px_rgba(0,0,0,0.4)]">
+      <div className="relative mx-auto w-full overflow-hidden rounded-3xl bg-dusk-footer shadow-[0_-4px_30px_rgba(0,0,0,0.4)]">
         {/* Ghost bike — left edge of footer card (desktop only) */}
         <div className="pointer-events-none absolute inset-0 hidden overflow-hidden lg:block" aria-hidden="true">
           {/* Warm backlight behind bike — fades in */}

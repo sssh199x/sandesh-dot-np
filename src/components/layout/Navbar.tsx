@@ -84,11 +84,11 @@ export function Navbar() {
   const headerBg = !mounted
     ? "bg-transparent"
     : scrolled && isDark
-      ? "bg-[#1A1714]/85 backdrop-blur-md shadow-[0_1px_0_rgba(255,255,255,0.04)]"
+      ? "bg-charcoal/85 backdrop-blur-md shadow-[0_1px_0_rgba(255,255,255,0.04)]"
       : scrolled && !isDark
         ? "bg-cream/85 backdrop-blur-md shadow-[0_1px_0_rgba(26,23,20,0.06)]"
         : isDark
-          ? "bg-[#1A1714]/60 backdrop-blur-sm"
+          ? "bg-charcoal/60 backdrop-blur-sm"
           : "bg-transparent";
 
   return (
@@ -108,7 +108,7 @@ export function Navbar() {
             className={cn(
               "fixed inset-0 z-40 flex flex-col items-center justify-center gap-8 lg:hidden",
               "pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]",
-              isDark ? "bg-[#1A1714]" : "bg-cream"
+              isDark ? "bg-charcoal" : "bg-cream"
             )}
           >
             {navItems.map((item, i) => (

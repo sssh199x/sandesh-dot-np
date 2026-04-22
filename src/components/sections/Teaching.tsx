@@ -119,7 +119,7 @@ export function Teaching() {
             scrollTrigger: {
               trigger: shimmerRef.current,
               start: "top 88%",
-              toggleActions: "play none none none",
+              toggleActions: "play none none reset",
             },
           }
         );

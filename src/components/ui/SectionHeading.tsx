@@ -19,7 +19,7 @@ export function SectionHeading({
     <div className={cn("mb-12 md:mb-16", className)}>
       {label && (
         <span
-          className="typ-label mb-4 block text-copper"
+          className={cn("typ-label mb-4 block", dark ? "text-copper-light" : "text-copper-dark")}
         >
           {label}
         </span>
@@ -32,7 +32,7 @@ export function SectionHeading({
       >
         {heading}
       </h2>
-      {accent && <div className="mt-4 h-[2px] w-12 bg-copper" />}
+      {accent && <div className={cn("mt-4 h-[2px] w-12", dark ? "bg-copper" : "bg-copper-dark")} />}
     </div>
   );
 }

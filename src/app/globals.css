@@ -29,6 +29,8 @@
   /* --- Surface Colors --- */
   --color-surface-light: rgba(255, 255, 255, 0.6);
   --color-surface-dark: rgba(255, 255, 255, 0.05);
+  --color-surface-card: #302C29;
+  --color-dusk-footer: #221F1B;
 
   /* --- Font Families (wired from next/font CSS variables) --- */
   --font-heading: var(--font-sora), ui-sans-serif, system-ui, sans-serif;

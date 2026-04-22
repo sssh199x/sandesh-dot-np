@@ -24,7 +24,7 @@ export function StatCard({ value, label, children, className }: StatCardProps) {
       ref={ref}
       className={cn(
         "relative overflow-hidden rounded-lg border border-charcoal/[0.06] bg-surface-light p-5 pl-7 transition-[shadow,border-color,transform] duration-200 hover:border-copper/30 hover:shadow-warm-sm hover:-translate-y-0.5",
-        "before:absolute before:left-0 before:top-0 before:h-full before:w-[3px] before:bg-copper/40",
+        "before:absolute before:left-0 before:top-0 before:h-full before:w-[3px] before:bg-copper-dark/40",
         className
       )}
     >

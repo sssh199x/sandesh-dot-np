@@ -160,7 +160,7 @@ export function Projects() {
               key={project.title}
               className={`project-card ${cardSizes[i]} col-span-1`}
             >
-              <div onMouseEnter={() => playHoverSound()} className="group h-full overflow-hidden rounded-xl border border-white/[0.06] bg-[#302C29] transition-[transform,box-shadow] duration-300 ease-out hover:-translate-y-1.5 hover:[box-shadow:0_12px_48px_rgba(184,115,51,0.12)]">
+              <div onMouseEnter={() => playHoverSound()} className="group h-full overflow-hidden rounded-xl border border-white/[0.06] bg-surface-card transition-[transform,box-shadow] duration-300 ease-out hover:-translate-y-1.5 hover:[box-shadow:0_12px_48px_rgba(184,115,51,0.12)]">
 
                 {/* Screenshot slideshow with minimal top bar */}
                 {project.images.length > 0 && (
