@@ -13,119 +13,269 @@ export default async function Image() {
           width: "100%",
           height: "100%",
           display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          background: "linear-gradient(145deg, #1A1714 0%, #2C2826 40%, #1A1714 100%)",
           position: "relative",
+          overflow: "hidden",
+          background: "#1A1714",
         }}
       >
-        {/* Warm radial glow */}
+        {/* Atmospheric copper glow — off-center, cinematic */}
         <div
           style={{
             position: "absolute",
-            top: "15%",
-            left: "25%",
-            width: "50%",
-            height: "70%",
+            top: "-20%",
+            right: "-10%",
+            width: "70%",
+            height: "140%",
             borderRadius: "50%",
-            background: "radial-gradient(ellipse, rgba(184,115,51,0.15) 0%, transparent 70%)",
+            background:
+              "radial-gradient(ellipse, rgba(184,115,51,0.12) 0%, rgba(184,115,51,0.04) 40%, transparent 70%)",
           }}
         />
-
-        {/* Copper accent line */}
-        <div
-          style={{
-            width: 60,
-            height: 3,
-            borderRadius: 2,
-            background: "#B87333",
-            marginBottom: 32,
-          }}
-        />
-
-        {/* Name */}
-        <div
-          style={{
-            fontSize: 64,
-            fontWeight: 700,
-            color: "#FAF7F2",
-            letterSpacing: "-0.03em",
-            lineHeight: 1.1,
-            textAlign: "center",
-          }}
-        >
-          Sandesh Hamal Thakuri
-        </div>
-
-        {/* Role */}
-        <div
-          style={{
-            fontSize: 24,
-            fontWeight: 400,
-            color: "#B87333",
-            marginTop: 20,
-            letterSpacing: "0.08em",
-            textTransform: "uppercase" as const,
-          }}
-        >
-          Full Stack Developer
-        </div>
-
-        {/* Description */}
-        <div
-          style={{
-            fontSize: 20,
-            fontWeight: 400,
-            color: "rgba(250,247,242,0.5)",
-            marginTop: 24,
-            textAlign: "center",
-            maxWidth: 600,
-            lineHeight: 1.6,
-          }}
-        >
-          5+ years building production apps for US companies. React, Next.js, AWS.
-        </div>
-
-        {/* Bottom bar */}
+        {/* Secondary warm wash — bottom left */}
         <div
           style={{
             position: "absolute",
-            bottom: 40,
+            bottom: "-30%",
+            left: "-5%",
+            width: "50%",
+            height: "80%",
+            borderRadius: "50%",
+            background:
+              "radial-gradient(ellipse, rgba(184,115,51,0.06) 0%, transparent 65%)",
+          }}
+        />
+
+        {/* Left content column — editorial asymmetry */}
+        <div
+          style={{
             display: "flex",
-            alignItems: "center",
-            gap: 16,
+            flexDirection: "column",
+            justifyContent: "space-between",
+            padding: "64px 80px",
+            width: "100%",
+            height: "100%",
+            position: "relative",
           }}
         >
+          {/* Top: Wordmark + role label */}
           <div
             style={{
-              fontSize: 14,
-              color: "rgba(250,247,242,0.35)",
-              letterSpacing: "0.12em",
-              textTransform: "uppercase" as const,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              width: "100%",
             }}
           >
-            Pokhara, Nepal
+            {/* sandesh. wordmark */}
+            <div
+              style={{
+                fontSize: 28,
+                fontWeight: 600,
+                color: "#B87333",
+                letterSpacing: "-0.01em",
+              }}
+            >
+              sandesh.
+            </div>
+
+            {/* Role pill */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 10,
+                border: "1px solid rgba(184,115,51,0.25)",
+                borderRadius: 999,
+                padding: "8px 20px",
+              }}
+            >
+              {/* Live dot */}
+              <div
+                style={{
+                  width: 6,
+                  height: 6,
+                  borderRadius: 3,
+                  background: "#B87333",
+                }}
+              />
+              <div
+                style={{
+                  fontSize: 13,
+                  fontWeight: 500,
+                  color: "rgba(250,247,242,0.6)",
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase" as const,
+                }}
+              >
+                Open to Remote
+              </div>
+            </div>
           </div>
+
+          {/* Middle: Name — large, left-aligned, dramatic */}
           <div
             style={{
-              width: 4,
-              height: 4,
-              borderRadius: 2,
-              background: "rgba(184,115,51,0.4)",
-            }}
-          />
-          <div
-            style={{
-              fontSize: 14,
-              color: "rgba(250,247,242,0.35)",
-              letterSpacing: "0.12em",
-              textTransform: "uppercase" as const,
+              display: "flex",
+              flexDirection: "column",
+              gap: 0,
+              marginTop: -20,
             }}
           >
-            sandesh-hamal.com.np
+            {/* Thin copper rule above name */}
+            <div
+              style={{
+                width: 48,
+                height: 2,
+                background: "linear-gradient(90deg, #B87333, rgba(184,115,51,0.2))",
+                borderRadius: 1,
+                marginBottom: 28,
+              }}
+            />
+
+            <div
+              style={{
+                fontSize: 72,
+                fontWeight: 700,
+                color: "#FAF7F2",
+                letterSpacing: "-0.04em",
+                lineHeight: 1.0,
+              }}
+            >
+              Sandesh
+            </div>
+            <div
+              style={{
+                fontSize: 72,
+                fontWeight: 700,
+                color: "#FAF7F2",
+                letterSpacing: "-0.04em",
+                lineHeight: 1.0,
+                marginTop: 4,
+              }}
+            >
+              Hamal Thakuri
+            </div>
+
+            {/* Tagline — separated, muted */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 16,
+                marginTop: 24,
+              }}
+            >
+              <div
+                style={{
+                  fontSize: 20,
+                  fontWeight: 400,
+                  color: "#B87333",
+                  letterSpacing: "0.04em",
+                }}
+              >
+                Full Stack Developer
+              </div>
+              <div
+                style={{
+                  width: 4,
+                  height: 4,
+                  borderRadius: 2,
+                  background: "rgba(184,115,51,0.4)",
+                }}
+              />
+              <div
+                style={{
+                  fontSize: 20,
+                  fontWeight: 400,
+                  color: "rgba(250,247,242,0.35)",
+                }}
+              >
+                5+ Years Remote
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom: Location + Stack + Domain */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              width: "100%",
+            }}
+          >
+            {/* Left: tech stack chips */}
+            <div style={{ display: "flex", gap: 8 }}>
+              {["React", "Next.js", "Node.js", "AWS", "Flutter"].map((t) => (
+                <div
+                  key={t}
+                  style={{
+                    fontSize: 12,
+                    fontWeight: 500,
+                    color: "rgba(250,247,242,0.45)",
+                    letterSpacing: "0.06em",
+                    textTransform: "uppercase" as const,
+                    background: "rgba(184,115,51,0.08)",
+                    border: "1px solid rgba(184,115,51,0.12)",
+                    borderRadius: 6,
+                    padding: "5px 12px",
+                  }}
+                >
+                  {t}
+                </div>
+              ))}
+            </div>
+
+            {/* Right: location + domain */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 12,
+              }}
+            >
+              <div
+                style={{
+                  fontSize: 13,
+                  color: "rgba(250,247,242,0.3)",
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase" as const,
+                }}
+              >
+                Pokhara, Nepal
+              </div>
+              <div
+                style={{
+                  width: 1,
+                  height: 14,
+                  background: "rgba(250,247,242,0.12)",
+                }}
+              />
+              <div
+                style={{
+                  fontSize: 13,
+                  color: "rgba(184,115,51,0.6)",
+                  letterSpacing: "0.06em",
+                }}
+              >
+                sandesh-hamal.com.np
+              </div>
+            </div>
           </div>
         </div>
+
+        {/* Right edge copper accent strip — vertical warmth */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            width: 4,
+            height: "100%",
+            background:
+              "linear-gradient(180deg, transparent 10%, rgba(184,115,51,0.4) 40%, rgba(184,115,51,0.5) 60%, rgba(184,115,51,0.4) 80%, transparent 95%)",
+          }}
+        />
       </div>
     ),
     { ...size }
