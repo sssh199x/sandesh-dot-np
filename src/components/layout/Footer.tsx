@@ -130,8 +130,7 @@ export function Footer() {
                 sandesh.
               </span>
               <p className="mt-4 max-w-xs font-[family-name:var(--font-body)] text-sm leading-relaxed text-cream/60">
-                Full Stack Developer building production web apps for US teams.
-                AWS Verified Academy Educator based in Pokhara, Nepal.
+                Shipping production apps for remote teams, teaching AWS to 200+ students. Based in Pokhara, Nepal.
               </p>
               {/* Direct contact — email + phone */}
               <div className="mt-5 flex flex-col gap-2.5">

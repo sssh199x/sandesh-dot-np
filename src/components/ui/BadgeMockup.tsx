@@ -85,8 +85,9 @@ export function BadgeMockup() {
             ))}
           </div>
 
-          {/* Location — anchored to bottom */}
-          <div className="mt-auto flex items-center gap-1">
+          {/* Location — separated from stats with its own divider */}
+          <div className="mt-auto w-[40%] h-px bg-gradient-to-r from-transparent via-copper/15 to-transparent" />
+          <div className="mt-[3%] flex items-center gap-1">
             <svg className="size-[6px] shrink-0 text-copper/50" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
               <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
             </svg>
