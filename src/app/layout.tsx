@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Sandesh Hamal Thakuri" }],
   creator: "Sandesh Hamal Thakuri",
-  metadataBase: new URL("https://sandeshhamal.com"),
+  metadataBase: new URL("https://sandesh-hamal.com.np"),
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -51,7 +51,7 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "Sandesh Hamal Thakuri",
-  url: "https://sandeshhamal.com",
+  url: "https://sandesh-hamal.com.np",
   jobTitle: "Full Stack Developer",
   description:
     "Full Stack Developer with 5+ years of experience building production web and mobile applications for US companies. AWS Verified Academy Educator.",

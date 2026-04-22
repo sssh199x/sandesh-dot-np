@@ -59,7 +59,7 @@ export function Hero() {
                   alt="Sandesh Hamal Thakuri"
                   width={160}
                   height={160}
-                  priority
+                  loading="eager"
                   sizes="(min-width: 640px) 80px, 56px"
                   className="size-full object-cover object-top"
                 />
