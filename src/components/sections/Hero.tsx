@@ -9,13 +9,14 @@ import { DeviceMockup } from "@/components/ui/DeviceMockup";
 import { PhoneMockup } from "@/components/ui/PhoneMockup";
 import { personal } from "@/data/personal";
 import { useNavigationStore } from "@/store/navigation";
-import { useIsTouchDevice } from "@/hooks/useIsTouchDevice";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const introComplete = useNavigationStore((s) => s.introComplete);
   const introPlayed = useNavigationStore((s) => s.introPlayed);
-  const isDesktop = !useIsTouchDevice();
+  const isLg = useMediaQuery("(min-width: 1024px)");
+  const isSm = useMediaQuery("(min-width: 640px)");
 
   // Delay mockup auto-scroll timeline until after iris-close clears (~1s).
   const [mockupReady, setMockupReady] = useState(false);
@@ -114,7 +115,7 @@ export function Hero() {
           </div>
 
           {/* Right column — Device mockups (parallax: trails text on scroll) */}
-          {isDesktop && (
+          {isLg && (
             <motion.div
               style={{ y: deviceParallaxY }}
               className="hidden lg:col-span-5 lg:flex lg:items-center lg:justify-center"
@@ -129,6 +130,7 @@ export function Hero() {
             </motion.div>
           )}
           {/* Tablet (sm → lg): iPhone 17 */}
+          {isSm && !isLg && (
           <motion.div
             style={{ y: deviceParallaxY }}
             className="hidden sm:col-span-5 sm:flex sm:items-center sm:justify-center lg:hidden"
@@ -141,6 +143,7 @@ export function Hero() {
               <PhoneMockup animate={mockupReady} />
             </div>
           </motion.div>
+          )}
         </div>
       </motion.div>
 
@@ -178,7 +181,7 @@ export function Hero() {
       </motion.div>
 
       {/* Peek avatar — desktop only */}
-      {isDesktop && <PeekAvatar introComplete={introComplete} />}
+      {isLg && <PeekAvatar introComplete={introComplete} />}
     </section>
   );
 }
@@ -255,8 +258,8 @@ function PeekAvatar({ introComplete }: { introComplete: boolean }) {
               <Image
                 src="/images/me/me-peek.webp"
                 alt=""
-                width={1536}
-                height={1024}
+                width={480}
+                height={320}
                 sizes="240px"
                 className="w-full h-auto object-cover drop-shadow-[0_-4px_16px_rgba(26,23,20,0.15)]"
                 style={{

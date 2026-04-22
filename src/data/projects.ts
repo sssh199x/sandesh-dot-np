@@ -14,7 +14,7 @@ export const projects: Project[] = [
       "Framer Motion",
     ],
     images: [
-      "/images/projects/silverline/silverline.webp",
+      "/images/projects/silverline/silverline-card.webp",
       "/images/projects/silverline/silverline-2.webp",
       "/images/projects/silverline/silverline-3.webp",
     ],
@@ -33,7 +33,7 @@ export const projects: Project[] = [
       "Radix UI",
     ],
     images: [
-      "/images/projects/kaya/kaya.webp",
+      "/images/projects/kaya/kaya-card.webp",
       "/images/projects/kaya/kaya-2.webp",
       "/images/projects/kaya/kaya-3.webp",
     ],
@@ -52,7 +52,7 @@ export const projects: Project[] = [
       "AWS",
     ],
     images: [
-      "/images/projects/exosolve/exosolve.webp",
+      "/images/projects/exosolve/exosolve-card.webp",
       "/images/projects/exosolve/exosolve-2.webp",
       "/images/projects/exosolve/exosolve-3.webp",
       "/images/projects/exosolve/exosolve-4.webp",
@@ -65,7 +65,7 @@ export const projects: Project[] = [
       "Retail management solution deployed to 30+ retailers. Led a 6-member team building Flutter frontend with real-time inventory tracking, multi-gateway payments, offline-first architecture, and interactive sales analytics dashboards.",
     tech: ["Flutter", "Node.js", "MongoDB", "fl_chart", "IoT", "SQLite"],
     images: [
-      "/images/projects/rebuzz/rebuzz.webp",
+      "/images/projects/rebuzz/rebuzz-card.webp",
       "/images/projects/rebuzz/rebuzz-2.webp",
       "/images/projects/rebuzz/rebuzz-3.webp",
       "/images/projects/rebuzz/rebuzz-4.webp",
@@ -85,7 +85,7 @@ export const projects: Project[] = [
       "WebSockets",
     ],
     images: [
-      "/images/projects/krofile/krofile.webp",
+      "/images/projects/krofile/krofile-card.webp",
       "/images/projects/krofile/krofile-2.webp",
       "/images/projects/krofile/krofile-3.webp",
       "/images/projects/krofile/krofile-4.webp",

@@ -81,9 +81,6 @@ export function DeviceMockup({ animate = true }: { animate?: boolean }) {
   const useARef = useRef(true);
   const firstCallRef = useRef(true);
   const [activeIndex, setActiveIndex] = useState(0);
-  const isClientRef = useRef(false);
-
-  useEffect(() => { isClientRef.current = true; }, []);
 
   /* ── Pause/resume timeline when off-screen to save GPU ── */
   useEffect(() => {
@@ -108,7 +105,7 @@ export function DeviceMockup({ animate = true }: { animate?: boolean }) {
 
   useGSAP(
     () => {
-      if (!isClientRef.current || !animate) return;
+      if (!animate) return;
       if (!imgARef.current || !imgBRef.current) return;
 
       const imgA = imgARef.current;

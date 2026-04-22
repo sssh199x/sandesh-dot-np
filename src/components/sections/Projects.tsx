@@ -189,6 +189,7 @@ export function Projects() {
                           alt={imgIdx === 0 ? `${project.title} screenshot` : ""}
                           fill
                           sizes={imgSizes}
+                          quality={60}
                           className="absolute inset-0 object-cover object-top transition-opacity duration-1000 ease-in-out lg:brightness-[0.85] lg:saturate-[0.9] lg:group-hover:brightness-100 lg:group-hover:saturate-100"
                           loading="lazy"
                           decoding="async"
