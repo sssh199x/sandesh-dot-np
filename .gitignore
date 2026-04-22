@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# claude code
+.claude/
+CLAUDE.md
+AGENTS.md
+FEATURES.md
+INTRO_ANIMATION_PLAN.md
