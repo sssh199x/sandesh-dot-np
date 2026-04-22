@@ -196,9 +196,12 @@ export function Experience() {
 
                     <EntryHighlights highlights={exp.highlights} />
 
-                    <div className="reveal-child mt-4 flex flex-wrap gap-1.5">
-                      {exp.tech.map((t) => (
-                        <Tag key={t} variant="light">{t}</Tag>
+                    <div className="reveal-child mt-4 flex flex-wrap items-center gap-x-1.5 gap-y-1.5">
+                      {exp.tech.map((t, ti) => (
+                        <span key={t} className="flex items-center gap-1.5">
+                          {ti > 0 && <span className="text-charcoal/15 select-none" aria-hidden="true">·</span>}
+                          <Tag variant="light">{t}</Tag>
+                        </span>
                       ))}
                     </div>
                   </div>
@@ -289,9 +292,12 @@ export function Experience() {
 
                       <EntryHighlights highlights={exp.highlights} />
 
-                      <div className="reveal-child mt-5 flex flex-wrap gap-1.5">
-                        {exp.tech.map((t) => (
-                          <Tag key={t} variant="light">{t}</Tag>
+                      <div className="reveal-child mt-5 flex flex-wrap items-center gap-x-1.5 gap-y-1.5">
+                        {exp.tech.map((t, ti) => (
+                          <span key={t} className="flex items-center gap-1.5">
+                            {ti > 0 && <span className="text-charcoal/15 select-none" aria-hidden="true">·</span>}
+                            <Tag variant="light">{t}</Tag>
+                          </span>
                         ))}
                       </div>
                     </div>

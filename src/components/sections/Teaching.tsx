@@ -330,13 +330,14 @@ export function Teaching() {
 
               {/* Topic tags (no icon) */}
               {course.topics.some((t) => !t.src) && (
-                <div className={`flex flex-wrap gap-1.5 ${course.topics.some((t) => t.src) ? "mt-4" : ""}`}>
+                <div className={`flex flex-wrap items-center gap-x-1.5 gap-y-1.5 ${course.topics.some((t) => t.src) ? "mt-4" : ""}`}>
                   {course.topics
                     .filter((t) => !t.src)
-                    .map((topic) => (
-                      <Tag key={topic.name} variant="light">
-                        {topic.name}
-                      </Tag>
+                    .map((topic, ti) => (
+                      <span key={topic.name} className="flex items-center gap-1.5">
+                        {ti > 0 && <span className="text-charcoal/15 select-none" aria-hidden="true">·</span>}
+                        <Tag variant="light">{topic.name}</Tag>
+                      </span>
                     ))}
                 </div>
               )}

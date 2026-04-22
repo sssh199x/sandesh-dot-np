@@ -10,10 +10,10 @@ export function Tag({ children, variant = "dark", className }: TagProps) {
   return (
     <span
       className={cn(
-        "typ-tag inline-block rounded-pill px-3 py-1",
+        "typ-tag inline-flex items-center gap-1.5 transition-colors duration-200",
         variant === "dark"
-          ? "bg-ghost-strong text-copper-light"
-          : "border border-copper/20 bg-copper/[0.06] text-copper-dark",
+          ? "text-cream/55 hover:text-copper-light"
+          : "text-copper-dark/80 hover:text-copper-dark",
         className
       )}
     >

@@ -1,14 +1,6 @@
 "use client";
 
-import { useRef, useCallback } from "react";
-import {
-  Monitor,
-  Server,
-  BarChart3,
-  Database,
-  Cloud,
-  Smartphone,
-} from "lucide-react";
+import { useRef } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -16,16 +8,6 @@ import { FadeUp } from "@/components/animations/FadeUp";
 import { Tag } from "@/components/ui/Tag";
 import Image from "next/image";
 import { skillCategories } from "@/data/skills";
-import { useIsTouchDevice } from "@/hooks/useIsTouchDevice";
-
-const categoryIcons: Record<string, React.ReactNode> = {
-  Frontend: <Monitor className="size-[18px]" aria-hidden="true" />,
-  Backend: <Server className="size-[18px]" aria-hidden="true" />,
-  "Data Visualization": <BarChart3 className="size-[18px]" aria-hidden="true" />,
-  "Database & ORM": <Database className="size-[18px]" aria-hidden="true" />,
-  "Cloud & DevOps": <Cloud className="size-[18px]" aria-hidden="true" />,
-  Mobile: <Smartphone className="size-[18px]" aria-hidden="true" />,
-};
 
 const categoryDescriptions: Record<string, string> = {
   Frontend:
@@ -111,40 +93,6 @@ const cardLayout = [
 
 export function Skills() {
   const gridRef = useRef<HTMLDivElement>(null);
-  const isTouch = useIsTouchDevice();
-  const rafRef = useRef(0);
-
-  /* Throttle mousemove to rAF for smooth 60fps spotlight */
-  const handleMouseMove = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      const card = e.currentTarget;
-      const clientX = e.clientX;
-      const clientY = e.clientY;
-      cancelAnimationFrame(rafRef.current);
-      rafRef.current = requestAnimationFrame(() => {
-        const rect = card.getBoundingClientRect();
-        card.style.setProperty("--spot-x", `${clientX - rect.left}px`);
-        card.style.setProperty("--spot-y", `${clientY - rect.top}px`);
-      });
-    },
-    []
-  );
-
-  const handleMouseEnter = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      const glow = e.currentTarget.querySelector<HTMLElement>(".card-glow");
-      if (glow) glow.style.opacity = "1";
-    },
-    []
-  );
-
-  const handleMouseLeave = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      const glow = e.currentTarget.querySelector<HTMLElement>(".card-glow");
-      if (glow) glow.style.opacity = "0";
-    },
-    []
-  );
 
   useGSAP(
     () => {
@@ -229,58 +177,33 @@ export function Skills() {
           <div
             key={cat.category}
             className={`skill-card group relative overflow-hidden rounded-lg border border-white/[0.06] bg-[rgba(255,255,255,0.03)] transition-[border-color] duration-300 hover:border-copper/20 focus-within:border-copper/20 sm:col-span-1 ${cardLayout[i]}${i % 2 === 1 ? " sm:mt-2 lg:mt-3" : ""}`}
-            {...(!isTouch && {
-              onMouseMove: handleMouseMove,
-              onMouseEnter: handleMouseEnter,
-              onMouseLeave: handleMouseLeave,
-            })}
           >
-            {/* Mouse-tracking spotlight glow — desktop only */}
-            {!isTouch && (
-              <div
-                className="card-glow pointer-events-none absolute inset-0 z-0 rounded-lg transition-opacity duration-300"
-                style={{
-                  opacity: 0,
-                  background:
-                    "radial-gradient(circle 180px at var(--spot-x, 50%) var(--spot-y, 50%), rgba(184,115,51,0.08), transparent 70%)",
-                }}
-              />
-            )}
-
             {/* Copper left accent */}
             <div className="absolute left-0 top-0 h-full w-[3px] bg-gradient-to-b from-copper/40 via-copper/15 to-transparent" />
 
             {/* Card content */}
             <div className="relative z-10 p-5 sm:p-6">
-              {/* Header */}
-              <div className="mb-3 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <span className="flex size-9 items-center justify-center rounded-md bg-copper/[0.08] text-copper">
-                    {categoryIcons[cat.category]}
-                  </span>
-                  <h3 className="typ-h2 text-cream">{cat.category}</h3>
-                </div>
-                <span
-                  className="typ-tag text-cream/50"
-                  aria-label={`${cat.skills.length} skills`}
-                >
-                  {cat.skills.length}
+              {/* Header — number + category */}
+              <div className="mb-3 flex items-center gap-3">
+                <span className="font-[family-name:var(--font-mono)] text-[0.6875rem] tracking-widest text-copper/50">
+                  {String(i + 1).padStart(2, "0")}
                 </span>
+                <h3 className="typ-h2 text-cream">{cat.category}</h3>
               </div>
 
               {/* Description */}
-              <p className="typ-caption mb-5 pl-12 text-cream/80">
+              <p className="typ-caption mb-5 text-cream/80">
                 {categoryDescriptions[cat.category]}
               </p>
 
-              {/* Skill tags with optional SVG icons */}
-              <ul className="flex flex-wrap gap-2" role="list">
-                {cat.skills.map((skill) => (
-                  <li key={skill.name}>
-                    <Tag
-                      variant="dark"
-                      className="skill-item inline-flex items-center gap-1.5 transition-[background-color] duration-200 hover:bg-copper/20"
-                    >
+              {/* Skill list — inline flow with dot separators */}
+              <ul className="flex flex-wrap items-center gap-x-1.5 gap-y-2" role="list">
+                {cat.skills.map((skill, si) => (
+                  <li key={skill.name} className="flex items-center gap-1.5">
+                    {si > 0 && (
+                      <span className="text-cream/15 select-none" aria-hidden="true">·</span>
+                    )}
+                    <Tag variant="dark" className="skill-item">
                       {skillIcons[skill.name] && (
                         <Image
                           src={skillIcons[skill.name]}

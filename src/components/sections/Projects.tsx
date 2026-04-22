@@ -222,9 +222,12 @@ export function Projects() {
                     {project.description}
                   </p>
 
-                  <div className="flex flex-wrap gap-1.5">
-                    {project.tech.map((t) => (
-                      <Tag key={t}>{t}</Tag>
+                  <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1.5">
+                    {project.tech.map((t, ti) => (
+                      <span key={t} className="flex items-center gap-1.5">
+                        {ti > 0 && <span className="text-cream/15 select-none" aria-hidden="true">·</span>}
+                        <Tag>{t}</Tag>
+                      </span>
                     ))}
                   </div>
                 </div>
