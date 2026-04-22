@@ -20,7 +20,7 @@ const cardSizes = [
   "lg:col-span-12",
 ];
 
-/* Extract domain from URL for browser chrome */
+/* Extract domain from URL for project bar */
 function getDomain(url?: string) {
   if (!url) return "";
   try {
@@ -43,33 +43,41 @@ export function Projects() {
       ScrollTrigger.matchMedia({
         "(min-width: 1024px)": () => {
           cards.forEach((card) => {
-            gsap.from(card, {
-              scale: 0.92,
-              opacity: 0,
-              y: 60,
-              duration: 0.8,
-              ease: "power3.out",
-              scrollTrigger: {
-                trigger: card,
-                start: "top 85%",
-                toggleActions: "play none none reverse",
-              },
-            });
+            gsap.fromTo(
+              card,
+              { scale: 0.92, opacity: 0, y: 60 },
+              {
+                scale: 1,
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: "power3.out",
+                scrollTrigger: {
+                  trigger: card,
+                  start: "top 85%",
+                  toggleActions: "play none none reverse",
+                },
+              }
+            );
           });
         },
         "(max-width: 1023px)": () => {
           cards.forEach((card) => {
-            gsap.from(card, {
-              opacity: 0,
-              y: 40,
-              duration: 0.6,
-              ease: "power3.out",
-              scrollTrigger: {
-                trigger: card,
-                start: "top 90%",
-                toggleActions: "play none none reverse",
-              },
-            });
+            gsap.fromTo(
+              card,
+              { opacity: 0, y: 40 },
+              {
+                opacity: 1,
+                y: 0,
+                duration: 0.6,
+                ease: "power3.out",
+                scrollTrigger: {
+                  trigger: card,
+                  start: "top 90%",
+                  toggleActions: "play none none reverse",
+                },
+              }
+            );
           });
         },
       });
@@ -154,25 +162,19 @@ export function Projects() {
             >
               <div onMouseEnter={() => playHoverSound()} className="group h-full overflow-hidden rounded-xl border border-white/[0.06] bg-[#302C29] transition-[transform,box-shadow] duration-300 ease-out hover:-translate-y-1.5 hover:[box-shadow:0_12px_48px_rgba(184,115,51,0.12)]">
 
-                {/* Browser chrome + screenshot slideshow */}
+                {/* Screenshot slideshow with minimal top bar */}
                 {project.images.length > 0 && (
                   <div>
-                    {/* Browser chrome bar */}
-                    <div className="flex items-center gap-2 border-b border-white/[0.06] bg-white/[0.03] px-4 py-2.5">
-                      {/* macOS traffic lights */}
-                      <div className="flex gap-1.5">
-                        <span className="size-2.5 rounded-full bg-[#FF5F57]" />
-                        <span className="size-2.5 rounded-full bg-[#FFBD2E]" />
-                        <span className="size-2.5 rounded-full bg-[#28C840]" />
-                      </div>
-                      {/* URL bar */}
-                      <div className="ml-1 flex-1">
-                        <div className="mx-auto w-fit max-w-[220px] rounded-md bg-white/[0.05] px-3 py-0.5">
-                          <span className={`block truncate font-[family-name:var(--font-mono)] text-[0.625rem] tracking-wide ${domain ? "text-cream/35 transition-colors duration-300 group-hover:text-copper/60" : "text-cream/20"}`}>
-                            {domain || "localhost:3000"}
-                          </span>
-                        </div>
-                      </div>
+                    {/* Minimal project bar — domain + index */}
+                    <div className="flex items-center justify-between border-t-[1.5px] border-t-copper/20 border-b border-b-white/[0.06] bg-white/[0.02] px-4 py-2">
+                      <span className="font-[family-name:var(--font-mono)] text-[0.5625rem] tracking-widest text-cream/25 uppercase">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      {domain && (
+                        <span className="font-[family-name:var(--font-mono)] text-[0.5625rem] tracking-wide text-cream/30 transition-colors duration-300 group-hover:text-copper/60">
+                          {domain}
+                        </span>
+                      )}
                     </div>
 
                     {/* Screenshot crossfade slideshow */}
@@ -189,6 +191,7 @@ export function Projects() {
                           sizes={imgSizes}
                           className="absolute inset-0 object-cover object-top transition-opacity duration-1000 ease-in-out lg:brightness-[0.85] lg:saturate-[0.9] lg:group-hover:brightness-100 lg:group-hover:saturate-100"
                           loading="lazy"
+                          decoding="async"
                           aria-hidden={imgIdx > 0 ? true : undefined}
                           style={{ opacity: imgIdx === 0 ? 1 : 0 }}
                         />
